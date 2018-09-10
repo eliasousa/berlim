@@ -1,5 +1,7 @@
 defmodule Berlim do
+  @moduledoc false
   use Application
+  alias Berlim.Endpoint
 
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
@@ -11,7 +13,7 @@ defmodule Berlim do
       # Start the Ecto repository
       supervisor(Berlim.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(Berlim.Endpoint, []),
+      supervisor(Berlim.Endpoint, [])
       # Start your own worker by calling: Berlim.Worker.start_link(arg1, arg2, arg3)
       # worker(Berlim.Worker, [arg1, arg2, arg3]),
     ]
@@ -25,7 +27,7 @@ defmodule Berlim do
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    Berlim.Endpoint.config_change(changed, removed)
+    Endpoint.config_change(changed, removed)
     :ok
   end
 end

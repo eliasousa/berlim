@@ -1,0 +1,4 @@
+PreCommit:
+  Credo:
+    enabled: true
+    required_executable: 'mix'

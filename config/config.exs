@@ -10,17 +10,17 @@ config :berlim,
   ecto_repos: [Berlim.Repo]
 
 # Configures the endpoint
-config :berlim, Berlim.Endpoint,
+config :berlim, BerlimWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "f95uOTWXBY/XtbQlob45Lu8pBXCUrA79aBwdQivtSoKasiFuZHkVGB+NgbbKLI/A",
-  render_errors: [view: Berlim.ErrorView, accepts: ~w(html json)],
+  secret_key_base: "1gbfpb7eaIzpCGBG1Y2rrXtiYSzj/0X/W7ey4ZyuyuAF2dld9weq5eLoB2xU4R2R",
+  render_errors: [view: BerlimWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Berlim.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
-  metadata: [:request_id]
+  metadata: [:user_id]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

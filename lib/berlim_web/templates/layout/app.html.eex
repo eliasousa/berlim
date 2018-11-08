@@ -4,19 +4,21 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Berlim · Phoenix Framework</title>
+    <title>VOO PAG</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
   </head>
   <body>
     <header>
       <section class="container">
         <nav role="navigation">
-          <ul>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
+          <ul class="nav nav-pills pull-right">
+            <li>
+              <%= link("Admins", to: "/admins") %>
+            </li>
           </ul>
         </nav>
-        <a href="http://phoenixframework.org/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
+        <a href="#" class="voo-pag-logo">
+          <img src="<%= Routes.static_path(@conn, "/images/voo_pag_logo.png") %>"/>
         </a>
       </section>
     </header>

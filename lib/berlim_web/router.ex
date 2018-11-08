@@ -17,6 +17,8 @@ defmodule BerlimWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    resources "/admins", AdminController, except: [:show]
   end
 
   # Other scopes may use custom stacks.

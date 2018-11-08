@@ -75,12 +75,13 @@ select {
 .phx-hero p {
   margin: 0;
 }
-.phx-logo {
-  min-width: 300px;
+.phx-pag-logo {
   margin: 1rem;
   display: block;
 }
-.phx-logo img {
+.voo-pag-logo img {
+
+  max-width: 250px;
   width: auto;
   display: block;
 }
@@ -127,7 +128,7 @@ header nav a {
   header nav ul {
     margin: 1rem;
   }
-  .phx-logo {
+  .voo-pag-logo {
     flex-basis: 527px;
     margin: 2rem 1rem;
   }

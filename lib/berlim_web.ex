@@ -20,26 +20,28 @@ defmodule BerlimWeb do
   def controller do
     quote do
       use Phoenix.Controller, namespace: BerlimWeb
+
       import Plug.Conn
-      import BerlimWeb.Router.Helpers
       import BerlimWeb.Gettext
+      alias BerlimWeb.Router.Helpers, as: Routes
     end
   end
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/berlim_web/templates",
-                        namespace: BerlimWeb
+      use Phoenix.View,
+        root: "lib/berlim_web/templates",
+        namespace: BerlimWeb
 
       # Import convenience functions from controllers
-      import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
+      import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
 
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import BerlimWeb.Router.Helpers
       import BerlimWeb.ErrorHelpers
       import BerlimWeb.Gettext
+      alias BerlimWeb.Router.Helpers, as: Routes
     end
   end
 

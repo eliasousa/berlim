@@ -1,10 +1,10 @@
 /_build
 /deps
 /*.ez
-# /assets/node_modules
+/assets/node_modules
 *.dump
 *.ez
 *.beam
-# /priv/static
+/priv/static
 **/.DS_Store
 /config/*.secret.exs

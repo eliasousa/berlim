@@ -1,16 +1,11 @@
 defmodule BerlimWeb.AdminControllerTest do
   use BerlimWeb.ConnCase
 
-  alias Berlim.Accounts
+  import Berlim.Factory
 
-  @create_attrs %{name: "John Doe", email: "johndoe@example.com", password: "1234abcd", active: true}
+  @create_attrs params_for(:admin)
   @update_attrs %{name: "Lionel Ritchie"}
   @invalid_attrs %{name: nil, email: nil}
-
-  def fixture(:admin) do
-    {:ok, admin} = Accounts.create_admin(@create_attrs)
-    admin
-  end
 
   describe "index" do
     test "lists all admins", %{conn: conn} do
@@ -74,7 +69,7 @@ defmodule BerlimWeb.AdminControllerTest do
   end
 
   defp create_admin(_) do
-    admin = fixture(:admin)
+    admin = insert(:admin)
     {:ok, admin: admin}
   end
 end

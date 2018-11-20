@@ -1,17 +1,11 @@
 defmodule Berlim.Accounts.TaxiTest do
   use Berlim.DataCase
 
+  import Berlim.Factory
+
   alias Berlim.Accounts.Taxi
 
-  @valid_attrs %{
-    email: "johndoe@example.com",
-    password: "1234abcd",
-    active: true,
-    phone: "7932120600",
-    smtt: 1234,
-    cpf: "02005445698"
-  }
-  @invalid_attrs %{}
+  @valid_attrs params_for(:taxi)
 
   test "changeset with valid attributes" do
     changeset = Taxi.changeset(%Taxi{}, @valid_attrs)
@@ -19,7 +13,7 @@ defmodule Berlim.Accounts.TaxiTest do
   end
 
   test "changeset with invalid attributes" do
-    changeset = Taxi.changeset(%Taxi{}, @invalid_attrs)
+    changeset = Taxi.changeset(%Taxi{}, %{})
     refute changeset.valid?
   end
 

@@ -3,14 +3,9 @@ defmodule Berlim.Accounts do
   The Accounts context.
   """
 
-  import Ecto.Query, warn: false
-  alias Berlim.Repo
+  alias Berlim.{Repo, Accounts.Admin}
 
-  alias Berlim.Accounts.Admin
-
-  def list_admins do
-    Repo.all(Admin)
-  end
+  def list_admins, do: Repo.all(Admin)
 
   def get_admin!(id), do: Repo.get!(Admin, id)
 

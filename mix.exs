@@ -25,7 +25,7 @@ defmodule Berlim.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "test/support", "test/factories"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
@@ -44,7 +44,8 @@ defmodule Berlim.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false},
-      {:exnumerator, "~> 1.6"}
+      {:exnumerator, "~> 1.6"},
+      {:ex_machina, "~> 2.2", only: :test}
     ]
   end
 

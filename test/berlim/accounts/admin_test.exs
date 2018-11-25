@@ -1,16 +1,11 @@
 defmodule Berlim.Accounts.AdminTest do
   use Berlim.DataCase
 
+  import Berlim.Factory
+
   alias Berlim.Accounts.Admin
 
-  @valid_attrs %{
-    email: "johndoe@example.com",
-    password: "1234abcd",
-    name: "John Doe",
-    active: true,
-    phone: "7932120600"
-  }
-  @invalid_attrs %{}
+  @valid_attrs params_for(:admin)
 
   test "changeset with valid attributes" do
     changeset = Admin.changeset(%Admin{}, @valid_attrs)
@@ -18,7 +13,7 @@ defmodule Berlim.Accounts.AdminTest do
   end
 
   test "changeset with invalid attributes" do
-    changeset = Admin.changeset(%Admin{}, @invalid_attrs)
+    changeset = Admin.changeset(%Admin{}, %{})
     refute changeset.valid?
   end
 

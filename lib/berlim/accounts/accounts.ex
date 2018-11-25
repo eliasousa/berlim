@@ -1,32 +1,58 @@
 defmodule Berlim.Accounts do
-
+  @moduledoc """
+  The Accounts context.
+  """
   import Ecto.Query
 
   alias Berlim.{
     Repo,
+    Accounts.Admin,
     Accounts.Taxi
   }
 
-  def get_all_taxis do
-    Repo.all(all_taxis_ordered_by_smtt())
+  def list_admins, do: Repo.all(Admin)
+
+  def get_admin!(id), do: Repo.get!(Admin, id)
+
+  def create_admin(attrs \\ %{}) do
+    %Admin{}
+    |> Admin.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_admin(%Admin{} = admin, attrs) do
+    admin
+    |> Admin.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_admin(%Admin{} = admin) do
+    Repo.delete(admin)
+  end
+
+  def change_admin(%Admin{} = admin) do
+    Admin.changeset(admin, %{})
+  end
+
+  def list_taxis do
+    Repo.all(query_taxis_ordered_by_smtt())
   end
 
   def get_taxi_by_id(taxi_id) do
     Repo.get(Taxi, taxi_id)
   end
 
-  def create_taxi(taxi) do
-    taxi_changeset(taxi)
+  def create_taxi(taxi_attrs) do
+    taxi_change(taxi_attrs)
     |> Repo.insert
   end
 
-  def taxi_changeset(changes \\ %{}) do
-    Taxi.changeset(%Taxi{}, changes)
+  def taxi_change(taxi_attrs \\ %{}) do
+    Taxi.changeset(%Taxi{}, taxi_attrs)
   end
 
-  defp all_taxis_ordered_by_smtt do
+  defp query_taxis_ordered_by_smtt do
     from Taxi,
       order_by: [asc: :smtt],
       select: [:id, :smtt]
-  end
 end

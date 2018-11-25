@@ -9,12 +9,12 @@ defmodule Berlim.Sales.Order do
 
   defmodule Status do
     @moduledoc false
-    use Exnumerator, values: [approved: "Aprovado", pending: "Pendente", refused: "Recusado"]
+    use Exnumerator, values: [:approved, :pending, :refused]
   end
 
   defmodule Type do
     @moduledoc false
-    use Exnumerator, values: [credit_card: "Cartão de Crédito", bank_slip: "Boleto Bancário"]
+    use Exnumerator, values: [:credit_card, :bank_slip]
   end
 
   schema "orders" do

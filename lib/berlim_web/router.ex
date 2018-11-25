@@ -19,6 +19,12 @@ defmodule BerlimWeb.Router do
     get "/", PageController, :index
   end
 
+  scope "/", BerlimWeb do
+    pipe_through :browser
+
+    resources "/taxis", TaxiController, only: [:index, :new, :create, :edit]
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", BerlimWeb do
   #   pipe_through :api

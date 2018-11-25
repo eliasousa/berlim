@@ -19,7 +19,7 @@ defmodule Berlim.Accounts.Taxi do
   end
 
   @doc false
-  def changeset(taxi, attrs) do
+  def changeset(taxi, attrs \\ %{}) do
     taxi
     |> cast(attrs, [:email, :password, :active, :phone, :smtt, :cpf])
     |> validate_required([:email, :password, :active, :phone, :smtt, :cpf])

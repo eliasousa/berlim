@@ -50,7 +50,7 @@ defmodule Berlim.Accounts do
 
   def update_taxi(taxi, taxi_attrs) do
     taxi
-    |> Taxi.changeset(taxi_attrs)
+    |> taxi_change(taxi_attrs)
     |> Repo.update()
   end
 

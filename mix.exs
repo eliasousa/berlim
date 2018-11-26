@@ -45,7 +45,7 @@ defmodule Berlim.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:credo, "~> 0.10.0", only: [:dev, :test], runtime: false},
       {:exnumerator, "~> 1.6"},
-      {:ex_machina, "~> 2.2", only: :test}
+      {:ex_machina, "~> 2.2", only: :test},
     ]
   end
 

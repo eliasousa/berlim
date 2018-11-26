@@ -25,6 +25,6 @@ defmodule Berlim.Accounts.AdminTest do
   test "email must contain at least an @" do
     attrs = %{@valid_attrs | email: "johndoe.com"}
     changeset = Admin.changeset(%Admin{}, attrs)
-    assert %{email: ["has invalid format"]} = errors_on(changeset)
+    assert %{email: ["Formato inválido!"]} = errors_on(changeset)
   end
 end

@@ -20,6 +20,6 @@ defmodule Berlim.Accounts.TaxiTest do
   test "email must contain at least an @" do
     attrs = %{@valid_attrs | email: "johndoe.com"}
     changeset = Taxi.changeset(%Taxi{}, attrs)
-    assert %{email: ["has invalid format"]} = errors_on(changeset)
+    assert %{email: ["Formato inválido!"]} = errors_on(changeset)
   end
 end

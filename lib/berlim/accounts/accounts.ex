@@ -34,25 +34,33 @@ defmodule Berlim.Accounts do
     Admin.changeset(admin, %{})
   end
 
-  def list_taxis do
+  def list_taxis() do
     Repo.all(query_taxis_ordered_by_smtt())
   end
 
-  def get_taxi_by_id(taxi_id) do
-    Repo.get(Taxi, taxi_id)
+  def get_taxi(taxi_id) do
+    Repo.get!(Taxi, taxi_id)
   end
 
   def create_taxi(taxi_attrs) do
-    taxi_change(taxi_attrs)
+    %Taxi{}
+    |> taxi_change(taxi_attrs)
     |> Repo.insert
   end
 
-  def taxi_change(taxi_attrs \\ %{}) do
-    Taxi.changeset(%Taxi{}, taxi_attrs)
+  def update_taxi(taxi, taxi_attrs) do
+    taxi
+    |> Taxi.changeset(taxi_attrs)
+    |> Repo.update()
+  end
+
+  def taxi_change(taxi \\ %Taxi{}, taxi_attrs \\ %{}) do
+    Taxi.changeset(taxi, taxi_attrs)
   end
 
   defp query_taxis_ordered_by_smtt do
     from Taxi,
       order_by: [asc: :smtt],
-      select: [:id, :smtt]
+      select: [:id, :smtt, :email, :active]
+  end
 end

@@ -16,15 +16,10 @@ defmodule BerlimWeb.Router do
   scope "/", BerlimWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", LoginController, :index
 
     resources "/admins", AdminController, except: [:show]
-  end
-
-  scope "/", BerlimWeb do
-    pipe_through :browser
-
-    resources "/taxis", TaxiController, only: [:index, :new, :create, :edit]
+    resources "/taxis", TaxiController, except: [:show, :delete]
   end
 
   # Other scopes may use custom stacks.

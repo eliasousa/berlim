@@ -57,4 +57,66 @@ defmodule Berlim.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_admin(admin)
     end
   end
+
+  describe "taxis" do
+    alias Berlim.Accounts.Taxi
+
+    @valid_attrs params_for(:taxi)
+    @update_attrs %{cpf: "12345678910"}
+    @invalid_attrs %{cpf: nil, email: nil}
+
+    setup [:insert_taxi]
+
+    test "list_taxis/0 returns all taxis ordered by smtt" do
+      insert_list(4, :taxi)
+      taxis = Accounts.list_taxis()
+      first_taxi = List.first(taxis)
+      last_taxi = List.last(taxis)
+
+      assert is_list(taxis)
+      assert Enum.count(taxis) == 5
+      assert first_taxi.smtt < last_taxi.smtt
+    end
+
+    test "get_taxi/1 returns the taxi with given id", %{taxi: taxi} do
+      assert Accounts.get_taxi(taxi.id) == taxi
+    end
+
+    test "create_taxi/1 with valid data creates a taxi" do
+      assert {:ok, taxi} = Accounts.create_taxi(@valid_attrs)
+      assert taxi.cpf == "02005445698"
+      assert taxi.password == "1234abcd"
+      assert taxi.active == true
+    end
+
+    test "create_taxi/1 with invalid data returns error changeset" do
+      assert {:error, _changeset} = Accounts.create_taxi(@invalid_attrs)
+    end
+
+    test "update_taxi/2 with valid data updates the taxi", %{taxi: taxi} do
+      assert {:ok, taxi} = Accounts.update_taxi(taxi, @update_attrs)
+      assert %Taxi{} = taxi
+      assert taxi.cpf == "12345678910"
+    end
+
+    test "update_taxi/2 with invalid data returns error changeset", %{taxi: taxi} do
+      assert {:error, _taxi} = Accounts.update_taxi(taxi, @invalid_attrs)
+    end
+
+    test "change_taxi/0 returns a taxi changeset" do
+      assert %Ecto.Changeset{} = Accounts.taxi_change()
+    end
+
+    test "change_taxi/1 returns a taxi changeset", %{taxi: taxi} do
+      assert %Ecto.Changeset{} = Accounts.taxi_change(taxi)
+    end
+
+    test "change_taxi/2 returns a taxi changeset", %{taxi: taxi} do
+      assert %Ecto.Changeset{} = Accounts.taxi_change(taxi, @valid_attrs)
+    end
+  end
+
+  defp insert_taxi(_) do
+    %{taxi: insert(:taxi)}
+  end
 end

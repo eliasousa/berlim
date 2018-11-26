@@ -1,10 +1,3 @@
-<%= form_for @changeset, taxi_path(@conn, :create), fn f ->%>
-  <%= input f, :cpf%>
-  <%= input f, :email%>
-  <%= input f, :password%>
-  <%= input f, :phone%>
-  <%= input f, :smtt%>
-  <%= input f, :active%>
+<h3>Novo Táxi</h3>
 
-  <%= submit "Criar", class: "btn btn-primary"%>
-<% end %>
+<%= render "form.html", Map.put(assigns, :action, Routes.taxi_path(@conn, :create)) %>

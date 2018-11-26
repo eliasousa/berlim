@@ -21,7 +21,7 @@ defmodule Berlim.AccountsFactory do
           password: "1234abcd",
           active: true,
           phone: "7932120600",
-          smtt: 1234,
+          smtt: sequence(:smtt, &"1234#{&1}"),
           cpf: "02005445698"
         }
       end

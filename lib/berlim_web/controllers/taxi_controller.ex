@@ -3,7 +3,7 @@ defmodule BerlimWeb.TaxiController do
 
   alias Berlim.Accounts
 
-  # plug BerlimWeb.Plugs.RequireAdminAuth
+  plug BerlimWeb.Plugs.RequireAdminAuth
 
   def index(conn, _params) do
     taxis = Accounts.list_taxis()

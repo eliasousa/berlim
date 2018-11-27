@@ -13,9 +13,7 @@ defmodule BerlimWeb.Plugs.RequireAdminAuth do
     Accounts.Admin
   }
 
-  def init(_params) do
-
-  end
+  def init(params), do: params
 
   def call(conn, _params) do
     user = conn.assigns[:user]
@@ -23,10 +21,10 @@ defmodule BerlimWeb.Plugs.RequireAdminAuth do
     if user && Repo.get!(Admin, user.id) do
       conn
     else
-        conn
-        |> put_flash(:error, "Você não tem permissão para acessar essa página!")
-        |> redirect(to: Routes.login_path(conn, :index))
-        |> halt()
+      conn
+      |> put_flash(:error, "Você não tem permissão para acessar essa página!")
+      |> redirect(to: Routes.login_path(conn, :index))
+      |> halt()
     end
   end
 end

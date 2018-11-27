@@ -35,10 +35,14 @@ defmodule Berlim.Accounts do
   end
 
   def list_taxis() do
-    Repo.all(query_taxis_ordered_by_smtt())
+    Repo.all(
+      from Taxi,
+        order_by: [asc: :smtt],
+        select: [:id, :smtt, :email, :active]
+    )
   end
 
-  def get_taxi(taxi_id) do
+  def get_taxi!(taxi_id) do
     Repo.get!(Taxi, taxi_id)
   end
 
@@ -56,11 +60,5 @@ defmodule Berlim.Accounts do
 
   def taxi_change(taxi \\ %Taxi{}, taxi_attrs \\ %{}) do
     Taxi.changeset(taxi, taxi_attrs)
-  end
-
-  defp query_taxis_ordered_by_smtt do
-    from Taxi,
-      order_by: [asc: :smtt],
-      select: [:id, :smtt, :email, :active]
   end
 end

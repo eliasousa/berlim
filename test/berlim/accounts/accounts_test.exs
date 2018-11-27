@@ -79,7 +79,7 @@ defmodule Berlim.AccountsTest do
     end
 
     test "get_taxi/1 returns the taxi with given id", %{taxi: taxi} do
-      assert Accounts.get_taxi(taxi.id) == taxi
+      assert Accounts.get_taxi!(taxi.id) == taxi
     end
 
     test "create_taxi/1 with valid data creates a taxi" do

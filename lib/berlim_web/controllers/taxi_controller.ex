@@ -29,14 +29,14 @@ defmodule BerlimWeb.TaxiController do
   end
 
   def edit(conn, %{"id" => taxi_id}) do
-    taxi = Accounts.get_taxi(taxi_id)
+    taxi = Accounts.get_taxi!(taxi_id)
     changeset = Accounts.taxi_change(taxi)
 
     render conn, "edit.html", taxi: taxi, changeset: changeset
   end
 
   def update(conn, %{"id" => taxi_id, "taxi" => taxi_params}) do
-    taxi = Accounts.get_taxi(taxi_id)
+    taxi = Accounts.get_taxi!(taxi_id)
     case Accounts.update_taxi(taxi, taxi_params) do
       {:ok, _taxi} ->
         conn

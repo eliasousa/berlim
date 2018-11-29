@@ -4,7 +4,10 @@ defmodule BerlimWeb.Plugs.RequireAdminAuth do
   """
 
   import Plug.Conn
-  import Phoenix.Controller
+  import Phoenix.Controller, only: [
+    put_flash: 3,
+    redirect: 2
+  ]
 
   alias BerlimWeb.Router.Helpers, as: Routes
 

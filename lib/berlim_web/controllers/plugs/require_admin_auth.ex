@@ -19,9 +19,9 @@ defmodule BerlimWeb.Plugs.RequireAdminAuth do
   def init(params), do: params
 
   def call(conn, _params) do
-    user = conn.assigns[:user]
+    user_id = get_session(conn, :user_id)
 
-    if user && Repo.get!(Admin, user.id) do
+    if user_id && Repo.get!(Admin, user_id) do
       conn
     else
       conn

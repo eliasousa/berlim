@@ -18,8 +18,8 @@ defmodule Berlim.Accounts.Admin do
   def changeset(admin, attrs) do
     admin
     |> cast(attrs, [:email, :password, :name, :active, :phone])
-    |> validate_required([:email, :password, :name, :active], message: "Campo obrigatório!")
-    |> unique_constraint(:email, message: "Email já cadastrado!")
-    |> validate_format(:email, ~r/@/, message: "Formato inválido!")
+    |> validate_required([:email, :password, :name, :active])
+    |> unique_constraint(:email)
+    |> validate_format(:email, ~r/@/)
   end
 end

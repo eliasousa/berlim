@@ -2,7 +2,7 @@ defmodule Berlim.Accounts do
   @moduledoc """
   The Accounts context.
   """
-  import Ecto.Query
+  import Ecto.Query, only: [from: 2]
 
   alias Berlim.{
     Repo,
@@ -34,11 +34,11 @@ defmodule Berlim.Accounts do
     Admin.changeset(admin, %{})
   end
 
-  def list_taxis() do
+  def list_taxis do
     Repo.all(
-      from Taxi,
+      from t in Taxi,
         order_by: [asc: :smtt],
-        select: [:id, :smtt, :email, :active]
+        select: t
     )
   end
 
@@ -48,17 +48,17 @@ defmodule Berlim.Accounts do
 
   def create_taxi(taxi_attrs) do
     %Taxi{}
-    |> taxi_change(taxi_attrs)
+    |> change_taxi(taxi_attrs)
     |> Repo.insert
   end
 
   def update_taxi(taxi, taxi_attrs) do
     taxi
-    |> taxi_change(taxi_attrs)
+    |> change_taxi(taxi_attrs)
     |> Repo.update()
   end
 
-  def taxi_change(taxi \\ %Taxi{}, taxi_attrs \\ %{}) do
+  def change_taxi(taxi \\ %Taxi{}, taxi_attrs \\ %{}) do
     Taxi.changeset(taxi, taxi_attrs)
   end
 end

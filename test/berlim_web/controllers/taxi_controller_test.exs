@@ -1,6 +1,6 @@
 defmodule BerlimWeb.TaxiControllerTest do
   use BerlimWeb.ConnCase
-  use Plug.Test
+  use BerlimWeb.Helpers.AuthHelper
 
   import Berlim.Factory
 
@@ -9,12 +9,10 @@ defmodule BerlimWeb.TaxiControllerTest do
   @invalid_attrs %{cpf: nil, email: nil}
 
   describe "GET /index, when user is an admin" do
-    setup [:assign_admin_on_conn]
+    setup [:authenticate_admin]
 
     test "list all taxis", %{conn: conn} do
-      conn =
-        conn
-        |> get(Routes.taxi_path(conn, :index))
+      conn = get(conn, Routes.taxi_path(conn, :index))
 
       assert html_response(conn, 200) =~ "Táxis"
     end
@@ -22,9 +20,7 @@ defmodule BerlimWeb.TaxiControllerTest do
 
   describe "GET /index, when user is not an admin" do
     test "redirects to Login /index and shows error message", %{conn: conn} do
-      conn =
-        conn
-        |> get(Routes.taxi_path(conn, :index))
+      conn = get(conn, Routes.taxi_path(conn, :index))
 
       assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
       assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
@@ -32,12 +28,10 @@ defmodule BerlimWeb.TaxiControllerTest do
   end
 
   describe "GET /new, when user is an admin" do
-    setup [:assign_admin_on_conn]
+    setup [:authenticate_admin]
 
     test "renders form", %{conn: conn} do
-      conn =
-        conn
-        |> get(Routes.taxi_path(conn, :new))
+      conn = get(conn, Routes.taxi_path(conn, :new))
 
       assert html_response(conn, 200) =~ "Novo Táxi"
     end
@@ -45,9 +39,7 @@ defmodule BerlimWeb.TaxiControllerTest do
 
   describe "GET /new, when user is not an admin" do
     test "redirects to Login /index and shows error message", %{conn: conn} do
-      conn =
-        conn
-        |> get(Routes.taxi_path(conn, :new))
+      conn = get(conn, Routes.taxi_path(conn, :new))
 
       assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
       assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
@@ -55,20 +47,16 @@ defmodule BerlimWeb.TaxiControllerTest do
   end
 
   describe "POST /create, when user is an admin" do
-    setup [:assign_admin_on_conn]
+    setup [:authenticate_admin]
 
     test "redirects to index when data is valid", %{conn: conn} do
-      conn =
-        conn
-        |> post(Routes.taxi_path(conn, :create), taxi: @valid_attrs)
+      conn = post(conn, Routes.taxi_path(conn, :create), taxi: @valid_attrs)
 
       assert redirected_to(conn) == Routes.taxi_path(conn, :index)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn =
-        conn
-        |> post(Routes.taxi_path(conn, :create), taxi: @invalid_attrs)
+      conn = post(conn, Routes.taxi_path(conn, :create), taxi: @invalid_attrs)
 
       assert html_response(conn, 200) =~ "Oops, algo errado aconteceu!"
     end
@@ -76,9 +64,7 @@ defmodule BerlimWeb.TaxiControllerTest do
 
   describe "POST /create, when user is not an admin" do
     test "redirects to Login /index and shows error message", %{conn: conn} do
-      conn =
-        conn
-        |> post(Routes.taxi_path(conn, :create), taxi: @valid_attrs)
+      conn = post(conn, Routes.taxi_path(conn, :create), taxi: @valid_attrs)
 
       assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
       assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
@@ -86,12 +72,10 @@ defmodule BerlimWeb.TaxiControllerTest do
   end
 
   describe "GET /edit, when user is an admin" do
-    setup [:assign_admin_on_conn, :insert_taxi]
+    setup [:authenticate_admin, :insert_taxi]
 
     test "renders form for editing chosen taxi", %{conn: conn, taxi: taxi} do
-      conn =
-        conn
-        |> get(Routes.taxi_path(conn, :edit, taxi))
+      conn = get(conn, Routes.taxi_path(conn, :edit, taxi))
 
       assert conn.assigns.taxi == taxi
       assert html_response(conn, 200) =~ "Editar Táxi"
@@ -102,9 +86,7 @@ defmodule BerlimWeb.TaxiControllerTest do
     setup [:insert_taxi]
 
     test "redirects to Login /index and shows error message", %{conn: conn, taxi: taxi} do
-      conn =
-        conn
-        |> get(Routes.taxi_path(conn, :edit, taxi))
+      conn = get(conn, Routes.taxi_path(conn, :edit, taxi))
 
       assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
       assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
@@ -112,21 +94,17 @@ defmodule BerlimWeb.TaxiControllerTest do
   end
 
   describe "PUT /update, when user is an admin" do
-    setup [:assign_admin_on_conn, :insert_taxi]
+    setup [:authenticate_admin, :insert_taxi]
 
     test "redirects when data is valid", %{conn: conn, taxi: taxi} do
-      conn =
-        conn
-        |> put(Routes.taxi_path(conn, :update, taxi), taxi: @update_attrs)
+      conn = put(conn, Routes.taxi_path(conn, :update, taxi), taxi: @update_attrs)
 
       assert redirected_to(conn) == Routes.taxi_path(conn, :index)
       assert get_flash(conn, :info) == "Táxi atualizado com sucesso."
     end
 
     test "renders errors when data is invalid", %{conn: conn, taxi: taxi} do
-      conn =
-        conn
-        |> put(Routes.taxi_path(conn, :update, taxi), taxi: @invalid_attrs)
+      conn = put(conn, Routes.taxi_path(conn, :update, taxi), taxi: @invalid_attrs)
 
       assert html_response(conn, 200) =~ "Oops, algo errado aconteceu!"
     end
@@ -136,9 +114,7 @@ defmodule BerlimWeb.TaxiControllerTest do
     setup [:insert_taxi]
 
     test "redirects to Login /index and shows error message", %{conn: conn, taxi: taxi} do
-      conn =
-        conn
-        |> put(Routes.taxi_path(conn, :update, taxi), taxi: @update_attrs)
+      conn = put(conn, Routes.taxi_path(conn, :update, taxi), taxi: @update_attrs)
 
       assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
       assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
@@ -150,13 +126,8 @@ defmodule BerlimWeb.TaxiControllerTest do
     %{taxi: insert(:taxi)}
   end
 
-  defp assign_admin_on_conn(_) do
-    admin = insert(:admin)
-
-    conn =
-      build_conn()
-      |> assign(:user, admin)
-
-    {:ok, conn: conn}
+  defp authenticate_admin %{conn: conn} do
+    conn = authenticate(conn)
+    %{conn: conn}
   end
 end

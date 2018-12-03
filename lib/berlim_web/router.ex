@@ -13,13 +13,22 @@ defmodule BerlimWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :ensure_admin do
+    plug BerlimWeb.Plugs.RequireAdminAuth
+  end
+
   scope "/", BerlimWeb do
     pipe_through :browser
 
     get "/", LoginController, :index
 
     resources "/admins", AdminController, except: [:show]
-    resources "/taxis", TaxiController, except: [:show, :delete]
+  end
+
+  scope "/taxis", BerlimWeb do
+    pipe_through [:browser, :ensure_admin]
+
+    resources "/", TaxiController, except: [:show, :delete]
   end
 
   # Other scopes may use custom stacks.

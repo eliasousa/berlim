@@ -3,8 +3,6 @@ defmodule BerlimWeb.TaxiController do
 
   alias Berlim.Accounts
 
-  plug BerlimWeb.Plugs.RequireAdminAuth
-
   def index(conn, _params) do
     taxis = Accounts.list_taxis()
 
@@ -12,7 +10,7 @@ defmodule BerlimWeb.TaxiController do
   end
 
   def new(conn, _params) do
-    changeset = Accounts.taxi_change()
+    changeset = Accounts.change_taxi()
 
     render conn, "new.html", changeset: changeset
   end
@@ -30,7 +28,7 @@ defmodule BerlimWeb.TaxiController do
 
   def edit(conn, %{"id" => taxi_id}) do
     taxi = Accounts.get_taxi!(taxi_id)
-    changeset = Accounts.taxi_change(taxi)
+    changeset = Accounts.change_taxi(taxi)
 
     render conn, "edit.html", taxi: taxi, changeset: changeset
   end

@@ -65,7 +65,9 @@ defmodule Berlim.AccountsTest do
     @update_attrs %{cpf: "12345678910"}
     @invalid_attrs %{cpf: nil, email: nil}
 
-    setup [:insert_taxi]
+    setup do
+      %{taxi: insert(:taxi)}
+    end
 
     test "list_taxis/0 returns all taxis ordered by smtt" do
       insert_list(4, :taxi)
@@ -104,19 +106,15 @@ defmodule Berlim.AccountsTest do
     end
 
     test "change_taxi/0 returns a taxi changeset" do
-      assert %Ecto.Changeset{} = Accounts.taxi_change()
+      assert %Ecto.Changeset{} = Accounts.change_taxi()
     end
 
     test "change_taxi/1 returns a taxi changeset", %{taxi: taxi} do
-      assert %Ecto.Changeset{} = Accounts.taxi_change(taxi)
+      assert %Ecto.Changeset{} = Accounts.change_taxi(taxi)
     end
 
     test "change_taxi/2 returns a taxi changeset", %{taxi: taxi} do
-      assert %Ecto.Changeset{} = Accounts.taxi_change(taxi, @valid_attrs)
+      assert %Ecto.Changeset{} = Accounts.change_taxi(taxi, @valid_attrs)
     end
-  end
-
-  defp insert_taxi(_) do
-    %{taxi: insert(:taxi)}
   end
 end

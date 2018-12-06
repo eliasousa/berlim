@@ -4,10 +4,12 @@ defmodule BerlimWeb.Plugs.RequireAdminAuth do
   """
 
   import Plug.Conn
-  import Phoenix.Controller, only: [
-    put_flash: 3,
-    redirect: 2
-  ]
+
+  import Phoenix.Controller,
+    only: [
+      put_flash: 3,
+      redirect: 2
+    ]
 
   alias BerlimWeb.Router.Helpers, as: Routes
 
@@ -21,7 +23,7 @@ defmodule BerlimWeb.Plugs.RequireAdminAuth do
   def call(conn, _params) do
     user_id = get_session(conn, :user_id)
 
-    if user_id && Repo.get!(Admin, user_id) do
+    if user_id && Repo.get(Admin, user_id) do
       conn
     else
       conn

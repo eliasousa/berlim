@@ -119,14 +119,13 @@ defmodule BerlimWeb.TaxiControllerTest do
       assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
       assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
     end
-
   end
 
   defp insert_taxi(_) do
     %{taxi: insert(:taxi)}
   end
 
-  defp authenticate_admin %{conn: conn} do
+  defp authenticate_admin(%{conn: conn}) do
     conn = authenticate(conn)
     %{conn: conn}
   end

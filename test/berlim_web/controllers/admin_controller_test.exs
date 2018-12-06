@@ -1,5 +1,6 @@
 defmodule BerlimWeb.AdminControllerTest do
   use BerlimWeb.ConnCase
+  use BerlimWeb.Helpers.AuthHelper
 
   import Berlim.Factory
 
@@ -7,69 +8,140 @@ defmodule BerlimWeb.AdminControllerTest do
   @update_attrs %{name: "Lionel Ritchie"}
   @invalid_attrs %{name: nil, email: nil}
 
-  describe "index" do
+  describe "GET /index, when user is an admin" do
+    setup [:authenticate_admin]
+
     test "lists all admins", %{conn: conn} do
-      conn = get conn, Routes.admin_path(conn, :index)
+      conn = get(conn, Routes.admin_path(conn, :index))
       assert html_response(conn, 200) =~ "Admins"
     end
   end
 
-  describe "new admin" do
+  describe "GET /index, when user is not an admin" do
+    test "redirects to Login /index and shows error message", %{conn: conn} do
+      conn = get(conn, Routes.admin_path(conn, :index))
+
+      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
+      assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
+    end
+  end
+
+  describe "GET /new, when user is an admin" do
+    setup [:authenticate_admin]
+
     test "renders form", %{conn: conn} do
-      conn = get conn, Routes.admin_path(conn, :new)
+      conn = get(conn, Routes.admin_path(conn, :new))
       assert html_response(conn, 200) =~ "Novo Admin"
     end
   end
 
-  describe "create admin" do
+  describe "GET /new, when user is not admin" do
+    test "redirects to Login /index and shows error message", %{conn: conn} do
+      conn = get(conn, Routes.admin_path(conn, :new))
+
+      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
+      assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
+    end
+  end
+
+  describe "POST /create, when user is an admin" do
+    setup [:authenticate_admin]
+
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post conn, Routes.admin_path(conn, :create), admin: @create_attrs
+      conn = post(conn, Routes.admin_path(conn, :create), admin: @create_attrs)
       assert redirected_to(conn) == Routes.admin_path(conn, :index)
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post conn, Routes.admin_path(conn, :create), admin: @invalid_attrs
+      conn = post(conn, Routes.admin_path(conn, :create), admin: @invalid_attrs)
       assert html_response(conn, 200) =~ "Novo Admin"
     end
   end
 
-  describe "edit admin" do
-    setup [:create_admin]
+  describe "POST /create, when user is not an admin" do
+    test "redirects to Login /index and shows error message", %{conn: conn} do
+      conn = post(conn, Routes.admin_path(conn, :create))
+
+      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
+      assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
+    end
+  end
+
+  describe "GET /edit, when user is an admin" do
+    setup [:create_admin, :authenticate_admin]
 
     test "renders form for editing chosen admin", %{conn: conn, admin: admin} do
-      conn = get conn, Routes.admin_path(conn, :edit, admin)
+      conn = get(conn, Routes.admin_path(conn, :edit, admin))
       assert html_response(conn, 200) =~ "Editar Admin"
     end
   end
 
-  describe "update admin" do
+  describe "GET /edit, when user is not an admin" do
     setup [:create_admin]
 
+    test "redirects to Login /index and shows error message", %{conn: conn, admin: admin} do
+      conn = get(conn, Routes.admin_path(conn, :edit, admin))
+
+      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
+      assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
+    end
+  end
+
+  describe " PUT /update, when user is an admin" do
+    setup [:create_admin, :authenticate_admin]
+
     test "redirects when data is valid", %{conn: conn, admin: admin} do
-      conn = put conn, Routes.admin_path(conn, :update, admin), admin: @update_attrs
+      conn = put(conn, Routes.admin_path(conn, :update, admin), admin: @update_attrs)
       assert redirected_to(conn) == Routes.admin_path(conn, :index)
 
-      conn = get conn, Routes.admin_path(conn, :edit, admin)
+      conn = get(conn, Routes.admin_path(conn, :edit, admin))
       assert html_response(conn, 200) =~ "Lionel Ritchie"
     end
 
     test "renders errors when data is invalid", %{conn: conn, admin: admin} do
-      conn = put conn, Routes.admin_path(conn, :update, admin), admin: @invalid_attrs
+      conn = put(conn, Routes.admin_path(conn, :update, admin), admin: @invalid_attrs)
       assert html_response(conn, 200) =~ "Editar Admin"
     end
   end
 
-  describe "delete admin" do
+  describe "PUT /update, when user is not an admin" do
     setup [:create_admin]
 
+    test "redirects to Login /index and shows error message", %{conn: conn, admin: admin} do
+      conn = put(conn, Routes.admin_path(conn, :update, admin), admin: @update_attrs)
+
+      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
+      assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
+    end
+  end
+
+  describe "DELETE /delete, when user is an admin" do
+    setup [:create_admin, :authenticate_admin]
+
     test "deletes chosen admin", %{conn: conn, admin: admin} do
-      conn = delete conn, Routes.admin_path(conn, :delete, admin)
+      conn = delete(conn, Routes.admin_path(conn, :delete, admin))
       assert redirected_to(conn) == Routes.admin_path(conn, :index)
+    end
+  end
+
+  describe "DELETE /delete, when user is not an admin" do
+    setup [:create_admin]
+
+    test "redirects to Login /index and shows error message", %{conn: conn, admin: admin} do
+      conn = delete(conn, Routes.admin_path(conn, :delete, admin))
+
+      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
+      assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
     end
   end
 
   defp create_admin(_) do
     admin = insert(:admin)
     {:ok, admin: admin}
+  end
+
+  defp authenticate_admin(%{conn: conn}) do
+    conn = authenticate(conn)
+    %{conn: conn}
   end
 end

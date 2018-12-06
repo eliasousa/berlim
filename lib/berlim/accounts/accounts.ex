@@ -36,9 +36,9 @@ defmodule Berlim.Accounts do
 
   def list_taxis do
     Repo.all(
-      from t in Taxi,
-        order_by: [asc: :smtt],
-        select: t
+      from(t in Taxi,
+        order_by: :smtt
+      )
     )
   end
 
@@ -49,7 +49,7 @@ defmodule Berlim.Accounts do
   def create_taxi(taxi_attrs) do
     %Taxi{}
     |> change_taxi(taxi_attrs)
-    |> Repo.insert
+    |> Repo.insert()
   end
 
   def update_taxi(taxi, taxi_attrs) do

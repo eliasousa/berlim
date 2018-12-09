@@ -18,15 +18,6 @@ defmodule BerlimWeb.TaxiControllerTest do
     end
   end
 
-  describe "GET /index, when user is not an admin" do
-    test "redirects to Login /index and shows error message", %{conn: conn} do
-      conn = get(conn, Routes.taxi_path(conn, :index))
-
-      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
-      assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
-    end
-  end
-
   describe "GET /new, when user is an admin" do
     setup [:authenticate_admin]
 
@@ -34,15 +25,6 @@ defmodule BerlimWeb.TaxiControllerTest do
       conn = get(conn, Routes.taxi_path(conn, :new))
 
       assert html_response(conn, 200) =~ "Novo Táxi"
-    end
-  end
-
-  describe "GET /new, when user is not an admin" do
-    test "redirects to Login /index and shows error message", %{conn: conn} do
-      conn = get(conn, Routes.taxi_path(conn, :new))
-
-      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
-      assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
     end
   end
 
@@ -62,15 +44,6 @@ defmodule BerlimWeb.TaxiControllerTest do
     end
   end
 
-  describe "POST /create, when user is not an admin" do
-    test "redirects to Login /index and shows error message", %{conn: conn} do
-      conn = post(conn, Routes.taxi_path(conn, :create), taxi: @valid_attrs)
-
-      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
-      assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
-    end
-  end
-
   describe "GET /edit, when user is an admin" do
     setup [:authenticate_admin, :insert_taxi]
 
@@ -79,17 +52,6 @@ defmodule BerlimWeb.TaxiControllerTest do
 
       assert conn.assigns.taxi == taxi
       assert html_response(conn, 200) =~ "Editar Táxi"
-    end
-  end
-
-  describe "GET /edit, when user is not an admin" do
-    setup [:insert_taxi]
-
-    test "redirects to Login /index and shows error message", %{conn: conn, taxi: taxi} do
-      conn = get(conn, Routes.taxi_path(conn, :edit, taxi))
-
-      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
-      assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
     end
   end
 
@@ -107,17 +69,6 @@ defmodule BerlimWeb.TaxiControllerTest do
       conn = put(conn, Routes.taxi_path(conn, :update, taxi), taxi: @invalid_attrs)
 
       assert html_response(conn, 200) =~ "Oops, algo errado aconteceu!"
-    end
-  end
-
-  describe "PUT /update, when user is not an admin" do
-    setup [:insert_taxi]
-
-    test "redirects to Login /index and shows error message", %{conn: conn, taxi: taxi} do
-      conn = put(conn, Routes.taxi_path(conn, :update, taxi), taxi: @update_attrs)
-
-      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
-      assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
     end
   end
 

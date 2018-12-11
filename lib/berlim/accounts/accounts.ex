@@ -2,8 +2,13 @@ defmodule Berlim.Accounts do
   @moduledoc """
   The Accounts context.
   """
+  import Ecto.Query, only: [from: 2]
 
-  alias Berlim.{Repo, Accounts.Admin}
+  alias Berlim.{
+    Repo,
+    Accounts.Admin,
+    Accounts.Taxi
+  }
 
   def list_admins, do: Repo.all(Admin)
 
@@ -27,5 +32,33 @@ defmodule Berlim.Accounts do
 
   def change_admin(%Admin{} = admin) do
     Admin.changeset(admin, %{})
+  end
+
+  def list_taxis do
+    Repo.all(
+      from(t in Taxi,
+        order_by: :smtt
+      )
+    )
+  end
+
+  def get_taxi!(taxi_id) do
+    Repo.get!(Taxi, taxi_id)
+  end
+
+  def create_taxi(taxi_attrs) do
+    %Taxi{}
+    |> change_taxi(taxi_attrs)
+    |> Repo.insert()
+  end
+
+  def update_taxi(taxi, taxi_attrs) do
+    taxi
+    |> change_taxi(taxi_attrs)
+    |> Repo.update()
+  end
+
+  def change_taxi(taxi \\ %Taxi{}, taxi_attrs \\ %{}) do
+    Taxi.changeset(taxi, taxi_attrs)
   end
 end

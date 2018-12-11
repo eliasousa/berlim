@@ -2,23 +2,32 @@ defmodule BerlimWeb.Router do
   use BerlimWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_flash)
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
+  end
+
+  pipeline :ensure_admin do
+    plug(BerlimWeb.Plugs.RequireAdminAuth)
   end
 
   scope "/", BerlimWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :index
+    get("/", LoginController, :index)
+  end
 
-    resources "/admins", AdminController, except: [:show]
+  scope "/", BerlimWeb do
+    pipe_through([:browser, :ensure_admin])
+
+    resources("/admins", AdminController, except: [:show])
+    resources("/taxis", TaxiController, except: [:show, :delete])
   end
 
   # Other scopes may use custom stacks.

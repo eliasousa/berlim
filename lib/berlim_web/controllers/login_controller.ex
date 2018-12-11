@@ -1,4 +1,4 @@
-defmodule BerlimWeb.PageController do
+defmodule BerlimWeb.LoginController do
   use BerlimWeb, :controller
 
   def index(conn, _params) do

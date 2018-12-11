@@ -18,8 +18,8 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Configurações</a>
             <div class="dropdown-menu">
-              <%= link("Admins", to: "/admins", class: "dropdown-item") %>
-              <a class="dropdown-item" href="#">Taxis</a>
+              <%= link("Admins", to: Routes.admin_path(@conn, :index), class: "dropdown-item") %>
+              <%= link("Taxis", to: Routes.taxi_path(@conn, :index), class: "dropdown-item") %>
             </div>
           </li>
         </ul>

@@ -17,6 +17,8 @@ config :berlim, BerlimWeb.Endpoint,
   render_errors: [view: BerlimWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Berlim.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :berlim, BerlimWeb.Gettext, default_locale: "pt_BR"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

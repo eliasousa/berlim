@@ -1,0 +1,31 @@
+<div class="d-flex mb-3">
+  <h3>Táxis</h3>
+  <div class="ml-auto">
+    <%= link "Cadastrar Táxi", to: Routes.taxi_path(@conn, :new), class: "btn btn-outline-primary btn-xs" %>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>SMTT</th>
+      <th>Email</th>
+      <th>Status</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for taxi <- @taxis do %>
+      <tr>
+        <td><%= taxi.smtt %></td>
+        <td><%= taxi.email %></td>
+        <td><%= if taxi.active, do: "Ativo", else: "Inativo" %></td>
+
+        <td class="text-right">
+          <span><%= link "Editar", to: Routes.taxi_path(@conn, :edit, taxi), class: "btn btn-outline-info btn-sm" %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

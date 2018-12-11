@@ -1,0 +1,48 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, algo errado aconteceu! Por favor, veja os erros abaixo.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label f, :cpf, "CPF", class: "control-label" %>
+    <%= text_input f, :cpf, class: "form-control" %>
+    <%= error_tag f, :cpf %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :smtt, "SMTT", class: "control-label" %>
+    <%= number_input f, :smtt, class: "form-control" %>
+    <%= error_tag f, :smtt %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :email, "E-mail", class: "control-label" %>
+    <%= text_input f, :email, class: "form-control" %>
+    <%= error_tag f, :email %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :password, "Senha", class: "control-label" %>
+    <%= password_input f, :password, class: "form-control" %>
+    <%= error_tag f, :password %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :active, "Status", class: "control-label" %>
+    <%= select f, :active, ["Ativo": true, "Inativo": false], class: "form-control" %>
+    <%= error_tag f, :active %>
+  </div>
+
+  <div class="form-group">
+    <%= label f, :phone, "Telefone", class: "control-label" %>
+    <%= telephone_input f, :phone, class: "form-control" %>
+    <%= error_tag f, :phone %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Salvar", class: "btn btn-success btn-sm" %>
+    <%= link "Voltar", class: "btn btn-outline-secondary btn-sm", to: Routes.taxi_path(@conn, :index) %>
+  </div>
+<% end %>

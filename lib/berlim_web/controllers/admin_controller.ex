@@ -20,6 +20,7 @@ defmodule BerlimWeb.AdminController do
         conn
         |> put_flash(:info, "Admin adicionado com sucesso.")
         |> redirect(to: Routes.admin_path(conn, :index))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -39,6 +40,7 @@ defmodule BerlimWeb.AdminController do
         conn
         |> put_flash(:info, "Admin atualizado com sucesso.")
         |> redirect(to: Routes.admin_path(conn, :index))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", admin: admin, changeset: changeset)
     end

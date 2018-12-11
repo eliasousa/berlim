@@ -1,4 +1,4 @@
-defmodule BerlimWeb.PageControllerTest do
+defmodule BerlimWeb.LoginControllerTest do
   use BerlimWeb.ConnCase
 
   test "GET /", %{conn: conn} do

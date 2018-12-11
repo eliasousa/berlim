@@ -1,5 +1,9 @@
-<span><%= link "Cadastrar Admin", to: Routes.admin_path(@conn, :new), class: "btn btn-primary btn-sm pull-right" %></span>
-<h3>Admins</h3>
+<div class="d-flex mb-3">
+  <h3>Admins</h3>
+  <div class="ml-auto">
+    <%= link "Cadastrar Admin", to: Routes.admin_path(@conn, :new), class: "btn btn-outline-primary btn-xs" %>
+  </div>
+</div>
 
 <table class="table">
   <thead>
@@ -19,8 +23,8 @@
         <td><%= if admin.active, do: "Ativo", else: "Inativo" %></td>
 
         <td class="text-right">
-          <span><%= link "Editar", to: Routes.admin_path(@conn, :edit, admin), class: "btn btn-default btn-xs" %></span>
-          <span><%= link "Deletar", to: Routes.admin_path(@conn, :delete, admin), method: :delete, data: [confirm: "Tem certeza?"], class: "btn btn-danger btn-xs" %></span>
+          <span><%= link "Editar", to: Routes.admin_path(@conn, :edit, admin), class: "btn btn-outline-info btn-sm" %></span>
+          <span><%= link "Deletar", to: Routes.admin_path(@conn, :delete, admin), method: :delete, data: [confirm: "Tem certeza?"], class: "btn btn-outline-danger btn-sm" %></span>
         </td>
       </tr>
     <% end %>

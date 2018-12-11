@@ -3,6 +3,6 @@ defmodule BerlimWeb.LoginControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")
-    assert html_response(conn, 200) =~ "Bem vindo ao Phoenix!"
+    assert html_response(conn, 200) =~ "Dashboard"
   end
 end

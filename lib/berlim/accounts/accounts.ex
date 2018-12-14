@@ -2,7 +2,7 @@ defmodule Berlim.Accounts do
   @moduledoc """
   The Accounts context.
   """
-  import Ecto.Query
+  import Ecto.Query, only: [order_by: 2]
 
   alias Berlim.{
     Repo,

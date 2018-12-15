@@ -69,15 +69,17 @@ defmodule Berlim.AccountsTest do
       %{taxi: insert(:taxi)}
     end
 
-    test "list_taxis/0 returns all taxis ordered by smtt" do
-      insert_list(4, :taxi)
-      taxis = Accounts.list_taxis()
-      first_taxi = List.first(taxis)
-      last_taxi = List.last(taxis)
+    test "list_taxis/1 returns the first 30 taxis ordered by smtt" do
+      insert_list(44, :taxi)
+      page = Accounts.list_taxis(%{page: 1})
+      first_taxi = List.first(page.entries)
+      last_taxi = List.last(page.entries)
 
-      assert is_list(taxis)
-      assert Enum.count(taxis) == 5
+      assert is_list(page.entries)
+      assert Enum.count(page.entries) == 30
       assert first_taxi.smtt < last_taxi.smtt
+      assert page.total_entries == 45
+      assert page.total_pages == 2
     end
 
     test "get_taxi/1 returns the taxi with given id", %{taxi: taxi} do

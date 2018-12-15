@@ -3,10 +3,10 @@ defmodule BerlimWeb.TaxiController do
 
   alias Berlim.Accounts
 
-  def index(conn, _params) do
-    taxis = Accounts.list_taxis()
+  def index(conn, params) do
+    page = Accounts.list_taxis(params)
 
-    render(conn, "index.html", taxis: taxis)
+    render(conn, "index.html", taxis: page.entries, page: page)
   end
 
   def new(conn, _params) do

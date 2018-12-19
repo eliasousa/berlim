@@ -24,8 +24,7 @@ defmodule BerlimWeb.Router do
   end
 
   scope "/", BerlimWeb do
-    # pipe_through([:browser, :ensure_admin])
-    pipe_through([:browser])
+    pipe_through([:browser, :ensure_admin])
 
     resources("/admins", AdminController, except: [:show])
     resources("/taxis", TaxiController, except: [:show, :delete])

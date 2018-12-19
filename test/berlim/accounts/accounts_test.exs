@@ -61,7 +61,6 @@ defmodule Berlim.AccountsTest do
   describe "taxis" do
     alias Berlim.Accounts.Taxi
 
-    @valid_attrs params_for(:taxi)
     @update_attrs %{cpf: "12345678910"}
     @invalid_attrs %{cpf: nil, email: nil}
 
@@ -83,13 +82,17 @@ defmodule Berlim.AccountsTest do
     end
 
     test "get_taxi/1 returns the taxi with given id", %{taxi: taxi} do
-      assert Accounts.get_taxi!(taxi.id) == taxi
+      assert Accounts.get_taxi!(taxi.id).id == taxi.id
     end
 
     test "create_taxi/1 with valid data creates a taxi" do
-      assert {:ok, taxi} = Accounts.create_taxi(@valid_attrs)
+      plan = insert(:plan)
+      create_attrs = Map.merge(params_for(:taxi), %{plan_id: plan.id})
+
+      assert {:ok, taxi} = Accounts.create_taxi(create_attrs)
       assert taxi.cpf == "02005445698"
       assert taxi.password == "1234abcd"
+      assert taxi.plan_id == plan.id
       assert taxi.active == true
     end
 
@@ -116,7 +119,7 @@ defmodule Berlim.AccountsTest do
     end
 
     test "change_taxi/2 returns a taxi changeset", %{taxi: taxi} do
-      assert %Ecto.Changeset{} = Accounts.change_taxi(taxi, @valid_attrs)
+      assert %Ecto.Changeset{} = Accounts.change_taxi(taxi, @update_attrs)
     end
   end
 end

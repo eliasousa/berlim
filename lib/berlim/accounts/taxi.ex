@@ -4,7 +4,7 @@ defmodule Berlim.Accounts.Taxi do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Berlim.Sales.Order
+  alias Berlim.Sales.{Order, Plan}
 
   schema "taxis" do
     field(:cpf, :string)
@@ -14,15 +14,16 @@ defmodule Berlim.Accounts.Taxi do
     field(:smtt, :integer)
     field(:active, :boolean)
     has_many(:orders, Order)
+    belongs_to(:plan, Plan)
 
     timestamps()
   end
 
   @doc false
-  def changeset(taxi, attrs \\ %{}) do
+  def changeset(taxi, attrs) do
     taxi
-    |> cast(attrs, [:email, :password, :active, :phone, :smtt, :cpf])
-    |> validate_required([:email, :password, :active, :phone, :smtt, :cpf])
+    |> cast(attrs, [:email, :password, :active, :phone, :smtt, :cpf, :plan_id])
+    |> validate_required([:email, :password, :active, :phone, :smtt, :cpf, :plan_id])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:smtt)
     |> unique_constraint(:email)

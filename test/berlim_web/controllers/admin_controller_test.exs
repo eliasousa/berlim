@@ -29,7 +29,7 @@ defmodule BerlimWeb.AdminControllerTest do
   describe "POST /create, when user is an admin" do
     setup [:authenticate_admin]
 
-    test "redirects to show when data is valid", %{conn: conn} do
+    test "redirects to index when data is valid", %{conn: conn} do
       conn = post(conn, Routes.admin_path(conn, :create), admin: @create_attrs)
       assert redirected_to(conn) == Routes.admin_path(conn, :index)
     end
@@ -49,7 +49,7 @@ defmodule BerlimWeb.AdminControllerTest do
     end
   end
 
-  describe " PUT /update, when user is an admin" do
+  describe "PUT /update, when user is an admin" do
     setup [:create_admin, :authenticate_admin]
 
     test "redirects when data is valid", %{conn: conn, admin: admin} do

@@ -24,10 +24,12 @@ defmodule BerlimWeb.Router do
   end
 
   scope "/", BerlimWeb do
-    pipe_through([:browser, :ensure_admin])
+    # pipe_through([:browser, :ensure_admin])
+    pipe_through([:browser])
 
     resources("/admins", AdminController, except: [:show])
     resources("/taxis", TaxiController, except: [:show, :delete])
+    resources("/plans", PlanController, except: [:show, :delete])
   end
 
   # Other scopes may use custom stacks.

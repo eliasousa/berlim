@@ -31,6 +31,13 @@ defmodule Berlim.SalesFactory do
           monthly_date: Date.utc_today()
         }
       end
+
+      def plan_factory do
+        %Berlim.Sales.Plan{
+          name: "Aracaju",
+          value: 200
+        }
+      end
     end
   end
 end

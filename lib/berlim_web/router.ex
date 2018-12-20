@@ -28,6 +28,7 @@ defmodule BerlimWeb.Router do
 
     resources("/admins", AdminController, except: [:show])
     resources("/taxis", TaxiController, except: [:show, :delete])
+    resources("/plans", PlanController, except: [:show, :delete])
   end
 
   # Other scopes may use custom stacks.

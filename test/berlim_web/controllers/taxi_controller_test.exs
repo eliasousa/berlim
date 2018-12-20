@@ -4,7 +4,6 @@ defmodule BerlimWeb.TaxiControllerTest do
 
   import Berlim.Factory
 
-  @valid_attrs params_for(:taxi)
   @update_attrs %{cpf: "12345678910"}
   @invalid_attrs %{cpf: nil, email: nil}
 
@@ -32,7 +31,9 @@ defmodule BerlimWeb.TaxiControllerTest do
     setup [:authenticate_admin]
 
     test "redirects to index when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.taxi_path(conn, :create), taxi: @valid_attrs)
+      valid_attrs = params_for(:taxi, plan: insert(:plan))
+
+      conn = post(conn, Routes.taxi_path(conn, :create), taxi: valid_attrs)
 
       assert redirected_to(conn) == Routes.taxi_path(conn, :index)
     end
@@ -50,7 +51,8 @@ defmodule BerlimWeb.TaxiControllerTest do
     test "renders form for editing chosen taxi", %{conn: conn, taxi: taxi} do
       conn = get(conn, Routes.taxi_path(conn, :edit, taxi))
 
-      assert conn.assigns.taxi == taxi
+      assert conn.assigns.taxi.id == taxi.id
+      assert conn.assigns.taxi.cpf == taxi.cpf
       assert html_response(conn, 200) =~ "Editar Táxi"
     end
   end

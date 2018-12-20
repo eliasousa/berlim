@@ -1,0 +1,29 @@
+<div class="d-flex mb-3">
+  <h3>Planos</h3>
+  <div class="ml-auto">
+    <%= link "Cadastrar Plano", to: Routes.plan_path(@conn, :new), class: "btn btn-outline-primary btn-xs" %>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Valor</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for plan <- @plans do %>
+      <tr>
+        <td><%= plan.name %></td>
+        <td><%= plan.value %></td>
+
+        <td class="text-right">
+          <span><%= link "Editar", to: Routes.plan_path(@conn, :edit, plan), class: "btn btn-outline-info btn-sm" %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

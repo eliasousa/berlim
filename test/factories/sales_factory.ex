@@ -9,16 +9,17 @@ defmodule Berlim.SalesFactory do
         %Berlim.Sales.Customer{
           fullname: "John Doe",
           email: sequence(:email, &"email-#{&1}@example.com"),
-          phone: "7932120600",
-          address_street: "Rua A",
-          address_street_number: "3",
-          address_complement: "Prox a farmacia",
-          address_city_code: 54,
+          phone: "+55 (12) 21212-1212",
+          tax_document: "379.337.474-26",
+          address_street: "Rua XXX",
+          address_street_number: "232",
+          address_complement: "",
+          address_city_code: 2_800_308,
           address_city_name: "Aracaju",
           address_state: "SE",
-          address_zipcode: "49140000",
-          address_district: "Ponto Novo",
-          address_country: "BRA"
+          address_country: "BRA",
+          address_zipcode: "12.121-21212",
+          address_district: "13 de Julho"
         }
       end
 

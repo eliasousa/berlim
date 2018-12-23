@@ -18,13 +18,13 @@ defmodule Berlim.Sales.Order do
   end
 
   schema "orders" do
+    embeds_one(:customer, Customer)
     field(:monthly_date, :date)
     field(:approved_at, :utc_datetime)
     field(:status, Status)
     field(:type, Type)
     field(:value, :float)
     belongs_to(:taxi, Taxi)
-    belongs_to(:customer, Customer)
 
     timestamps()
   end

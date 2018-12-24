@@ -14,7 +14,7 @@ defmodule Berlim.Sales.Order do
 
   defmodule Type do
     @moduledoc false
-    use Exnumerator, values: [:credit_card, :bank_slip]
+    use Exnumerator, values: [:credit_card, :bank_slip, :money]
   end
 
   schema "orders" do
@@ -32,7 +32,7 @@ defmodule Berlim.Sales.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [:value, :status, :type, :approved_at, :monthly_date])
-    |> validate_required([:value, :status, :type, :monthly_date])
+    |> cast(attrs, [:value, :status, :type, :approved_at, :monthly_date, :taxi_id])
+    |> validate_required([:value, :status, :type, :monthly_date, :taxi_id])
   end
 end

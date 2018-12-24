@@ -29,7 +29,8 @@ defmodule Berlim.SalesFactory do
           status: :approved,
           type: :credit_card,
           approved_at: DateTime.utc_now(),
-          monthly_date: Date.utc_today()
+          monthly_date: Date.utc_today(),
+          taxi: build(:taxi)
         }
       end
 

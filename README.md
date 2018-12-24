@@ -9,4 +9,4 @@ To start your Phoenix server:
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 ### UML
-<img width="646" alt="screen shot 2018-09-14 at 19 41 46" src="https://user-images.githubusercontent.com/2476248/45578178-43439180-b856-11e8-8264-351ea9b77aaf.png">
+<img width="672" alt="screen shot 2018-12-23 at 6 48 54 pm" src="https://user-images.githubusercontent.com/2476248/50388443-64d5d400-06f5-11e9-80d1-459703e85d81.png">

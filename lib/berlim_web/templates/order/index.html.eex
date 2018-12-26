@@ -1,0 +1,38 @@
+<div class="d-flex mb-3">
+  <h3>Pagamentos</h3>
+  <div class="ml-auto">
+    <%= link "Cadastrar Pagamento", to: Routes.order_path(@conn, :new), class: "btn btn-outline-primary btn-xs" %>
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>SMTT</th>
+      <th>Data da Central</th>
+      <th>Status</th>
+      <th>Tipo</th>
+      <th>Valor</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= for order <- @orders do %>
+      <tr>
+        <td><%= order.taxi.smtt %></td>
+        <td><%= order.monthly_date %></td>
+        <td><%= order.status %></td>
+        <td><%= order.type %></td>
+        <td><%= order.value %></td>
+
+        <td class="text-right">
+          <span><%= link "Editar", to: Routes.order_path(@conn, :edit, order), class: "btn btn-outline-info btn-sm" %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= unless @page.total_pages == 1 do %>
+  <%= pagination_links @page %>
+<% end %>

@@ -4,12 +4,14 @@ defmodule Berlim.Sales.Order do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Berlim.Accounts.Taxi
-  alias Berlim.Sales.Customer
+  alias Berlim.{
+    Accounts.Taxi,
+    Sales.Customer
+  }
 
   defmodule Status do
     @moduledoc false
-    use Exnumerator, values: [:approved, :pending, :refused]
+    use Exnumerator, values: [:approved, :pending, :refused, :paid]
   end
 
   defmodule Type do

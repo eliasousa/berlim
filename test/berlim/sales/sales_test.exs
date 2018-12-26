@@ -57,12 +57,19 @@ defmodule Berlim.SalesTest do
     @update_attrs %{value: 200}
     @invalid_attrs %{value: nil}
 
-    test "list_orders/0 returns all orders" do
-      order = insert(:order)
-      orders = Sales.list_orders()
+    test "list_orders/1 returns the first 30 orders ordered desc by inserted_at" do
+      today = DateTime.utc_now()
+      insert_list(20, :order, inserted_at: today)
+      insert_list(25, :order, inserted_at: %{today | day: today.day + 1})
+      page = Sales.list_orders(%{page: 1})
+      first_order = List.first(page.entries)
+      last_order = List.last(page.entries)
 
-      assert is_list(orders)
-      assert List.first(orders).id == order.id
+      assert is_list(page.entries)
+      assert Enum.count(page.entries) == 30
+      assert first_order.inserted_at > last_order.inserted_at
+      assert page.total_entries == 45
+      assert page.total_pages == 2
     end
 
     test "get_order!/1 returns the order with given id" do
@@ -72,15 +79,15 @@ defmodule Berlim.SalesTest do
 
     test "create_order/1 with valid data creates a order" do
       taxi = insert(:taxi)
-      create_attrs = Map.merge(params_for(:order), %{taxi_id: taxi.id})
+      taxi = Repo.preload(taxi, :plan)
+
+      create_attrs = %{"monthly_date" => "25/10/2018", "taxi_id" => taxi.id}
 
       assert {:ok, %Order{} = order} = Sales.create_order(create_attrs)
-      assert order.status == :approved
-      assert order.value == 150
-    end
-
-    test "create_order/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = Sales.create_order(@invalid_attrs)
+      assert order.status == :paid
+      assert order.type == :money
+      assert order.monthly_date == ~D[2018-10-25]
+      assert order.value == taxi.plan.value
     end
 
     test "update_order/2 with valid data updates the order" do

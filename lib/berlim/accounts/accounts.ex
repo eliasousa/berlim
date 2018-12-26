@@ -34,6 +34,12 @@ defmodule Berlim.Accounts do
     Admin.changeset(admin, %{})
   end
 
+  def list_taxis() do
+    Taxi
+    |> order_by(asc: :smtt)
+    |> Repo.all()
+  end
+
   def list_taxis(params) do
     Taxi
     |> order_by(asc: :smtt)

@@ -20,7 +20,7 @@ defmodule Berlim.MixProject do
   def application do
     [
       mod: {Berlim.Application, []},
-      extra_applications: [:logger, :runtime_tools, :scrivener_ecto, :scrivener_html]
+      extra_applications: [:logger, :runtime_tools, :scrivener_ecto, :scrivener_html, :timex]
     ]
   end
 
@@ -47,7 +47,8 @@ defmodule Berlim.MixProject do
       {:exnumerator, "~> 1.6"},
       {:ex_machina, "~> 2.2", only: :test},
       {:scrivener_ecto, "~> 2.0"},
-      {:scrivener_html, git: "https://github.com/hlongvu/scrivener_html.git"}
+      {:scrivener_html, git: "https://github.com/hlongvu/scrivener_html.git"},
+      {:timex, "~> 3.1"}
     ]
   end
 

@@ -5,10 +5,10 @@ defmodule Berlim.Sales.OrderTest do
 
   alias Berlim.Sales.Order
 
-  @valid_attrs params_for(:order)
-
   test "changeset with valid attributes" do
-    changeset = Order.changeset(%Order{}, @valid_attrs)
+    taxi = insert(:taxi)
+    valid_attrs = Map.merge(params_for(:order), %{taxi_id: taxi.id})
+    changeset = Order.changeset(%Order{}, valid_attrs)
     assert changeset.valid?
   end
 

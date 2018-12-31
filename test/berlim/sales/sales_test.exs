@@ -54,20 +54,12 @@ defmodule Berlim.SalesTest do
   describe "orders" do
     alias Berlim.Sales.Order
 
-    @update_attrs %{value: 200}
-    @invalid_attrs %{value: nil}
-
     test "list_orders/1 returns the first 30 orders ordered desc by inserted_at" do
-      today = DateTime.utc_now()
-      insert_list(20, :order, inserted_at: today)
-      insert_list(25, :order, inserted_at: %{today | day: today.day + 1})
+      insert_list(45, :order)
       page = Sales.list_orders(%{page: 1})
-      first_order = List.first(page.entries)
-      last_order = List.last(page.entries)
 
       assert is_list(page.entries)
       assert Enum.count(page.entries) == 30
-      assert first_order.inserted_at > last_order.inserted_at
       assert page.total_entries == 45
       assert page.total_pages == 2
     end
@@ -92,13 +84,21 @@ defmodule Berlim.SalesTest do
 
     test "update_order/2 with valid data updates the order" do
       order = insert(:order)
-      assert {:ok, %Order{} = order} = Sales.update_order(order, @update_attrs)
-      assert order.value == 200
+
+      taxi = insert(:taxi) |> Repo.preload(:plan)
+      update_attrs = %{"monthly_date" => "25/10/2018", "taxi_id" => taxi.id}
+
+      assert {:ok, %Order{} = order} = Sales.update_order(order, update_attrs)
+      assert order.value == taxi.plan.value
+      assert order.monthly_date == ~D[2018-10-25]
     end
 
     test "update_order/2 with invalid data returns error changeset" do
       order = insert(:order)
-      assert {:error, %Ecto.Changeset{}} = Sales.update_order(order, @invalid_attrs)
+      taxi = insert(:taxi) |> Repo.preload(:plan)
+      invalid_attrs = %{"monthly_date" => "", "taxi_id" => taxi.id}
+
+      assert {:error, %Ecto.Changeset{}} = Sales.update_order(order, invalid_attrs)
       assert order.id == Sales.get_order!(order.id).id
     end
 

@@ -31,32 +31,32 @@ defmodule BerlimWeb.OrderController do
     end
   end
 
-  # def edit(conn, %{"id" => id}) do
-  #   admin = Accounts.get_admin!(id)
-  #   changeset = Accounts.change_admin(admin)
-  #   render(conn, "edit.html", admin: admin, changeset: changeset)
-  # end
+  def edit(conn, %{"id" => id}) do
+    order = Sales.get_order!(id)
+    changeset = Sales.change_order(order)
+    render(conn, "edit.html", order: order, changeset: changeset)
+  end
 
-  # def update(conn, %{"id" => id, "admin" => admin_params}) do
-  #   admin = Accounts.get_admin!(id)
+  def update(conn, %{"id" => id, "order" => order_params}) do
+    order = Sales.get_order!(id)
 
-  #   case Accounts.update_admin(admin, admin_params) do
-  #     {:ok, _admin} ->
-  #       conn
-  #       |> put_flash(:info, "Admin atualizado com sucesso.")
-  #       |> redirect(to: Routes.admin_path(conn, :index))
+    case Sales.update_order(order, order_params) do
+      {:ok, _order} ->
+        conn
+        |> put_flash(:info, "Pagamento atualizado com sucesso.")
+        |> redirect(to: Routes.order_path(conn, :index))
 
-  #     {:error, %Ecto.Changeset{} = changeset} ->
-  #       render(conn, "edit.html", admin: admin, changeset: changeset)
-  #   end
-  # end
+      {:error, %Ecto.Changeset{} = changeset} ->
+        render(conn, "edit.html", order: order, changeset: changeset)
+    end
+  end
 
-  # def delete(conn, %{"id" => id}) do
-  #   admin = Accounts.get_admin!(id)
-  #   {:ok, _admin} = Accounts.delete_admin(admin)
+  def delete(conn, %{"id" => id}) do
+    order = Sales.get_order!(id)
+    {:ok, _order} = Sales.delete_order(order)
 
-  #   conn
-  #   |> put_flash(:info, "Admin deletado com sucesso.")
-  #   |> redirect(to: Routes.admin_path(conn, :index))
-  # end
+    conn
+    |> put_flash(:info, "Pagamento deletado com sucesso.")
+    |> redirect(to: Routes.order_path(conn, :index))
+  end
 end

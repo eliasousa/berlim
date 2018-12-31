@@ -44,45 +44,48 @@ defmodule BerlimWeb.OrderControllerTest do
     end
   end
 
-  # describe "GET /edit, when user is an admin" do
-  #   setup [:create_admin, :authenticate_admin]
+  describe "GET /edit, when user is an admin" do
+    setup [:create_order, :authenticate_admin]
 
-  #   test "renders form for editing chosen admin", %{conn: conn, admin: admin} do
-  #     conn = get(conn, Routes.admin_path(conn, :edit, admin))
-  #     assert html_response(conn, 200) =~ "Editar Admin"
-  #   end
-  # end
+    test "renders form for editing chosen order", %{conn: conn, order: order} do
+      conn = get(conn, Routes.order_path(conn, :edit, order))
+      assert html_response(conn, 200) =~ "Editar Pagamento"
+    end
+  end
 
-  # describe "PUT /update, when user is an admin" do
-  #   setup [:create_admin, :authenticate_admin]
+  describe "PUT /update, when user is an admin" do
+    setup [:create_order, :authenticate_admin]
 
-  #   test "redirects when data is valid", %{conn: conn, admin: admin} do
-  #     conn = put(conn, Routes.admin_path(conn, :update, admin), admin: @update_attrs)
-  #     assert redirected_to(conn) == Routes.admin_path(conn, :index)
+    test "redirects when data is valid", %{conn: conn, order: order} do
+      taxi = insert(:taxi) |> Repo.preload(:plan)
+      update_attrs = %{"monthly_date" => "25/10/2018", "taxi_id" => taxi.id}
 
-  #     conn = get(conn, Routes.admin_path(conn, :edit, admin))
-  #     assert html_response(conn, 200) =~ "Lionel Ritchie"
-  #   end
+      conn = put(conn, Routes.order_path(conn, :update, order), order: update_attrs)
+      assert redirected_to(conn) == Routes.order_path(conn, :index)
+    end
 
-  #   test "renders errors when data is invalid", %{conn: conn, admin: admin} do
-  #     conn = put(conn, Routes.admin_path(conn, :update, admin), admin: @invalid_attrs)
-  #     assert html_response(conn, 200) =~ "Editar Admin"
-  #   end
-  # end
+    test "renders errors when data is invalid", %{conn: conn, order: order} do
+      taxi = insert(:taxi) |> Repo.preload(:plan)
+      invalid_attrs = %{"monthly_date" => "", "taxi_id" => taxi.id}
 
-  # describe "DELETE /delete, when user is an admin" do
-  #   setup [:create_admin, :authenticate_admin]
+      conn = put(conn, Routes.order_path(conn, :update, order), order: invalid_attrs)
+      assert html_response(conn, 200) =~ "Editar Pagamento"
+    end
+  end
 
-  #   test "deletes chosen admin", %{conn: conn, admin: admin} do
-  #     conn = delete(conn, Routes.admin_path(conn, :delete, admin))
-  #     assert redirected_to(conn) == Routes.admin_path(conn, :index)
-  #   end
-  # end
+  describe "DELETE /delete, when user is an admin" do
+    setup [:create_order, :authenticate_admin]
 
-  # defp create_admin(_) do
-  #   admin = insert(:admin)
-  #   {:ok, admin: admin}
-  # end
+    test "deletes chosen order", %{conn: conn, order: order} do
+      conn = delete(conn, Routes.order_path(conn, :delete, order))
+      assert redirected_to(conn) == Routes.order_path(conn, :index)
+    end
+  end
+
+  defp create_order(_) do
+    order = insert(:order)
+    {:ok, order: order}
+  end
 
   defp authenticate_admin(%{conn: conn}) do
     conn = authenticate(conn)

@@ -28,6 +28,7 @@
 
         <td class="text-right">
           <span><%= link "Editar", to: Routes.order_path(@conn, :edit, order), class: "btn btn-outline-info btn-sm" %></span>
+          <span><%= link "Deletar", to: Routes.order_path(@conn, :delete, order), method: :delete, data: [confirm: "Tem certeza?"], class: "btn btn-outline-danger btn-sm" %></span>
         </td>
       </tr>
     <% end %>

@@ -21,7 +21,7 @@
     <%= for order <- @orders do %>
       <tr>
         <td><%= order.taxi.smtt %></td>
-        <td><%= order.monthly_date %></td>
+        <td><%= Timex.format!(order.monthly_date, "{D}/{0M}/{YYYY}") %></td>
         <td><%= order.status %></td>
         <td><%= order.type %></td>
         <td><%= order.value %></td>

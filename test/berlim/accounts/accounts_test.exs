@@ -4,6 +4,7 @@ defmodule Berlim.AccountsTest do
   import Berlim.Factory
 
   alias Berlim.Accounts
+  alias Comeonin.Bcrypt
 
   describe "admins" do
     alias Berlim.Accounts.Admin
@@ -25,8 +26,8 @@ defmodule Berlim.AccountsTest do
     test "create_admin/1 with valid data creates a admin" do
       assert {:ok, %Admin{} = admin} = Accounts.create_admin(@valid_attrs)
       assert admin.name == "John Doe"
-      assert admin.password == "1234abcd"
       assert admin.active == true
+      assert Bcrypt.check_pass(admin, "1234abcd") == {:ok, admin}
     end
 
     test "create_admin/1 with invalid data returns error changeset" do
@@ -91,9 +92,9 @@ defmodule Berlim.AccountsTest do
 
       assert {:ok, taxi} = Accounts.create_taxi(create_attrs)
       assert taxi.cpf == "02005445698"
-      assert taxi.password == "1234abcd"
       assert taxi.plan_id == plan.id
       assert taxi.active == true
+      assert Bcrypt.check_pass(taxi, "1234abcd") == {:ok, taxi}
     end
 
     test "create_taxi/1 with invalid data returns error changeset" do
@@ -120,6 +121,90 @@ defmodule Berlim.AccountsTest do
 
     test "change_taxi/2 returns a taxi changeset", %{taxi: taxi} do
       assert %Ecto.Changeset{} = Accounts.change_taxi(taxi, @update_attrs)
+    end
+  end
+
+  describe "authenticate admin tests" do
+    setup do
+      %{admin: insert_user_with_this_password(:admin, "1234")}
+    end
+
+    test "authenticate_user/1 with valid admin email and password, returns the admin with the given email",
+         %{admin: admin} do
+      assert {:ok, admin} =
+               Accounts.authenticate_user(%{"email" => admin.email, "password" => "1234"})
+    end
+
+    test "authenticate_user/1 with invalid admin email, returns invalid user-identifier error",
+         %{admin: admin} do
+      refute admin.email === "invalid@email"
+
+      assert {:error, "invalid user-identifier"} =
+               Accounts.authenticate_user(%{"email" => "invalid@email", "password" => "1234"})
+    end
+
+    test "authenticate_user/1 with invalid admin password, returns invalid password error",
+         %{admin: admin} do
+      assert {:error, "invalid password"} =
+               Accounts.authenticate_user(%{"email" => admin.email, "password" => "invalid"})
+    end
+
+    test "authenticate_user/1 with empty admin email, returns empty params error" do
+      assert {:error, "empty params"} =
+               Accounts.authenticate_user(%{"email" => "", "password" => "1234"})
+    end
+
+    test "authenticate_user/1 with empty admin password, returns empty params error",
+         %{admin: admin} do
+      assert {:error, "empty params"} =
+               Accounts.authenticate_user(%{"email" => admin.email, "password" => ""})
+    end
+
+    test "authenticate_user/1 with empty admin email and password, returns empty params error" do
+      assert {:error, "empty params"} =
+               Accounts.authenticate_user(%{"email" => "", "password" => ""})
+    end
+  end
+
+  describe "authenticate taxi tests" do
+    setup do
+      %{taxi: insert_user_with_this_password(:taxi, "1234")}
+    end
+
+    test "authenticate_user/1 with valid taxi email and password, returns the taxi with the given email",
+         %{taxi: taxi} do
+      assert {:ok, taxi} =
+               Accounts.authenticate_user(%{"email" => taxi.email, "password" => "1234"})
+    end
+
+    test "authenticate_user/1 with invalid taxi email, returns invalid user-identifier error",
+         %{taxi: taxi} do
+      refute taxi.email === "invalid@email"
+
+      assert {:error, "invalid user-identifier"} =
+               Accounts.authenticate_user(%{"email" => "invalid@email", "password" => "1234"})
+    end
+
+    test "authenticate_user/1 with invalid taxi password, returns invalid password error",
+         %{taxi: taxi} do
+      assert {:error, "invalid password"} =
+               Accounts.authenticate_user(%{"email" => taxi.email, "password" => "invalid"})
+    end
+
+    test "authenticate_user/1 with empty taxi email, returns empty params error" do
+      assert {:error, "empty params"} =
+               Accounts.authenticate_user(%{"email" => "", "password" => "1234"})
+    end
+
+    test "authenticate_user/1 with empty taxi password, returns empty params error",
+         %{taxi: taxi} do
+      assert {:error, "empty params"} =
+               Accounts.authenticate_user(%{"email" => taxi.email, "password" => ""})
+    end
+
+    test "authenticate_user/1 with empty taxi email and password, returns empty params error" do
+      assert {:error, "empty params"} =
+               Accounts.authenticate_user(%{"email" => "", "password" => ""})
     end
   end
 end

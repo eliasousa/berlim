@@ -47,7 +47,9 @@ defmodule Berlim.MixProject do
       {:exnumerator, "~> 1.6"},
       {:ex_machina, "~> 2.2", only: :test},
       {:scrivener_ecto, "~> 2.0"},
-      {:scrivener_html, git: "https://github.com/hlongvu/scrivener_html.git"}
+      {:scrivener_html, git: "https://github.com/hlongvu/scrivener_html.git"},
+      {:comeonin, "~> 4.1"},
+      {:bcrypt_elixir, "~> 1.1"}
     ]
   end
 

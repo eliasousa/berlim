@@ -28,7 +28,7 @@ defmodule BerlimWeb.Plugs.RequireAdminAuth do
     else
       conn
       |> put_flash(:error, "Você não tem permissão para acessar essa página!")
-      |> redirect(to: Routes.login_path(conn, :index))
+      |> redirect(to: Routes.home_path(conn, :index))
       |> halt()
     end
   end

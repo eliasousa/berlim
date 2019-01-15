@@ -19,8 +19,8 @@
 
   <div class="form-group">
     <%= label f, :password, "Senha", class: "control-label" %>
-    <%= text_input f, :password, class: "form-control" %>
-    <%= error_tag f, :password %>
+    <%= text_input f, :encrypted_password, class: "form-control" %>
+    <%= error_tag f, :encrypted_password %>
   </div>
 
   <div class="form-group">

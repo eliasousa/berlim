@@ -3,21 +3,17 @@ defmodule BerlimWeb.Plugs.RequireAdminAuthTest do
   use BerlimWeb.Helpers.AuthHelper
 
   import BerlimWeb.Plugs.RequireAdminAuth, only: [call: 2]
+  import BerlimWeb.Helpers.PlugHelper, only: [setup_conn: 1]
 
   describe "user is not authenticated as admin" do
     setup %{conn: conn} do
-      conn =
-        conn
-        |> bypass_through(BerlimWeb.Router, :browser)
-        |> get("/")
-
-      %{conn: conn}
+      setup_conn(conn)
     end
 
-    test "redirects to Login /index and shows error message", %{conn: conn} do
+    test "redirects to Home /index and shows error message", %{conn: conn} do
       conn = call(conn, %{})
 
-      assert redirected_to(conn, 302) == Routes.login_path(conn, :index)
+      assert redirected_to(conn, 302) == Routes.home_path(conn, :index)
       assert get_flash(conn, :error) == "Você não tem permissão para acessar essa página!"
     end
   end

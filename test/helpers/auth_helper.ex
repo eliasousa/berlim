@@ -12,7 +12,6 @@ defmodule BerlimWeb.Helpers.AuthHelper do
   end
 
   def authenticate(conn, %{id: id} \\ insert(:admin)) do
-    conn
-    |> init_test_session(user_id: id)
+    init_test_session(conn, user_id: id)
   end
 end

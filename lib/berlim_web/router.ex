@@ -34,10 +34,10 @@ defmodule BerlimWeb.Router do
     post("/sign-in", LoginController, :create)
   end
 
-  scope "/", BerlimWeb do
+  scope "/sign-out", BerlimWeb do
     pipe_through(:browser)
 
-    delete("/sign-out", LoginController, :delete)
+    delete("/", LoginController, :delete)
   end
 
   scope "/", BerlimWeb do
@@ -48,10 +48,10 @@ defmodule BerlimWeb.Router do
     resources("/plans", PlanController, except: [:show, :delete])
   end
 
-  scope "/", BerlimWeb do
+  scope "/dashboard", BerlimWeb do
     pipe_through([:browser, :ensure_user_signed_in])
 
-    resources("/dashboard", DashboardController, only: [:index])
+    resources("/", DashboardController, only: [:index])
   end
 
   # Other scopes may use custom stacks.

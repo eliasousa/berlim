@@ -29,17 +29,13 @@ defmodule BerlimWeb.LoginController do
   def delete(conn, _params) do
     conn
     |> clear_session()
-    |> put_flash(:info, "Você saiu da sua conta")
+    |> put_flash(:info, "Logout efetuado com sucesso")
     |> redirect(to: Routes.home_path(conn, :index))
   end
 
-  defp redirect_after_authentication(conn, user) do
-    case user do
-      %Admin{} ->
-        redirect(conn, to: Routes.admin_path(conn, :index))
+  defp redirect_after_authentication(conn, %Admin{}),
+    do: redirect(conn, to: Routes.admin_path(conn, :index))
 
-      %Taxi{} ->
-        redirect(conn, to: Routes.dashboard_path(conn, :index))
-    end
-  end
+  defp redirect_after_authentication(conn, %Taxi{}),
+    do: redirect(conn, to: Routes.dashboard_path(conn, :index))
 end

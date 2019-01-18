@@ -14,7 +14,7 @@ defmodule BerlimWeb.Plugs.SetUserTest do
     test "conn.assigns.current_user is nil", %{conn: conn} do
       conn = call(conn, %{})
 
-      assert is_nil(conn.assigns.current_user)
+      refute conn.assigns.current_user
     end
   end
 
@@ -28,7 +28,7 @@ defmodule BerlimWeb.Plugs.SetUserTest do
     test "set the user on conn.assigns.current_user as admin", %{conn: conn} do
       conn = call(conn, %{})
 
-      refute is_nil(conn.assigns.current_user)
+      assert conn.assigns.current_user
       assert conn.assigns.is_admin? == true
     end
   end
@@ -43,7 +43,7 @@ defmodule BerlimWeb.Plugs.SetUserTest do
     test "set the user on conn.assigns.current_user as taxi", %{conn: conn} do
       conn = call(conn, %{})
 
-      refute is_nil(conn.assigns.current_user)
+      assert conn.assigns.current_user
       assert conn.assigns.is_taxi? == true
     end
   end

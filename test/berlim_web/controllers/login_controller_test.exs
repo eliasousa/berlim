@@ -101,7 +101,7 @@ defmodule BerlimWeb.LoginControllerTest do
       conn = delete(conn, Routes.login_path(conn, :delete))
 
       assert redirected_to(conn) == Routes.home_path(conn, :index)
-      assert get_flash(conn, :info) == "Você saiu da sua conta"
+      assert get_flash(conn, :info) == "Logout efetuado com sucesso"
       assert is_nil(get_session(conn, :user_id))
     end
   end

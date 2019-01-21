@@ -72,7 +72,7 @@ defmodule BerlimWeb.PlanControllerTest do
   end
 
   defp authenticate_admin(%{conn: conn}) do
-    conn = authenticate(conn)
+    conn = authenticate(conn, insert(:admin))
     %{conn: conn}
   end
 end

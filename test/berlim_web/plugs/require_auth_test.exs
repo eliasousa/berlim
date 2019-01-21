@@ -4,6 +4,7 @@ defmodule BerlimWeb.Plugs.RequireAuthTest do
 
   import BerlimWeb.Plugs.RequireAuth, only: [call: 2]
   import BerlimWeb.Helpers.PlugHelper, only: [setup_conn: 1]
+  import Berlim.Factory, only: [insert: 1]
 
   describe "when user is not authenticated" do
     setup %{conn: conn} do
@@ -22,7 +23,7 @@ defmodule BerlimWeb.Plugs.RequireAuthTest do
   describe "when user is authenticated" do
     setup %{conn: conn} do
       conn
-      |> authenticate()
+      |> authenticate(insert(:taxi))
       |> setup_conn()
     end
 

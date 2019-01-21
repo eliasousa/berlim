@@ -4,6 +4,7 @@ defmodule BerlimWeb.Plugs.RequireAdminAuthTest do
 
   import BerlimWeb.Plugs.RequireAdminAuth, only: [call: 2]
   import BerlimWeb.Helpers.PlugHelper, only: [setup_conn: 1]
+  import Berlim.Factory, only: [insert: 1]
 
   describe "user is not authenticated as admin" do
     setup %{conn: conn} do
@@ -20,7 +21,7 @@ defmodule BerlimWeb.Plugs.RequireAdminAuthTest do
 
   describe "user is authenticated as admin" do
     setup %{conn: conn} do
-      conn = authenticate(conn)
+      conn = authenticate(conn, insert(:admin))
 
       %{conn: conn}
     end

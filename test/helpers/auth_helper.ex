@@ -3,7 +3,6 @@ defmodule BerlimWeb.Helpers.AuthHelper do
   Module with methods to help the authetication process on tests.
   """
   import Plug.Test, only: [init_test_session: 2]
-  import Berlim.Factory
 
   defmacro __using__(_) do
     quote do
@@ -11,7 +10,7 @@ defmodule BerlimWeb.Helpers.AuthHelper do
     end
   end
 
-  def authenticate(conn, %{id: id} \\ insert(:admin)) do
+  def authenticate(conn, %{id: id}) do
     init_test_session(conn, user_id: id)
   end
 end

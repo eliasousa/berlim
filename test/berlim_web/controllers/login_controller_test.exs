@@ -94,7 +94,7 @@ defmodule BerlimWeb.LoginControllerTest do
 
   describe "DELETE /sign-out, when user is authenticated" do
     setup %{conn: conn} do
-      %{conn: authenticate(conn)}
+      %{conn: authenticate(conn, insert(:admin))}
     end
 
     test "signs out user", %{conn: conn} do

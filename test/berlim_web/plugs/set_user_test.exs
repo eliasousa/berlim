@@ -2,9 +2,9 @@ defmodule BerlimWeb.Plugs.SetUserTest do
   use BerlimWeb.ConnCase
   use BerlimWeb.Helpers.AuthHelper
 
-  import Berlim.Factory
   import BerlimWeb.Plugs.SetUser, only: [call: 2]
   import BerlimWeb.Helpers.PlugHelper, only: [setup_conn: 1]
+  import Berlim.Factory, only: [insert: 1]
 
   describe "when user is not authenticated" do
     setup %{conn: conn} do
@@ -21,7 +21,7 @@ defmodule BerlimWeb.Plugs.SetUserTest do
   describe "when user is authenticated as admin" do
     setup %{conn: conn} do
       conn
-      |> authenticate()
+      |> authenticate(insert(:admin))
       |> setup_conn()
     end
 

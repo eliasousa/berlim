@@ -9,7 +9,7 @@ defmodule BerlimWeb.Plugs.RedirectLoggedUserTest do
   describe "when user is authenticated as admin" do
     setup %{conn: conn} do
       conn
-      |> authenticate()
+      |> authenticate(insert(:admin))
       |> setup_conn()
     end
 

@@ -74,8 +74,12 @@ defmodule Berlim.Accounts do
       true ->
         nil
     end
-    |> Bcrypt.check_pass(password)
+    |> check_password(password)
   end
 
   def authenticate_user(_empty_params), do: {:error, "empty params"}
+
+  defp check_password(nil, _password), do: {:error, "incorrect username or password"}
+
+  defp check_password(user, password), do: Bcrypt.check_pass(user, password)
 end

@@ -1,6 +1,5 @@
 defmodule BerlimWeb.Plugs.RedirectLoggedUserTest do
   use BerlimWeb.ConnCase
-  use BerlimWeb.Helpers.AuthHelper
 
   import BerlimWeb.Plugs.RedirectLoggedUser, only: [call: 2]
   import BerlimWeb.Helpers.PlugHelper, only: [setup_conn: 1]
@@ -9,13 +8,12 @@ defmodule BerlimWeb.Plugs.RedirectLoggedUserTest do
   describe "when user is authenticated as admin" do
     setup %{conn: conn} do
       conn
-      |> authenticate(insert(:admin))
+      |> assign(:is_admin?, true)
       |> setup_conn()
     end
 
     test "redirects to Admin /index", %{conn: conn} do
       conn = call(conn, %{})
-
       assert redirected_to(conn) == Routes.admin_path(conn, :index)
     end
   end
@@ -23,7 +21,7 @@ defmodule BerlimWeb.Plugs.RedirectLoggedUserTest do
   describe "when user is authenticated as taxi" do
     setup %{conn: conn} do
       conn
-      |> authenticate(insert(:taxi))
+      |> assign(:is_taxi?, true)
       |> setup_conn()
     end
 

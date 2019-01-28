@@ -23,6 +23,13 @@ defmodule Berlim.Accounts.Admin do
     |> validate_required([:email, :encrypted_password, :name, :active])
     |> unique_constraint(:email)
     |> validate_format(:email, ~r/@/)
-    |> update_change(:encrypted_password, &Bcrypt.hashpwsalt/1)
+    |> put_pass_hash()
   end
+
+  defp put_pass_hash(
+         %Ecto.Changeset{valid?: true, changes: %{encrypted_password: password}} = changeset
+       ),
+       do: put_change(changeset, :encrypted_password, Bcrypt.hashpwsalt(password))
+
+  defp put_pass_hash(changeset), do: changeset
 end

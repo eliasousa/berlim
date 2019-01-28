@@ -32,6 +32,17 @@ defmodule Berlim.Accounts.Taxi do
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:smtt)
     |> unique_constraint(:email)
-    |> update_change(:encrypted_password, &Bcrypt.hashpwsalt/1)
+    # |> update_change(:encrypted_password, &Bcrypt.hashpwsalt/1)
+    |> put_pass_hash()
+  end
+
+  defp put_pass_hash(
+         %Ecto.Changeset{valid?: true, changes: %{encrypted_password: password}} = changeset
+       ) do
+    put_change(changeset, :encrypted_password, Bcrypt.hashpwsalt(password))
+  end
+
+  defp put_pass_hash(changeset) do
+    changeset
   end
 end

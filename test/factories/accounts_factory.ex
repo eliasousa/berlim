@@ -31,9 +31,18 @@ defmodule Berlim.AccountsFactory do
         }
       end
 
-      def insert_user_with_this_password(user, password) when is_atom(user) do
+      def insert_user_with_this_password(:admin = user, password) when is_atom(user) do
         user
         |> build()
+        |> set_password(password)
+        |> insert()
+      end
+
+      def insert_user_with_this_password(:taxi = user, password) when is_atom(user) do
+        plan = insert(:plan)
+
+        user
+        |> build(plan: plan, plan_id: plan.id)
         |> set_password(password)
         |> insert()
       end

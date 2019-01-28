@@ -139,7 +139,7 @@ defmodule Berlim.AccountsTest do
          %{admin: admin} do
       refute admin.email === "invalid@email"
 
-      assert {:error, "invalid user-identifier"} =
+      assert {:error, "incorrect username or password"} =
                Accounts.authenticate_user(%{"email" => "invalid@email", "password" => "1234"})
     end
 
@@ -171,7 +171,7 @@ defmodule Berlim.AccountsTest do
       %{taxi: insert_user_with_this_password(:taxi, "1234")}
     end
 
-    test "authenticate_user/1 with valid taxi email and password, returns the taxi with the given email",
+    test "authenticate_user/1 with valid admin email and password, returns the admin with the given email",
          %{taxi: taxi} do
       assert {:ok, taxi} =
                Accounts.authenticate_user(%{"email" => taxi.email, "password" => "1234"})
@@ -181,7 +181,7 @@ defmodule Berlim.AccountsTest do
          %{taxi: taxi} do
       refute taxi.email === "invalid@email"
 
-      assert {:error, "invalid user-identifier"} =
+      assert {:error, "incorrect username or password"} =
                Accounts.authenticate_user(%{"email" => "invalid@email", "password" => "1234"})
     end
 

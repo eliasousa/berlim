@@ -12,17 +12,30 @@ defmodule BerlimWeb.Plugs.RequireAuth do
 
   alias BerlimWeb.Router.Helpers, as: Routes
 
+  alias Berlim.{
+    Repo,
+    Accounts.Admin,
+    Accounts.Taxi
+  }
+
   def init(_params) do
   end
 
   def call(conn, _params) do
-    if conn.assigns[:current_user] do
-      conn
-    else
-      conn
-      |> put_flash(:error, "Você precisa estar logado para acessar essa página.")
-      |> redirect(to: Routes.login_path(conn, :new))
-      |> halt()
+    user_id = get_session(conn, :user_id)
+
+    cond do
+      user_id && Repo.get(Admin, user_id) ->
+        conn
+
+      user_id && Repo.get(Taxi, user_id) ->
+        conn
+
+      true ->
+        conn
+        |> put_flash(:error, "Você precisa estar logado para acessar essa página.")
+        |> redirect(to: Routes.login_path(conn, :new))
+        |> halt()
     end
   end
 end

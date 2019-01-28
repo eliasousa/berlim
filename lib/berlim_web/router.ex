@@ -7,7 +7,6 @@ defmodule BerlimWeb.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
-    plug(BerlimWeb.Plugs.SetUser)
   end
 
   pipeline :api do
@@ -20,6 +19,7 @@ defmodule BerlimWeb.Router do
 
   pipeline :ensure_user_signed_in do
     plug(BerlimWeb.Plugs.RequireAuth)
+    plug(BerlimWeb.Plugs.SetUser)
   end
 
   pipeline :redirect_logged_user do
@@ -30,12 +30,11 @@ defmodule BerlimWeb.Router do
     pipe_through([:browser, :redirect_logged_user])
 
     get("/", HomeController, :index)
-    get("/sign-in", LoginController, :new)
-    post("/sign-in", LoginController, :create)
+    resources("/sign-in", LoginController, only: [:new, :create])
   end
 
   scope "/sign-out", BerlimWeb do
-    pipe_through(:browser)
+    pipe_through([:browser, :ensure_user_signed_in])
 
     delete("/", LoginController, :delete)
   end

@@ -171,7 +171,7 @@ defmodule Berlim.AccountsTest do
       %{taxi: insert_user_with_this_password(:taxi, "1234")}
     end
 
-    test "authenticate_user/1 with valid admin email and password, returns the admin with the given email",
+    test "authenticate_user/1 with valid taxi email and password, returns the taxi with the given email",
          %{taxi: taxi} do
       assert {:ok, taxi} =
                Accounts.authenticate_user(%{"email" => taxi.email, "password" => "1234"})

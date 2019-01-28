@@ -32,7 +32,6 @@ defmodule Berlim.Accounts.Taxi do
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:smtt)
     |> unique_constraint(:email)
-    # |> update_change(:encrypted_password, &Bcrypt.hashpwsalt/1)
     |> put_pass_hash()
   end
 

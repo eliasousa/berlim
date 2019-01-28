@@ -4,10 +4,12 @@ defmodule Berlim.Accounts.Admin do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Comeonin.Bcrypt
+
   schema "admins" do
     field(:email, :string)
     field(:name, :string)
-    field(:password, :string)
+    field(:encrypted_password, :string)
     field(:phone, :string)
     field(:active, :boolean)
 
@@ -17,9 +19,17 @@ defmodule Berlim.Accounts.Admin do
   @doc false
   def changeset(admin, attrs) do
     admin
-    |> cast(attrs, [:email, :password, :name, :active, :phone])
-    |> validate_required([:email, :password, :name, :active])
+    |> cast(attrs, [:email, :encrypted_password, :name, :active, :phone])
+    |> validate_required([:email, :encrypted_password, :name, :active])
     |> unique_constraint(:email)
     |> validate_format(:email, ~r/@/)
+    |> put_pass_hash()
   end
+
+  defp put_pass_hash(
+         %Ecto.Changeset{valid?: true, changes: %{encrypted_password: password}} = changeset
+       ),
+       do: put_change(changeset, :encrypted_password, Bcrypt.hashpwsalt(password))
+
+  defp put_pass_hash(changeset), do: changeset
 end

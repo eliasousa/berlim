@@ -10,6 +10,8 @@ defmodule Berlim.Accounts do
     Accounts.Taxi
   }
 
+  alias Comeonin.Bcrypt
+
   def list_admins, do: Repo.all(Admin)
 
   def get_admin!(id), do: Repo.get!(Admin, id)
@@ -59,4 +61,25 @@ defmodule Berlim.Accounts do
   def change_taxi(taxi \\ %Taxi{}, taxi_attrs \\ %{}) do
     Taxi.changeset(taxi, taxi_attrs)
   end
+
+  def authenticate_user(%{"email" => email, "password" => password})
+      when email !== "" and password !== "" do
+    cond do
+      admin = Repo.get_by(Admin, email: email) ->
+        admin
+
+      taxi = Repo.get_by(Taxi, email: email) ->
+        taxi
+
+      true ->
+        nil
+    end
+    |> check_password(password)
+  end
+
+  def authenticate_user(_empty_params), do: {:error, "empty params"}
+
+  defp check_password(nil, _password), do: {:error, "incorrect username or password"}
+
+  defp check_password(user, password), do: Bcrypt.check_pass(user, password)
 end

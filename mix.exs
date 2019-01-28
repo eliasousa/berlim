@@ -5,7 +5,7 @@ defmodule Berlim.MixProject do
     [
       app: :berlim,
       version: "0.0.1",
-      elixir: "~> 1.7.3",
+      elixir: "~> 1.8.0",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -47,7 +47,9 @@ defmodule Berlim.MixProject do
       {:exnumerator, "~> 1.6"},
       {:ex_machina, "~> 2.2", only: :test},
       {:scrivener_ecto, "~> 2.0"},
-      {:scrivener_html, git: "https://github.com/hlongvu/scrivener_html.git"}
+      {:scrivener_html, git: "https://github.com/hlongvu/scrivener_html.git"},
+      {:comeonin, "~> 4.1"},
+      {:bcrypt_elixir, "~> 1.1"}
     ]
   end
 

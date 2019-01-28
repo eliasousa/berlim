@@ -5,8 +5,8 @@ defmodule Berlim.Sales.Plan do
   import Ecto.Changeset
 
   schema "plans" do
-    field :name, :string
-    field :value, :float
+    field(:name, :string)
+    field(:value, :float)
 
     timestamps()
   end

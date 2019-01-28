@@ -15,14 +15,25 @@
 
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Configurações</a>
-            <div class="dropdown-menu">
-              <%= link("Admins", to: Routes.admin_path(@conn, :index), class: "dropdown-item") %>
-              <%= link("Taxis", to: Routes.taxi_path(@conn, :index), class: "dropdown-item") %>
-              <%= link("Planos", to: Routes.plan_path(@conn, :index), class: "dropdown-item") %>
-            </div>
-          </li>
+          <%= if @conn.assigns[:is_admin?] do %>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Configurações</a>
+              <div class="dropdown-menu">
+                <%= link("Admins", to: Routes.admin_path(@conn, :index), class: "dropdown-item") %>
+                <%= link("Taxis", to: Routes.taxi_path(@conn, :index), class: "dropdown-item") %>
+                <%= link("Planos", to: Routes.plan_path(@conn, :index), class: "dropdown-item") %>
+              </div>
+            </li>
+          <% end %>
+          <%= if @conn.assigns[:current_user] do %>
+            <li class="nav-item">
+              <%= link("Sair", to: Routes.login_path(@conn, :delete), method: :delete, class: "nav-link") %>
+            </li>
+          <% else %>
+            <li class="nav-item">
+              <%= link("Login", to: Routes.login_path(@conn, :new), class: "btn btn-info btn-sm") %>
+            </li>
+          <% end %>
         </ul>
       </div>
     </nav>

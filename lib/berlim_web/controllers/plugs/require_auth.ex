@@ -14,8 +14,8 @@ defmodule BerlimWeb.Plugs.RequireAuth do
 
   alias Berlim.{
     Repo,
-    Accounts.Admin,
-    Accounts.Taxi
+    InternalAccounts.Admin,
+    InternalAccounts.Taxi
   }
 
   def init(_params) do

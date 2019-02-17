@@ -1,4 +1,4 @@
-defmodule Berlim.Accounts.Admin do
+defmodule Berlim.InternalAccounts.Admin do
   @moduledoc false
 
   use Ecto.Schema

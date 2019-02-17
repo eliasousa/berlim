@@ -1,10 +1,10 @@
-defmodule Berlim.AccountsFactory do
+defmodule Berlim.InternalAccountsFactory do
   @moduledoc """
-  Factory for modules inside the `Accounts` context
+  Factory for modules inside the `InternalAccounts` context
   """
   alias Berlim.{
-    Accounts.Admin,
-    Accounts.Taxi
+    InternalAccounts.Admin,
+    InternalAccounts.Taxi
   }
 
   defmacro __using__(_opts) do
@@ -26,23 +26,13 @@ defmodule Berlim.AccountsFactory do
           active: true,
           phone: "7932120600",
           smtt: sequence(:smtt, &"1234#{&1}"),
-          cpf: "02005445698",
-          plan: build(:plan)
+          cpf: "02005445698"
         }
       end
 
-      def insert_user_with_this_password(:admin = user, password) when is_atom(user) do
+      def insert_user_with_this_password(user, password) when is_atom(user) do
         user
         |> build()
-        |> set_password(password)
-        |> insert()
-      end
-
-      def insert_user_with_this_password(:taxi = user, password) when is_atom(user) do
-        plan = insert(:plan)
-
-        user
-        |> build(plan: plan, plan_id: plan.id)
         |> set_password(password)
         |> insert()
       end

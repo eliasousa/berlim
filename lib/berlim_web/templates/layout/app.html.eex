@@ -21,7 +21,6 @@
               <div class="dropdown-menu">
                 <%= link("Admins", to: Routes.admin_path(@conn, :index), class: "dropdown-item") %>
                 <%= link("Taxis", to: Routes.taxi_path(@conn, :index), class: "dropdown-item") %>
-                <%= link("Planos", to: Routes.plan_path(@conn, :index), class: "dropdown-item") %>
               </div>
             </li>
           <% end %>

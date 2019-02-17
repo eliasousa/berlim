@@ -62,6 +62,7 @@ defmodule Berlim.AccountsTest do
   describe "taxis" do
     alias Berlim.Accounts.Taxi
 
+    @create_attrs params_for(:taxi)
     @update_attrs %{cpf: "12345678910"}
     @invalid_attrs %{cpf: nil, email: nil}
 
@@ -87,12 +88,8 @@ defmodule Berlim.AccountsTest do
     end
 
     test "create_taxi/1 with valid data creates a taxi" do
-      plan = insert(:plan)
-      create_attrs = Map.merge(params_for(:taxi), %{plan_id: plan.id})
-
-      assert {:ok, taxi} = Accounts.create_taxi(create_attrs)
+      assert {:ok, taxi} = Accounts.create_taxi(@create_attrs)
       assert taxi.cpf == "02005445698"
-      assert taxi.plan_id == plan.id
       assert taxi.active == true
       assert Bcrypt.check_pass(taxi, "1234abcd") == {:ok, taxi}
     end

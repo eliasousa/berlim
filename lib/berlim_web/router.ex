@@ -44,7 +44,6 @@ defmodule BerlimWeb.Router do
 
     resources("/admins", AdminController, except: [:show])
     resources("/taxis", TaxiController, except: [:show, :delete])
-    resources("/plans", PlanController, except: [:show, :delete])
   end
 
   scope "/dashboard", BerlimWeb do

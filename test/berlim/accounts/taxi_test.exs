@@ -5,10 +5,10 @@ defmodule Berlim.Accounts.TaxiTest do
 
   alias Berlim.Accounts.Taxi
 
-  test "changeset with valid attributes" do
-    valid_attrs = Map.merge(params_for(:taxi), %{plan_id: insert(:plan).id})
+  @valid_attrs params_for(:taxi)
 
-    changeset = Taxi.changeset(%Taxi{}, valid_attrs)
+  test "changeset with valid attributes" do
+    changeset = Taxi.changeset(%Taxi{}, @valid_attrs)
     assert changeset.valid?
   end
 
@@ -18,9 +18,7 @@ defmodule Berlim.Accounts.TaxiTest do
   end
 
   test "email must contain at least an @" do
-    valid_attrs = Map.merge(params_for(:taxi), %{plan_id: insert(:plan).id})
-
-    attrs = %{valid_attrs | email: "johndoe.com"}
+    attrs = %{@valid_attrs | email: "johndoe.com"}
     changeset = Taxi.changeset(%Taxi{}, attrs)
     assert %{email: ["has invalid format"]} = errors_on(changeset)
   end

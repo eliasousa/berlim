@@ -5,5 +5,4 @@ defmodule Berlim.Factory do
 
   use ExMachina.Ecto, repo: Berlim.Repo
   use Berlim.AccountsFactory
-  use Berlim.SalesFactory
 end

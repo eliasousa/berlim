@@ -4,11 +4,6 @@ defmodule Berlim.Accounts.Taxi do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Berlim.Sales.{
-    Order,
-    Plan
-  }
-
   alias Comeonin.Bcrypt
 
   schema "taxis" do
@@ -18,8 +13,6 @@ defmodule Berlim.Accounts.Taxi do
     field(:phone, :string)
     field(:smtt, :integer)
     field(:active, :boolean)
-    has_many(:orders, Order)
-    belongs_to(:plan, Plan)
 
     timestamps()
   end
@@ -27,8 +20,8 @@ defmodule Berlim.Accounts.Taxi do
   @doc false
   def changeset(taxi, attrs) do
     taxi
-    |> cast(attrs, [:email, :encrypted_password, :active, :phone, :smtt, :cpf, :plan_id])
-    |> validate_required([:email, :encrypted_password, :active, :phone, :smtt, :cpf, :plan_id])
+    |> cast(attrs, [:email, :encrypted_password, :active, :phone, :smtt, :cpf])
+    |> validate_required([:email, :encrypted_password, :active, :phone, :smtt, :cpf])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:smtt)
     |> unique_constraint(:email)

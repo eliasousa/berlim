@@ -1,3 +1,0 @@
-<h1>Editar Plano</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.plan_path(@conn, :update, @plan)) %>

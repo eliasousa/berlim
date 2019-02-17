@@ -3,7 +3,6 @@ defmodule BerlimWeb.Plugs.RedirectLoggedUserTest do
 
   import BerlimWeb.Plugs.RedirectLoggedUser, only: [call: 2]
   import BerlimWeb.Helpers.PlugHelper, only: [setup_conn: 1]
-  import Berlim.Factory, only: [insert: 1]
 
   describe "when user is authenticated as admin" do
     setup %{conn: conn} do

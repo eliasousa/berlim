@@ -1,4 +1,4 @@
-# Berlim
+# GoVoucher
 
 To start your Phoenix server:
 
@@ -9,4 +9,4 @@ To start your Phoenix server:
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 ### UML
-<img width="666" alt="screen shot 2018-12-25 at 4 43 11 pm" src="https://user-images.githubusercontent.com/2476248/50426086-36c2d200-0864-11e9-83fd-c8e549a2ace2.png">
+<img width="666" alt="berlimUml" src="https://user-images.githubusercontent.com/2476248/52915301-f5bdcb80-32b0-11e9-991a-2167ebda4762.png">

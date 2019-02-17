@@ -1,9 +1,9 @@
-defmodule Berlim.Accounts.AdminTest do
+defmodule Berlim.InternalAccounts.AdminTest do
   use Berlim.DataCase
 
   import Berlim.Factory
 
-  alias Berlim.Accounts.Admin
+  alias Berlim.InternalAccounts.Admin
 
   @valid_attrs params_for(:admin)
 

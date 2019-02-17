@@ -1,21 +1,21 @@
 defmodule BerlimWeb.AdminController do
   use BerlimWeb, :controller
 
-  alias Berlim.Accounts
-  alias Berlim.Accounts.Admin
+  alias Berlim.InternalAccounts
+  alias Berlim.InternalAccounts.Admin
 
   def index(conn, _params) do
-    admins = Accounts.list_admins()
+    admins = InternalAccounts.list_admins()
     render(conn, "index.html", admins: admins)
   end
 
   def new(conn, _params) do
-    changeset = Accounts.change_admin(%Admin{})
+    changeset = InternalAccounts.change_admin(%Admin{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"admin" => admin_params}) do
-    case Accounts.create_admin(admin_params) do
+    case InternalAccounts.create_admin(admin_params) do
       {:ok, _admin} ->
         conn
         |> put_flash(:info, "Admin adicionado com sucesso.")
@@ -27,15 +27,15 @@ defmodule BerlimWeb.AdminController do
   end
 
   def edit(conn, %{"id" => id}) do
-    admin = Accounts.get_admin!(id)
-    changeset = Accounts.change_admin(admin)
+    admin = InternalAccounts.get_admin!(id)
+    changeset = InternalAccounts.change_admin(admin)
     render(conn, "edit.html", admin: admin, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "admin" => admin_params}) do
-    admin = Accounts.get_admin!(id)
+    admin = InternalAccounts.get_admin!(id)
 
-    case Accounts.update_admin(admin, admin_params) do
+    case InternalAccounts.update_admin(admin, admin_params) do
       {:ok, _admin} ->
         conn
         |> put_flash(:info, "Admin atualizado com sucesso.")
@@ -47,8 +47,8 @@ defmodule BerlimWeb.AdminController do
   end
 
   def delete(conn, %{"id" => id}) do
-    admin = Accounts.get_admin!(id)
-    {:ok, _admin} = Accounts.delete_admin(admin)
+    admin = InternalAccounts.get_admin!(id)
+    {:ok, _admin} = InternalAccounts.delete_admin(admin)
 
     conn
     |> put_flash(:info, "Admin deletado com sucesso.")

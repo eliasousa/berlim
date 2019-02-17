@@ -6,8 +6,8 @@ defmodule BerlimWeb.Plugs.SetUser do
 
   alias Berlim.{
     Repo,
-    Accounts.Admin,
-    Accounts.Taxi
+    InternalAccounts.Admin,
+    InternalAccounts.Taxi
   }
 
   def init(params), do: params

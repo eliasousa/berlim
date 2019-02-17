@@ -1,13 +1,13 @@
-defmodule Berlim.Accounts do
+defmodule Berlim.InternalAccounts do
   @moduledoc """
-  The Accounts context.
+  The InternalAccounts context.
   """
   import Ecto.Query, only: [order_by: 2]
 
   alias Berlim.{
     Repo,
-    Accounts.Admin,
-    Accounts.Taxi
+    InternalAccounts.Admin,
+    InternalAccounts.Taxi
   }
 
   alias Comeonin.Bcrypt

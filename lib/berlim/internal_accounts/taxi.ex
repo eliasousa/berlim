@@ -1,4 +1,4 @@
-defmodule Berlim.Accounts.Taxi do
+defmodule Berlim.InternalAccounts.Taxi do
   @moduledoc false
 
   use Ecto.Schema

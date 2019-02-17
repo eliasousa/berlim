@@ -1,10 +1,10 @@
-defmodule Berlim.AccountsFactory do
+defmodule Berlim.InternalAccountsFactory do
   @moduledoc """
-  Factory for modules inside the `Accounts` context
+  Factory for modules inside the `InternalAccounts` context
   """
   alias Berlim.{
-    Accounts.Admin,
-    Accounts.Taxi
+    InternalAccounts.Admin,
+    InternalAccounts.Taxi
   }
 
   defmacro __using__(_opts) do

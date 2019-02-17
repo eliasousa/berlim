@@ -1,9 +1,9 @@
-defmodule Berlim.Accounts.TaxiTest do
+defmodule Berlim.InternalAccounts.TaxiTest do
   use Berlim.DataCase
 
   import Berlim.Factory
 
-  alias Berlim.Accounts.Taxi
+  alias Berlim.InternalAccounts.Taxi
 
   @valid_attrs params_for(:taxi)
 

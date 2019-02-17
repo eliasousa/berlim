@@ -2,9 +2,9 @@ defmodule BerlimWeb.LoginController do
   use BerlimWeb, :controller
 
   alias Berlim.{
-    Accounts,
-    Accounts.Admin,
-    Accounts.Taxi
+    InternalAccounts,
+    InternalAccounts.Admin,
+    InternalAccounts.Taxi
   }
 
   def new(conn, _params) do
@@ -12,7 +12,7 @@ defmodule BerlimWeb.LoginController do
   end
 
   def create(conn, %{"auth_params" => auth_params}) do
-    case Accounts.authenticate_user(auth_params) do
+    case InternalAccounts.authenticate_user(auth_params) do
       {:ok, user} ->
         conn
         |> put_session(:user_id, user.id)

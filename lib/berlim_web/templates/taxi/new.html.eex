@@ -1,3 +1,0 @@
-<h3>Novo Táxi</h3>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.taxi_path(@conn, :create)) %>

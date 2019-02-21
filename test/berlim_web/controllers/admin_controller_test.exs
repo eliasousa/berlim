@@ -20,7 +20,7 @@ defmodule BerlimWeb.AdminControllerTest do
   end
 
   describe "POST /create" do
-    test "redirects to index when data is valid", %{conn: conn} do
+    test "renders admin show when data is valid", %{conn: conn} do
       conn = post(conn, Routes.admin_path(conn, :create), admin: @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
 
@@ -41,7 +41,7 @@ defmodule BerlimWeb.AdminControllerTest do
   describe "PUT /update" do
     setup [:create_admin]
 
-    test "redirects when data is valid", %{conn: conn, admin: %Admin{id: id} = admin} do
+    test "renders admin show when data is valid", %{conn: conn, admin: %Admin{id: id} = admin} do
       conn = put(conn, Routes.admin_path(conn, :update, admin), admin: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
@@ -73,7 +73,6 @@ defmodule BerlimWeb.AdminControllerTest do
   end
 
   defp create_admin(_) do
-    admin = insert(:admin)
-    {:ok, admin: admin}
+    %{admin: insert(:admin)}
   end
 end

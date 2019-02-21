@@ -39,12 +39,6 @@ defmodule BerlimWeb.Router do
     delete("/", LoginController, :delete)
   end
 
-  scope "/", BerlimWeb do
-    pipe_through([:browser, :ensure_user_signed_in, :ensure_admin])
-
-    resources("/taxis", TaxiController, except: [:show, :delete])
-  end
-
   scope "/dashboard", BerlimWeb do
     pipe_through([:browser, :ensure_user_signed_in])
 
@@ -55,5 +49,6 @@ defmodule BerlimWeb.Router do
     pipe_through(:api)
 
     resources("/admins", AdminController, except: [:new, :edit])
+    resources("/taxis", TaxiController, except: [:new, :edit, :delete])
   end
 end

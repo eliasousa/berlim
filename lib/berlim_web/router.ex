@@ -42,7 +42,6 @@ defmodule BerlimWeb.Router do
   scope "/", BerlimWeb do
     pipe_through([:browser, :ensure_user_signed_in, :ensure_admin])
 
-    resources("/admins", AdminController, except: [:show])
     resources("/taxis", TaxiController, except: [:show, :delete])
   end
 
@@ -52,8 +51,9 @@ defmodule BerlimWeb.Router do
     resources("/", DashboardController, only: [:index])
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", BerlimWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", BerlimWeb do
+    pipe_through(:api)
+
+    resources("/admins", AdminController, except: [:new, :edit])
+  end
 end

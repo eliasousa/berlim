@@ -1,3 +1,0 @@
-<h3>Novo Admin</h3>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.admin_path(@conn, :create)) %>

@@ -66,24 +66,13 @@ defmodule Berlim.InternalAccountsTest do
     @update_attrs %{cpf: "12345678910"}
     @invalid_attrs %{cpf: nil, email: nil}
 
-    setup do
-      %{taxi: insert(:taxi)}
+    test "list_taxis/0 returns all taxis" do
+      taxi = insert(:taxi)
+      assert InternalAccounts.list_taxis() == [taxi]
     end
 
-    test "list_taxis/1 returns the first 30 taxis ordered by smtt" do
-      insert_list(44, :taxi)
-      page = InternalAccounts.list_taxis(%{page: 1})
-      first_taxi = List.first(page.entries)
-      last_taxi = List.last(page.entries)
-
-      assert is_list(page.entries)
-      assert Enum.count(page.entries) == 30
-      assert first_taxi.smtt < last_taxi.smtt
-      assert page.total_entries == 45
-      assert page.total_pages == 2
-    end
-
-    test "get_taxi/1 returns the taxi with given id", %{taxi: taxi} do
+    test "get_taxi/1 returns the taxi with given id" do
+      taxi = insert(:taxi)
       assert InternalAccounts.get_taxi!(taxi.id).id == taxi.id
     end
 
@@ -98,13 +87,15 @@ defmodule Berlim.InternalAccountsTest do
       assert {:error, _changeset} = InternalAccounts.create_taxi(@invalid_attrs)
     end
 
-    test "update_taxi/2 with valid data updates the taxi", %{taxi: taxi} do
+    test "update_taxi/2 with valid data updates the taxi" do
+      taxi = insert(:taxi)
       assert {:ok, taxi} = InternalAccounts.update_taxi(taxi, @update_attrs)
       assert %Taxi{} = taxi
       assert taxi.cpf == "12345678910"
     end
 
-    test "update_taxi/2 with invalid data returns error changeset", %{taxi: taxi} do
+    test "update_taxi/2 with invalid data returns error changeset" do
+      taxi = insert(:taxi)
       assert {:error, _taxi} = InternalAccounts.update_taxi(taxi, @invalid_attrs)
     end
 
@@ -112,11 +103,13 @@ defmodule Berlim.InternalAccountsTest do
       assert %Ecto.Changeset{} = InternalAccounts.change_taxi()
     end
 
-    test "change_taxi/1 returns a taxi changeset", %{taxi: taxi} do
+    test "change_taxi/1 returns a taxi changeset" do
+      taxi = insert(:taxi)
       assert %Ecto.Changeset{} = InternalAccounts.change_taxi(taxi)
     end
 
-    test "change_taxi/2 returns a taxi changeset", %{taxi: taxi} do
+    test "change_taxi/2 returns a taxi changeset" do
+      taxi = insert(:taxi)
       assert %Ecto.Changeset{} = InternalAccounts.change_taxi(taxi, @update_attrs)
     end
   end

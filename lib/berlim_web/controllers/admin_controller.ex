@@ -4,54 +4,39 @@ defmodule BerlimWeb.AdminController do
   alias Berlim.InternalAccounts
   alias Berlim.InternalAccounts.Admin
 
+  action_fallback(BerlimWeb.FallbackController)
+
   def index(conn, _params) do
     admins = InternalAccounts.list_admins()
-    render(conn, "index.html", admins: admins)
-  end
-
-  def new(conn, _params) do
-    changeset = InternalAccounts.change_admin(%Admin{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "index.json", admins: admins)
   end
 
   def create(conn, %{"admin" => admin_params}) do
-    case InternalAccounts.create_admin(admin_params) do
-      {:ok, _admin} ->
-        conn
-        |> put_flash(:info, "Admin adicionado com sucesso.")
-        |> redirect(to: Routes.admin_path(conn, :index))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+    with {:ok, %Admin{} = admin} <- InternalAccounts.create_admin(admin_params) do
+      conn
+      |> put_status(:created)
+      |> render("show.json", admin: admin)
     end
   end
 
-  def edit(conn, %{"id" => id}) do
+  def show(conn, %{"id" => id}) do
     admin = InternalAccounts.get_admin!(id)
-    changeset = InternalAccounts.change_admin(admin)
-    render(conn, "edit.html", admin: admin, changeset: changeset)
+    render(conn, "show.json", admin: admin)
   end
 
   def update(conn, %{"id" => id, "admin" => admin_params}) do
     admin = InternalAccounts.get_admin!(id)
 
-    case InternalAccounts.update_admin(admin, admin_params) do
-      {:ok, _admin} ->
-        conn
-        |> put_flash(:info, "Admin atualizado com sucesso.")
-        |> redirect(to: Routes.admin_path(conn, :index))
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", admin: admin, changeset: changeset)
+    with {:ok, %Admin{} = admin} <- InternalAccounts.update_admin(admin, admin_params) do
+      render(conn, "show.json", admin: admin)
     end
   end
 
   def delete(conn, %{"id" => id}) do
     admin = InternalAccounts.get_admin!(id)
-    {:ok, _admin} = InternalAccounts.delete_admin(admin)
 
-    conn
-    |> put_flash(:info, "Admin deletado com sucesso.")
-    |> redirect(to: Routes.admin_path(conn, :index))
+    with {:ok, %Admin{}} <- InternalAccounts.delete_admin(admin) do
+      send_resp(conn, :no_content, "")
+    end
   end
 end

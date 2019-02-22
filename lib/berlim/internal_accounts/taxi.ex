@@ -4,7 +4,7 @@ defmodule Berlim.InternalAccounts.Taxi do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Comeonin.Bcrypt
+  import Comeonin.Bcrypt, only: [hashpwsalt: 1]
 
   schema "taxis" do
     field(:cpf, :string)
@@ -30,11 +30,8 @@ defmodule Berlim.InternalAccounts.Taxi do
 
   defp put_pass_hash(
          %Ecto.Changeset{valid?: true, changes: %{encrypted_password: password}} = changeset
-       ) do
-    put_change(changeset, :encrypted_password, Bcrypt.hashpwsalt(password))
-  end
+       ),
+       do: put_change(changeset, :encrypted_password, hashpwsalt(password))
 
-  defp put_pass_hash(changeset) do
-    changeset
-  end
+  defp put_pass_hash(changeset), do: changeset
 end

@@ -2,49 +2,33 @@ defmodule BerlimWeb.TaxiController do
   use BerlimWeb, :controller
 
   alias Berlim.InternalAccounts
+  alias Berlim.InternalAccounts.Taxi
 
-  def index(conn, params) do
-    page = InternalAccounts.list_taxis(params)
+  action_fallback(BerlimWeb.FallbackController)
 
-    render(conn, "index.html", taxis: page.entries, page: page)
-  end
-
-  def new(conn, _params) do
-    changeset = InternalAccounts.change_taxi()
-
-    render(conn, "new.html", changeset: changeset)
+  def index(conn, _params) do
+    taxis = InternalAccounts.list_taxis()
+    render(conn, "index.json", taxis: taxis)
   end
 
   def create(conn, %{"taxi" => taxi_params}) do
-    case InternalAccounts.create_taxi(taxi_params) do
-      {:ok, _taxi} ->
-        conn
-        |> put_flash(:info, "Táxi criado com sucesso.")
-        |> redirect(to: Routes.taxi_path(conn, :index))
-
-      {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset)
+    with {:ok, %Taxi{} = taxi} <- InternalAccounts.create_taxi(taxi_params) do
+      conn
+      |> put_status(:created)
+      |> render("show.json", taxi: taxi)
     end
   end
 
-  def edit(conn, %{"id" => taxi_id}) do
-    taxi = InternalAccounts.get_taxi!(taxi_id)
-    changeset = InternalAccounts.change_taxi(taxi)
-
-    render(conn, "edit.html", taxi: taxi, changeset: changeset)
+  def show(conn, %{"id" => id}) do
+    taxi = InternalAccounts.get_taxi!(id)
+    render(conn, "show.json", taxi: taxi)
   end
 
-  def update(conn, %{"id" => taxi_id, "taxi" => taxi_params}) do
-    taxi = InternalAccounts.get_taxi!(taxi_id)
+  def update(conn, %{"id" => id, "taxi" => taxi_params}) do
+    taxi = InternalAccounts.get_taxi!(id)
 
-    case InternalAccounts.update_taxi(taxi, taxi_params) do
-      {:ok, _taxi} ->
-        conn
-        |> put_flash(:info, "Táxi atualizado com sucesso.")
-        |> redirect(to: Routes.taxi_path(conn, :index))
-
-      {:error, changeset} ->
-        render(conn, "edit.html", taxi: taxi, changeset: changeset)
+    with {:ok, %Taxi{} = taxi} <- InternalAccounts.update_taxi(taxi, taxi_params) do
+      render(conn, "show.json", taxi: taxi)
     end
   end
 end

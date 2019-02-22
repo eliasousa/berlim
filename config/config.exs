@@ -13,8 +13,8 @@ config :berlim,
 # Configures the endpoint
 config :berlim, BerlimWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "M+jc6lWzYh7UkEgqXhlEusHDzaLhNmLNrerZZQ7Q9Ch+or/7nUkMNmM+UDrwq7ik",
-  render_errors: [view: BerlimWeb.ErrorView, accepts: ~w(html json)],
+  secret_key_base: "zLibDaWPS82bycIsZoOH8YkBwj1wpBkfMAtz5YgvoCaHC4qeagdtcDXIOCHmzUzY",
+  render_errors: [view: BerlimWeb.ErrorView, accepts: ~w(json)],
   pubsub: [name: Berlim.PubSub, adapter: Phoenix.PubSub.PG2]
 
 config :berlim, BerlimWeb.Gettext, default_locale: "pt_BR"

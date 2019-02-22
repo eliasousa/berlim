@@ -37,14 +37,10 @@ defmodule BerlimWeb.TaxiControllerTest do
 
     test "renders taxi show when data is valid", %{conn: conn, taxi: %Taxi{id: id} = taxi} do
       conn = put(conn, taxi_path(conn, :update, taxi), taxi: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+      taxi = InternalAccounts.get_taxi!(id)
 
-      conn = get(conn, taxi_path(conn, :show, id))
-
-      assert %{
-               "id" => id,
-               "cpf" => "12345678910"
-             } = json_response(conn, 200)["data"]
+      assert json_response(conn, 200) == render_json(TaxiView, "show.json", %{taxi: taxi})
+      assert json_response(conn, 200)["data"]["cpf"] == "12345678910"
     end
 
     test "renders errors when data is invalid", %{conn: conn, taxi: taxi} do

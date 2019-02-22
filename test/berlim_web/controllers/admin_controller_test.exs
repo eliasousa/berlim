@@ -37,14 +37,10 @@ defmodule BerlimWeb.AdminControllerTest do
 
     test "renders admin show when data is valid", %{conn: conn, admin: %Admin{id: id} = admin} do
       conn = put(conn, admin_path(conn, :update, admin), admin: @update_attrs)
-      assert %{"id" => ^id} = json_response(conn, 200)["data"]
+      admin = InternalAccounts.get_admin!(id)
 
-      conn = get(conn, admin_path(conn, :show, id))
-
-      assert %{
-               "id" => id,
-               "name" => "Lionel Ritchie"
-             } = json_response(conn, 200)["data"]
+      assert json_response(conn, 200) == render_json(AdminView, "show.json", %{admin: admin})
+      assert json_response(conn, 200)["data"]["name"] == "Lionel Ritchie"
     end
 
     test "renders errors when data is invalid", %{conn: conn, admin: admin} do

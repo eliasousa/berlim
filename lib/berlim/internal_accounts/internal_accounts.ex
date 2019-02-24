@@ -3,12 +3,7 @@ defmodule Berlim.InternalAccounts do
   The InternalAccounts context.
   """
 
-  alias Berlim.{
-    Repo,
-    InternalAccounts.Admin,
-    InternalAccounts.Taxi
-  }
-
+  alias Berlim.{InternalAccounts.Admin, InternalAccounts.Taxi, Repo}
   alias Comeonin.Bcrypt
 
   def list_admins, do: Repo.all(Admin)

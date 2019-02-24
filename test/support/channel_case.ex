@@ -14,6 +14,7 @@ defmodule BerlimWeb.ChannelCase do
   """
 
   use ExUnit.CaseTemplate
+  alias Ecto.Adapters.SQL.Sandbox
 
   using do
     quote do
@@ -26,10 +27,10 @@ defmodule BerlimWeb.ChannelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Berlim.Repo)
+    :ok = Sandbox.checkout(Berlim.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Berlim.Repo, {:shared, self()})
+      Sandbox.mode(Berlim.Repo, {:shared, self()})
     end
 
     :ok

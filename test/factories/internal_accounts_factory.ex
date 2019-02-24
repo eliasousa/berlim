@@ -2,10 +2,8 @@ defmodule Berlim.InternalAccountsFactory do
   @moduledoc """
   Factory for modules inside the `InternalAccounts` context
   """
-  alias Berlim.{
-    InternalAccounts.Admin,
-    InternalAccounts.Taxi
-  }
+  alias Berlim.InternalAccounts.{Admin, Taxi}
+  alias Ecto.Changeset
 
   defmacro __using__(_opts) do
     quote do
@@ -40,7 +38,7 @@ defmodule Berlim.InternalAccountsFactory do
       defp set_password(user, password) do
         user
         |> user.__struct__.changeset(%{encrypted_password: password})
-        |> Ecto.Changeset.apply_changes()
+        |> Changeset.apply_changes()
       end
     end
   end

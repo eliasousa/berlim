@@ -4,6 +4,7 @@ defmodule Berlim.Application do
   @moduledoc false
 
   use Application
+  alias BerlimWeb.Endpoint
 
   def start(_type, _args) do
     # List all child processes to be supervised
@@ -25,7 +26,7 @@ defmodule Berlim.Application do
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    BerlimWeb.Endpoint.config_change(changed, removed)
+    Endpoint.config_change(changed, removed)
     :ok
   end
 end

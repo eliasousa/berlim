@@ -19,6 +19,10 @@ config :berlim, BerlimWeb.Endpoint,
 
 config :berlim, BerlimWeb.Gettext, default_locale: "pt_BR"
 
+config :berlim, Berlim.Guardian,
+  issuer: "berlim",
+  secret_key: "YvtB8OxkPVavo4Yc0iT7GjSVIKVpo7jgbgXQv5KtdD9k6AVjYE27CJbff92WHTIt"
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

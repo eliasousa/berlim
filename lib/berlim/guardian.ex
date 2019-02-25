@@ -27,6 +27,9 @@ defmodule Berlim.Guardian do
 
       "Taxi" ->
         InternalAccounts.get_taxi!(id)
+
+      _ ->
+        nil
     end
   end
 end

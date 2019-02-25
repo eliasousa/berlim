@@ -10,7 +10,7 @@ defmodule Berlim.Accounts do
     case authenticate_user(email, password) do
       {:ok, user} ->
         type = user.__struct__ |> Module.split() |> List.last()
-        Guardian.encode_and_sign(user, %{type: type})
+        Guardian.encode_and_sign(user, %{type: type}, ttl: {24, :hours})
 
       _ ->
         {:error, :unauthorized}

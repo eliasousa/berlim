@@ -1,4 +1,4 @@
-defmodule BerlimWeb.Plugs.AuthErrorHandler do
+defmodule BerlimWeb.Plugs.Guardian.AuthErrorHandler do
   @moduledoc """
   Guardian auth error handler.
   """

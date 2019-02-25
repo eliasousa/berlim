@@ -1,4 +1,4 @@
-defmodule BerlimWeb.Plugs.AuthPipeline do
+defmodule BerlimWeb.Plugs.Guardian.AuthPipeline do
   @moduledoc """
   Guardian auth pipelines.
   """
@@ -6,7 +6,7 @@ defmodule BerlimWeb.Plugs.AuthPipeline do
   use Guardian.Plug.Pipeline,
     otp_app: :Berlim,
     module: Berlim.Guardian,
-    error_handler: BerlimWeb.Plugs.AuthErrorHandler
+    error_handler: BerlimWeb.Plugs.Guardian.AuthErrorHandler
 
   plug Guardian.Plug.VerifyHeader, realm: "Bearer"
   plug Guardian.Plug.EnsureAuthenticated

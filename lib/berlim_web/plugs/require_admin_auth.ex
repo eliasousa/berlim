@@ -14,7 +14,7 @@ defmodule BerlimWeb.Plugs.RequireAdminAuth do
     if user.__struct__ |> Module.split() |> List.last() == "Admin" do
       conn
     else
-      body = Jason.encode!(%{error: "Você não pode acessar esse resource"})
+      body = Jason.encode!(%{error: "Você não pode acessar esse recurso"})
       send_resp(conn, 401, body)
     end
   end

@@ -12,4 +12,12 @@ defmodule BerlimWeb.FallbackControllerTest do
       assert conn.status == 422
     end
   end
+
+  describe "call/2 with unauthorized" do
+    test "responds with 401", %{conn: conn} do
+      conn = FallbackController.call(conn, {:error, :unauthorized})
+
+      assert conn.status == 401
+    end
+  end
 end

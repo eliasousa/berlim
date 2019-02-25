@@ -1,4 +1,4 @@
-defmodule Berlim.InternalAccountsTest do
+defmodule Berlim.InternalAccounts.InternalAccountsTest do
   use Berlim.DataCase
 
   import Berlim.Factory

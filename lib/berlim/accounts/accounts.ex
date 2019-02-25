@@ -7,7 +7,7 @@ defmodule Berlim.Accounts do
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   def token_sign_in(email, password) do
-    case email_password_auth(email, password) do
+    case authenticate_user(email, password) do
       {:ok, user} ->
         type = user.__struct__ |> Module.split() |> List.last()
         Guardian.encode_and_sign(user, %{type: type})
@@ -17,9 +17,8 @@ defmodule Berlim.Accounts do
     end
   end
 
-  defp email_password_auth(email, password) when is_binary(email) and is_binary(password) do
-    with {:ok, user} <- get_by_email(email),
-         do: verify_password(password, user)
+  defp authenticate_user(email, password) when is_binary(email) and is_binary(password) do
+    with {:ok, user} <- get_by_email(email), do: verify_password(password, user)
   end
 
   defp get_by_email(email) when is_binary(email) do
@@ -32,7 +31,7 @@ defmodule Berlim.Accounts do
 
       true ->
         dummy_checkpw()
-        {:error, "Login error."}
+        {:error, "Invalid Login"}
     end
   end
 

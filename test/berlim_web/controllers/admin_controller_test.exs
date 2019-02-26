@@ -21,12 +21,30 @@ defmodule BerlimWeb.AdminControllerTest do
     end
   end
 
+  describe "GET /index, when user is not an admin" do
+    setup [:authenticate_taxi]
+
+    test "renders unauthorized", %{conn: conn} do
+      conn = get(conn, admin_path(conn, :index))
+      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+    end
+  end
+
   describe "GET /show, when user is an admin" do
     setup [:create_admin, :authenticate_admin]
 
     test "renders admin", %{conn: conn, admin: admin} do
       conn = get(conn, admin_path(conn, :show, admin))
       assert json_response(conn, 200) == render_json(AdminView, "show.json", %{admin: admin})
+    end
+  end
+
+  describe "GET /show, when user is not an admin" do
+    setup [:create_admin, :authenticate_taxi]
+
+    test "renders unauthorized", %{conn: conn, admin: admin} do
+      conn = get(conn, admin_path(conn, :show, admin))
+      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -43,6 +61,15 @@ defmodule BerlimWeb.AdminControllerTest do
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, admin_path(conn, :create), admin: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
+
+  describe "POST /create, when user is not an admin" do
+    setup [:authenticate_taxi]
+
+    test "renders unauthorized", %{conn: conn} do
+      conn = post(conn, admin_path(conn, :create), admin: @create_attrs)
+      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -63,6 +90,15 @@ defmodule BerlimWeb.AdminControllerTest do
     end
   end
 
+  describe "PUT /update, when user is not an admin" do
+    setup [:create_admin, :authenticate_taxi]
+
+    test "renders unauthorized", %{conn: conn, admin: admin} do
+      conn = put(conn, admin_path(conn, :update, admin), admin: @update_attrs)
+      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+    end
+  end
+
   describe "DELETE /delete, when user is an admin" do
     setup [:create_admin, :authenticate_admin]
 
@@ -76,11 +112,24 @@ defmodule BerlimWeb.AdminControllerTest do
     end
   end
 
+  describe "DELETE /delete, when user is not an admin" do
+    setup [:create_admin, :authenticate_taxi]
+
+    test "renders unauthorized", %{conn: conn, admin: admin} do
+      conn = delete(conn, admin_path(conn, :delete, admin))
+      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+    end
+  end
+
   defp create_admin(_) do
     %{admin: insert(:admin)}
   end
 
   defp authenticate_admin(%{conn: conn}) do
     authenticate(conn, insert(:admin))
+  end
+
+  defp authenticate_taxi(%{conn: conn}) do
+    authenticate(conn, insert(:taxi))
   end
 end

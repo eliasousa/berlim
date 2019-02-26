@@ -6,6 +6,8 @@ defmodule Berlim.Accounts do
   alias Berlim.{Guardian, InternalAccounts.Admin, InternalAccounts.Taxi, Repo}
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
+  @spec token_sign_in(String.t(), String.t()) ::
+          {:ok, String.t(), struct()} | {:error, :unauthorised}
   def token_sign_in(email, password) do
     case authenticate_user(email, password) do
       {:ok, user} ->
@@ -20,7 +22,7 @@ defmodule Berlim.Accounts do
     with {:ok, user} <- get_by_email(email), do: verify_password(password, user)
   end
 
-  defp get_by_email(email) when is_binary(email) do
+  defp get_by_email(email) do
     cond do
       admin = Repo.get_by(Admin, email: email) ->
         {:ok, admin}
@@ -30,7 +32,7 @@ defmodule Berlim.Accounts do
 
       true ->
         dummy_checkpw()
-        {:error, "Invalid Login"}
+        {:error, :invalid_email}
     end
   end
 

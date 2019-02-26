@@ -4,6 +4,9 @@ defmodule BerlimWeb.Plugs.RequireAdminAuth do
   """
 
   import Plug.Conn
+
+  use Phoenix.Controller
+
   alias Berlim.Guardian
 
   def init(params), do: params
@@ -14,8 +17,10 @@ defmodule BerlimWeb.Plugs.RequireAdminAuth do
     if is_admin?(user) do
       conn
     else
-      body = Jason.encode!(%{error: "Você não pode acessar esse recurso"})
-      send_resp(conn, 401, body)
+      conn
+      |> put_status(401)
+      |> json(%{error: "Você não pode acessar esse recurso"})
+      |> halt()
     end
   end
 

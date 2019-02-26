@@ -9,8 +9,7 @@ defmodule Berlim.Accounts do
   def token_sign_in(email, password) do
     case authenticate_user(email, password) do
       {:ok, user} ->
-        type = user.__struct__ |> Module.split() |> List.last()
-        Guardian.encode_and_sign(user, %{type: type}, ttl: {24, :hours})
+        Guardian.encode_and_sign(user, %{type: get_user_type(user)}, ttl: {24, :hours})
 
       _ ->
         {:error, :unauthorized}
@@ -41,5 +40,9 @@ defmodule Berlim.Accounts do
     else
       {:error, :invalid_password}
     end
+  end
+
+  def get_user_type(user) do
+    user.__struct__ |> Module.split() |> List.last()
   end
 end

@@ -11,11 +11,15 @@ defmodule BerlimWeb.Plugs.RequireAdminAuth do
   def call(conn, _params) do
     user = Guardian.Plug.current_resource(conn)
 
-    if user.__struct__ |> Module.split() |> List.last() == "Admin" do
+    if is_admin?(user) do
       conn
     else
       body = Jason.encode!(%{error: "Você não pode acessar esse recurso"})
       send_resp(conn, 401, body)
     end
+  end
+
+  defp is_admin?(user) do
+    user.__struct__ |> Module.split() |> List.last() == "Admin"
   end
 end

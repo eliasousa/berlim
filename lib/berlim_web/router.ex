@@ -18,7 +18,7 @@ defmodule BerlimWeb.Router do
   scope "/api", BerlimWeb do
     pipe_through :api
 
-    resources("/users", UserController, only: [:create])
+    resources("/sessions", SessionController, only: [:create])
   end
 
   scope "/api", BerlimWeb do

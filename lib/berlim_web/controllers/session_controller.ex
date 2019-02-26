@@ -1,8 +1,8 @@
-defmodule BerlimWeb.UserController do
+defmodule BerlimWeb.SessionController do
   use BerlimWeb, :controller
 
   alias Berlim.Accounts
-  alias BerlimWeb.UserView
+  alias BerlimWeb.SessionView
 
   action_fallback(BerlimWeb.FallbackController)
 
@@ -10,7 +10,7 @@ defmodule BerlimWeb.UserController do
     case Accounts.token_sign_in(email, password) do
       {:ok, token, _claims} ->
         conn
-        |> put_view(UserView)
+        |> put_view(SessionView)
         |> render("jwt.json", jwt: token)
 
       _ ->

@@ -10,26 +10,17 @@ defmodule Berlim.Guardian do
     {:ok, to_string(user.id)}
   end
 
-  def resource_from_claims(%{"sub" => id, "type" => type}) do
-    case get_resource(id, type) do
-      nil ->
-        {:error, :resource_not_found}
-
-      user ->
-        {:ok, user}
-    end
+  def resource_from_claims(%{"sub" => id, "type" => "Admin"}) do
+    user = InternalAccounts.get_admin!(id)
+    {:ok, user}
   end
 
-  defp get_resource(id, type) do
-    case type do
-      "Admin" ->
-        InternalAccounts.get_admin!(id)
+  def resource_from_claims(%{"sub" => id, "type" => "Taxi"}) do
+    user = InternalAccounts.get_taxi!(id)
+    {:ok, user}
+  end
 
-      "Taxi" ->
-        InternalAccounts.get_taxi!(id)
-
-      _ ->
-        nil
-    end
+  def resource_from_claims(%{"sub" => _, "type" => _}) do
+    {:error, :resource_not_found}
   end
 end

@@ -13,7 +13,7 @@ defmodule Berlim.Accounts do
       {:ok, user} ->
         Guardian.encode_and_sign(user, %{type: get_user_type(user)}, ttl: {24, :hours})
 
-      _ ->
+      {:error, :invalid_credentials} ->
         {:error, :unauthorized}
     end
   end
@@ -32,7 +32,7 @@ defmodule Berlim.Accounts do
 
       true ->
         dummy_checkpw()
-        {:error, :invalid_email}
+        {:error, :invalid_credentials}
     end
   end
 
@@ -40,7 +40,7 @@ defmodule Berlim.Accounts do
     if checkpw(password, user.encrypted_password) do
       {:ok, user}
     else
-      {:error, :invalid_password}
+      {:error, :invalid_credentials}
     end
   end
 

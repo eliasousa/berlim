@@ -11,7 +11,7 @@ defmodule Berlim.AccountsTest do
 
     {:ok, token, claims} = Accounts.token_sign_in("john@email.com", "123456")
 
-    assert token
+    assert is_binary(token)
     assert claims["sub"] == Integer.to_string(admin.id)
     assert claims["type"] == "Admin"
   end
@@ -21,7 +21,7 @@ defmodule Berlim.AccountsTest do
 
     {:ok, token, claims} = Accounts.token_sign_in("john@email.com", "123456")
 
-    assert token
+    assert is_binary(token)
     assert claims["sub"] == Integer.to_string(taxi.id)
     assert claims["type"] == "Taxi"
   end

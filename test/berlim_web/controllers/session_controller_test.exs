@@ -1,17 +1,17 @@
 defmodule BerlimWeb.SessionControllerTest do
-  use BerlimWeb.ConnCase
+  use BerlimWeb.ConnCase, async: true
 
   import Berlim.Factory
 
   alias BerlimWeb.SessionView
 
   describe "POST /create" do
-    test "renders jwt token if logged successfully", %{conn: conn} do
+    test "renders token if logged successfully", %{conn: conn} do
       admin = insert_user_with_this_password(:admin, "123456")
       conn = post(conn, session_path(conn, :create), %{email: admin.email, password: "123456"})
 
-      %{jwt: jwt} = conn.assigns
-      assert json_response(conn, 200) == render_json(SessionView, "jwt.json", %{jwt: jwt})
+      %{token: token} = conn.assigns
+      assert json_response(conn, 200) == render_json(SessionView, "account.json", %{token: token})
     end
 
     test "renders unauthorized of login failed", %{conn: conn} do

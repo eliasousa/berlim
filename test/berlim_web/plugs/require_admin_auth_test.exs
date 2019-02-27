@@ -1,5 +1,5 @@
 defmodule BerlimWeb.Plugs.RequireAdminAuthTest do
-  use BerlimWeb.ConnCase
+  use BerlimWeb.ConnCase, async: true
 
   import BerlimWeb.Plugs.RequireAdminAuth, only: [call: 2]
   import Berlim.Factory, only: [insert: 1]
@@ -9,7 +9,7 @@ defmodule BerlimWeb.Plugs.RequireAdminAuthTest do
     setup %{conn: conn} do
       conn = Guardian.Plug.sign_in(conn, insert(:taxi))
 
-      {:ok, conn: conn}
+      %{conn: conn}
     end
 
     test "send 401 response", %{conn: conn} do
@@ -24,7 +24,7 @@ defmodule BerlimWeb.Plugs.RequireAdminAuthTest do
     setup %{conn: conn} do
       conn = Guardian.Plug.sign_in(conn, insert(:admin))
 
-      {:ok, conn: conn}
+      %{conn: conn}
     end
 
     test "user pass through when is authenticated as admin", %{conn: conn} do

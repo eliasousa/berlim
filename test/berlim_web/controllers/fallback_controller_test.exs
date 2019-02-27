@@ -1,5 +1,5 @@
 defmodule BerlimWeb.FallbackControllerTest do
-  use BerlimWeb.ConnCase
+  use BerlimWeb.ConnCase, async: true
 
   alias Berlim.InternalAccounts.Admin
   alias BerlimWeb.FallbackController

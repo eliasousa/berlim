@@ -1,5 +1,5 @@
-defmodule Berlim.Accounts.AccountsTest do
-  use Berlim.DataCase
+defmodule Berlim.AccountsTest do
+  use Berlim.DataCase, async: true
 
   import Berlim.Factory
   import Comeonin.Bcrypt, only: [hashpwsalt: 1]
@@ -29,6 +29,6 @@ defmodule Berlim.Accounts.AccountsTest do
   test "token_sign_in/2 with invalid credentials" do
     insert(:admin, %{email: "john@email.com", encrypted_password: "123456"})
 
-    assert Accounts.token_sign_in("john@email.com", "12345678") == {:error, :unauthorized}
+    assert {:error, :unauthorized} = Accounts.token_sign_in("john@email.com", "12345678")
   end
 end

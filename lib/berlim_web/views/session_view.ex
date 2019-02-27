@@ -1,7 +1,7 @@
 defmodule BerlimWeb.SessionView do
   use BerlimWeb, :view
 
-  def render("jwt.json", %{jwt: jwt}) do
-    %{jwt: jwt}
+  def render("account.json", %{token: token}) do
+    %{token: token}
   end
 end

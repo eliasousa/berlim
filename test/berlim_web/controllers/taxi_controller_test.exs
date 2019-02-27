@@ -1,5 +1,5 @@
 defmodule BerlimWeb.TaxiControllerTest do
-  use BerlimWeb.ConnCase
+  use BerlimWeb.ConnCase, async: true
   use BerlimWeb.Helpers.AuthHelper
 
   import Berlim.Factory

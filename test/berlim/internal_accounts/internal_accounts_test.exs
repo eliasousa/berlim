@@ -1,5 +1,5 @@
-defmodule Berlim.InternalAccounts.InternalAccountsTest do
-  use Berlim.DataCase
+defmodule Berlim.InternalAccountsTest do
+  use Berlim.DataCase, async: true
 
   import Berlim.Factory
 

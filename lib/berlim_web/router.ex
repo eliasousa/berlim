@@ -7,7 +7,7 @@ defmodule BerlimWeb.Router do
     plug :accepts, ["json"]
   end
 
-  pipeline :ensure_jwt_auth do
+  pipeline :ensure_auth do
     plug Plugs.Guardian.AuthPipeline
   end
 
@@ -22,7 +22,7 @@ defmodule BerlimWeb.Router do
   end
 
   scope "/api", BerlimWeb do
-    pipe_through [:api, :ensure_jwt_auth, :ensure_admin]
+    pipe_through [:api, :ensure_auth, :ensure_admin]
 
     resources("/admins", AdminController, except: [:new, :edit])
     resources("/taxis", TaxiController, except: [:new, :edit, :delete])

@@ -3,7 +3,7 @@ defmodule BerlimWeb.SessionViewTest do
 
   alias BerlimWeb.SessionView
 
-  test "renders jwt token" do
-    assert SessionView.render("jwt.json", jwt: "jwt_token") == %{jwt: "jwt_token"}
+  test "renders token" do
+    assert SessionView.render("account.json", token: "token") == %{token: "token"}
   end
 end

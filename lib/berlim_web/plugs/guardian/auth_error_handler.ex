@@ -4,9 +4,12 @@ defmodule BerlimWeb.Plugs.Guardian.AuthErrorHandler do
   """
 
   import Plug.Conn
+  use Phoenix.Controller
 
   def auth_error(conn, {type, _reason}, _opts) do
-    body = Jason.encode!(%{error: to_string(type)})
-    send_resp(conn, 401, body)
+    conn
+    |> put_status(401)
+    |> json(%{error: to_string(type)})
+    |> halt()
   end
 end

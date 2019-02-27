@@ -1,5 +1,5 @@
 defmodule Berlim.GuardianTest do
-  use Berlim.DataCase
+  use Berlim.DataCase, async: true
 
   import Berlim.Factory
   alias Berlim.Guardian

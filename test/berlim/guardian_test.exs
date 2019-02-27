@@ -12,13 +12,13 @@ defmodule Berlim.GuardianTest do
   test "resource_from_claims/2 when user is an Admin" do
     user = insert(:admin)
     claims = %{"sub" => user.id, "type" => "Admin"}
-    assert {:ok, user} = Guardian.resource_from_claims(claims)
+    assert Guardian.resource_from_claims(claims) == {:ok, user}
   end
 
   test "resource_from_claims/2 when user is a Taxi" do
     user = insert(:taxi)
     claims = %{"sub" => user.id, "type" => "Taxi"}
-    assert {:ok, user} = Guardian.resource_from_claims(claims)
+    assert Guardian.resource_from_claims(claims) == {:ok, user}
   end
 
   test "resource_from_claims/2 when user does not exist" do

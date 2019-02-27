@@ -18,13 +18,13 @@ defmodule BerlimWeb.TaxiViewTest do
 
   describe "index.json/2" do
     test "returns taxis", %{taxi: taxi} do
-      assert TaxiView.render("index.json", %{taxis: [taxi]}) == %{data: [taxi]}
+      assert %{data: [taxi]} = TaxiView.render("index.json", %{taxis: [taxi]})
     end
   end
 
   describe "show.json/2" do
     test "returns taxi", %{taxi: taxi} do
-      assert TaxiView.render("show.json", %{taxi: taxi}) == %{data: taxi}
+      assert %{data: taxi} = TaxiView.render("show.json", %{taxi: taxi})
     end
   end
 

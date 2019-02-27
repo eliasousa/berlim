@@ -17,13 +17,13 @@ defmodule BerlimWeb.AdminViewTest do
 
   describe "index.json/2" do
     test "returns admins", %{admin: admin} do
-      assert AdminView.render("index.json", %{admins: [admin]}) == %{data: [admin]}
+      assert %{data: [admin]} = AdminView.render("index.json", %{admins: [admin]})
     end
   end
 
   describe "show.json/2" do
     test "returns admin", %{admin: admin} do
-      assert AdminView.render("show.json", %{admin: admin}) == %{data: admin}
+      assert %{data: admin} = AdminView.render("show.json", %{admin: admin})
     end
   end
 

@@ -4,6 +4,6 @@ defmodule BerlimWeb.SessionViewTest do
   alias BerlimWeb.SessionView
 
   test "renders token" do
-    assert SessionView.render("account.json", token: "token") == %{token: "token"}
+    assert %{token: "token"} = SessionView.render("account.json", token: "token")
   end
 end

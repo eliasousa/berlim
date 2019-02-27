@@ -1,5 +1,6 @@
 defmodule BerlimWeb.ErrorView do
   use BerlimWeb, :view
+  alias Phoenix.Controller
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.
@@ -11,6 +12,6 @@ defmodule BerlimWeb.ErrorView do
   # the template name. For example, "404.json" becomes
   # "Not Found".
   def template_not_found(template, _assigns) do
-    %{errors: %{detail: Phoenix.Controller.status_message_from_template(template)}}
+    %{errors: %{detail: Controller.status_message_from_template(template)}}
   end
 end

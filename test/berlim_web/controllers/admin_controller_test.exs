@@ -1,5 +1,6 @@
 defmodule BerlimWeb.AdminControllerTest do
-  use BerlimWeb.ConnCase
+  use BerlimWeb.ConnCase, async: true
+  use BerlimWeb.Helpers.AuthHelper
 
   import Berlim.Factory
 
@@ -11,14 +12,45 @@ defmodule BerlimWeb.AdminControllerTest do
   @update_attrs %{name: "Lionel Ritchie"}
   @invalid_attrs %{name: nil, email: nil}
 
-  describe "GET /index" do
+  describe "GET /index, when user is an admin" do
+    setup [:authenticate_admin]
+
     test "lists all admins", %{conn: conn} do
       conn = get(conn, admin_path(conn, :index))
-      assert json_response(conn, 200)["data"] == []
+      assert is_list(json_response(conn, 200)["data"])
     end
   end
 
-  describe "POST /create" do
+  describe "GET /index, when user is not an admin" do
+    setup [:authenticate_taxi]
+
+    test "renders unauthorized", %{conn: conn} do
+      conn = get(conn, admin_path(conn, :index))
+      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+    end
+  end
+
+  describe "GET /show, when user is an admin" do
+    setup [:create_admin, :authenticate_admin]
+
+    test "renders admin", %{conn: conn, admin: admin} do
+      conn = get(conn, admin_path(conn, :show, admin))
+      assert json_response(conn, 200) == render_json(AdminView, "show.json", %{admin: admin})
+    end
+  end
+
+  describe "GET /show, when user is not an admin" do
+    setup [:create_admin, :authenticate_taxi]
+
+    test "renders unauthorized", %{conn: conn, admin: admin} do
+      conn = get(conn, admin_path(conn, :show, admin))
+      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+    end
+  end
+
+  describe "POST /create, when user is an admin" do
+    setup [:authenticate_admin]
+
     test "renders admin show when data is valid", %{conn: conn} do
       conn = post(conn, admin_path(conn, :create), admin: @create_attrs)
       admin = InternalAccounts.get_admin!(json_response(conn, 201)["data"]["id"])
@@ -32,8 +64,17 @@ defmodule BerlimWeb.AdminControllerTest do
     end
   end
 
-  describe "PUT /update" do
-    setup [:create_admin]
+  describe "POST /create, when user is not an admin" do
+    setup [:authenticate_taxi]
+
+    test "renders unauthorized", %{conn: conn} do
+      conn = post(conn, admin_path(conn, :create), admin: @create_attrs)
+      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+    end
+  end
+
+  describe "PUT /update, when user is an admin" do
+    setup [:create_admin, :authenticate_admin]
 
     test "renders admin show when data is valid", %{conn: conn, admin: %Admin{id: id} = admin} do
       conn = put(conn, admin_path(conn, :update, admin), admin: @update_attrs)
@@ -49,8 +90,17 @@ defmodule BerlimWeb.AdminControllerTest do
     end
   end
 
-  describe "DELETE /delete" do
-    setup [:create_admin]
+  describe "PUT /update, when user is not an admin" do
+    setup [:create_admin, :authenticate_taxi]
+
+    test "renders unauthorized", %{conn: conn, admin: admin} do
+      conn = put(conn, admin_path(conn, :update, admin), admin: @update_attrs)
+      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+    end
+  end
+
+  describe "DELETE /delete, when user is an admin" do
+    setup [:create_admin, :authenticate_admin]
 
     test "deletes chosen admin", %{conn: conn, admin: admin} do
       conn = delete(conn, admin_path(conn, :delete, admin))
@@ -62,7 +112,24 @@ defmodule BerlimWeb.AdminControllerTest do
     end
   end
 
+  describe "DELETE /delete, when user is not an admin" do
+    setup [:create_admin, :authenticate_taxi]
+
+    test "renders unauthorized", %{conn: conn, admin: admin} do
+      conn = delete(conn, admin_path(conn, :delete, admin))
+      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+    end
+  end
+
   defp create_admin(_) do
     %{admin: insert(:admin)}
+  end
+
+  defp authenticate_admin(%{conn: conn}) do
+    authenticate(conn, insert(:admin))
+  end
+
+  defp authenticate_taxi(%{conn: conn}) do
+    authenticate(conn, insert(:taxi))
   end
 end

@@ -1,5 +1,5 @@
 defmodule BerlimWeb.FallbackControllerTest do
-  use BerlimWeb.ConnCase
+  use BerlimWeb.ConnCase, async: true
 
   alias Berlim.InternalAccounts.Admin
   alias BerlimWeb.FallbackController
@@ -10,6 +10,14 @@ defmodule BerlimWeb.FallbackControllerTest do
       conn = FallbackController.call(conn, {:error, changeset})
 
       assert conn.status == 422
+    end
+  end
+
+  describe "call/2 with unauthorized" do
+    test "responds with 401", %{conn: conn} do
+      conn = FallbackController.call(conn, {:error, :unauthorized})
+
+      assert conn.status == 401
     end
   end
 end

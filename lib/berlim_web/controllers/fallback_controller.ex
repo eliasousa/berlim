@@ -12,4 +12,10 @@ defmodule BerlimWeb.FallbackController do
     |> put_view(BerlimWeb.ChangesetView)
     |> render("error.json", changeset: changeset)
   end
+
+  def call(conn, {:error, :unauthorized}) do
+    conn
+    |> put_status(:unauthorized)
+    |> json(%{error: "Login error"})
+  end
 end

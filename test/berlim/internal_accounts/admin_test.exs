@@ -27,4 +27,14 @@ defmodule Berlim.InternalAccounts.AdminTest do
     changeset = Admin.changeset(%Admin{}, attrs)
     assert %{email: ["has invalid format"]} = errors_on(changeset)
   end
+
+  test "email is unique" do
+    admin_existent = insert(:admin)
+
+    attrs = %{@valid_attrs | email: admin_existent.email}
+    new_admin = Admin.changeset(%Admin{}, attrs)
+
+    assert {:error, changeset} = Repo.insert(new_admin)
+    assert %{email: ["has already been taken"]} = errors_on(changeset)
+  end
 end

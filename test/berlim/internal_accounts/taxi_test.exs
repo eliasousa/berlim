@@ -22,4 +22,24 @@ defmodule Berlim.InternalAccounts.TaxiTest do
     changeset = Taxi.changeset(%Taxi{}, attrs)
     assert %{email: ["has invalid format"]} = errors_on(changeset)
   end
+
+  test "email is unique" do
+    taxi_existent = insert(:taxi)
+
+    attrs = %{@valid_attrs | email: taxi_existent.email}
+    new_taxi = Taxi.changeset(%Taxi{}, attrs)
+
+    assert {:error, changeset} = Repo.insert(new_taxi)
+    assert %{email: ["has already been taken"]} = errors_on(changeset)
+  end
+
+  test "smtt is unique" do
+    taxi_existent = insert(:taxi)
+
+    attrs = %{@valid_attrs | smtt: taxi_existent.smtt}
+    new_taxi = Taxi.changeset(%Taxi{}, attrs)
+
+    assert {:error, changeset} = Repo.insert(new_taxi)
+    assert %{smtt: ["has already been taken"]} = errors_on(changeset)
+  end
 end

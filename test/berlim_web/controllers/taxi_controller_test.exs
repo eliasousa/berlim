@@ -16,7 +16,7 @@ defmodule BerlimWeb.TaxiControllerTest do
     setup [:authenticate_admin]
 
     test "list all taxis", %{conn: conn} do
-      conn = get(conn, taxi_path(conn, :index))
+      conn = get(conn, Routes.taxi_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
     end
   end
@@ -25,7 +25,7 @@ defmodule BerlimWeb.TaxiControllerTest do
     setup [:authenticate_taxi]
 
     test "renders unauthorized", %{conn: conn} do
-      conn = get(conn, taxi_path(conn, :index))
+      conn = get(conn, Routes.taxi_path(conn, :index))
       assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
     end
   end
@@ -34,7 +34,7 @@ defmodule BerlimWeb.TaxiControllerTest do
     setup [:create_taxi, :authenticate_admin]
 
     test "renders taxi", %{conn: conn, taxi: taxi} do
-      conn = get(conn, taxi_path(conn, :show, taxi))
+      conn = get(conn, Routes.taxi_path(conn, :show, taxi))
       assert json_response(conn, 200) == render_json(TaxiView, "show.json", %{taxi: taxi})
     end
   end
@@ -43,7 +43,7 @@ defmodule BerlimWeb.TaxiControllerTest do
     setup [:create_taxi, :authenticate_taxi]
 
     test "renders unauthorized", %{conn: conn, taxi: taxi} do
-      conn = get(conn, taxi_path(conn, :show, taxi))
+      conn = get(conn, Routes.taxi_path(conn, :show, taxi))
       assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
     end
   end
@@ -52,14 +52,14 @@ defmodule BerlimWeb.TaxiControllerTest do
     setup [:authenticate_admin]
 
     test "renders taxi show when data is valid", %{conn: conn} do
-      conn = post(conn, taxi_path(conn, :create), taxi: @create_attrs)
+      conn = post(conn, Routes.taxi_path(conn, :create), taxi: @create_attrs)
       taxi = InternalAccounts.get_taxi!(json_response(conn, 201)["data"]["id"])
 
       assert json_response(conn, 201) == render_json(TaxiView, "show.json", %{taxi: taxi})
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, taxi_path(conn, :create), taxi: @invalid_attrs)
+      conn = post(conn, Routes.taxi_path(conn, :create), taxi: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -68,7 +68,7 @@ defmodule BerlimWeb.TaxiControllerTest do
     setup [:authenticate_taxi]
 
     test "renders unauthorized", %{conn: conn} do
-      conn = post(conn, taxi_path(conn, :create), taxi: @create_attrs)
+      conn = post(conn, Routes.taxi_path(conn, :create), taxi: @create_attrs)
       assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
     end
   end
@@ -77,7 +77,7 @@ defmodule BerlimWeb.TaxiControllerTest do
     setup [:create_taxi, :authenticate_admin]
 
     test "renders taxi show when data is valid", %{conn: conn, taxi: %Taxi{id: id} = taxi} do
-      conn = put(conn, taxi_path(conn, :update, taxi), taxi: @update_attrs)
+      conn = put(conn, Routes.taxi_path(conn, :update, taxi), taxi: @update_attrs)
       taxi = InternalAccounts.get_taxi!(id)
 
       assert json_response(conn, 200) == render_json(TaxiView, "show.json", %{taxi: taxi})
@@ -85,7 +85,7 @@ defmodule BerlimWeb.TaxiControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, taxi: taxi} do
-      conn = put(conn, taxi_path(conn, :update, taxi), taxi: @invalid_attrs)
+      conn = put(conn, Routes.taxi_path(conn, :update, taxi), taxi: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -94,7 +94,7 @@ defmodule BerlimWeb.TaxiControllerTest do
     setup [:create_taxi, :authenticate_taxi]
 
     test "renders unauthorized", %{conn: conn, taxi: taxi} do
-      conn = put(conn, taxi_path(conn, :update, taxi), taxi: @update_attrs)
+      conn = put(conn, Routes.taxi_path(conn, :update, taxi), taxi: @update_attrs)
       assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
     end
   end

@@ -16,7 +16,7 @@ defmodule BerlimWeb.AdminControllerTest do
     setup [:authenticate_admin]
 
     test "lists all admins", %{conn: conn} do
-      conn = get(conn, admin_path(conn, :index))
+      conn = get(conn, Routes.admin_path(conn, :index))
       assert is_list(json_response(conn, 200)["data"])
     end
   end
@@ -25,7 +25,7 @@ defmodule BerlimWeb.AdminControllerTest do
     setup [:authenticate_taxi]
 
     test "renders unauthorized", %{conn: conn} do
-      conn = get(conn, admin_path(conn, :index))
+      conn = get(conn, Routes.admin_path(conn, :index))
       assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
     end
   end
@@ -34,7 +34,7 @@ defmodule BerlimWeb.AdminControllerTest do
     setup [:create_admin, :authenticate_admin]
 
     test "renders admin", %{conn: conn, admin: admin} do
-      conn = get(conn, admin_path(conn, :show, admin))
+      conn = get(conn, Routes.admin_path(conn, :show, admin))
       assert json_response(conn, 200) == render_json(AdminView, "show.json", %{admin: admin})
     end
   end
@@ -43,7 +43,7 @@ defmodule BerlimWeb.AdminControllerTest do
     setup [:create_admin, :authenticate_taxi]
 
     test "renders unauthorized", %{conn: conn, admin: admin} do
-      conn = get(conn, admin_path(conn, :show, admin))
+      conn = get(conn, Routes.admin_path(conn, :show, admin))
       assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
     end
   end
@@ -52,14 +52,14 @@ defmodule BerlimWeb.AdminControllerTest do
     setup [:authenticate_admin]
 
     test "renders admin show when data is valid", %{conn: conn} do
-      conn = post(conn, admin_path(conn, :create), admin: @create_attrs)
+      conn = post(conn, Routes.admin_path(conn, :create), admin: @create_attrs)
       admin = InternalAccounts.get_admin!(json_response(conn, 201)["data"]["id"])
 
       assert json_response(conn, 201) == render_json(AdminView, "show.json", %{admin: admin})
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, admin_path(conn, :create), admin: @invalid_attrs)
+      conn = post(conn, Routes.admin_path(conn, :create), admin: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -68,7 +68,7 @@ defmodule BerlimWeb.AdminControllerTest do
     setup [:authenticate_taxi]
 
     test "renders unauthorized", %{conn: conn} do
-      conn = post(conn, admin_path(conn, :create), admin: @create_attrs)
+      conn = post(conn, Routes.admin_path(conn, :create), admin: @create_attrs)
       assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
     end
   end
@@ -77,7 +77,7 @@ defmodule BerlimWeb.AdminControllerTest do
     setup [:create_admin, :authenticate_admin]
 
     test "renders admin show when data is valid", %{conn: conn, admin: %Admin{id: id} = admin} do
-      conn = put(conn, admin_path(conn, :update, admin), admin: @update_attrs)
+      conn = put(conn, Routes.admin_path(conn, :update, admin), admin: @update_attrs)
       admin = InternalAccounts.get_admin!(id)
 
       assert json_response(conn, 200) == render_json(AdminView, "show.json", %{admin: admin})
@@ -85,7 +85,7 @@ defmodule BerlimWeb.AdminControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, admin: admin} do
-      conn = put(conn, admin_path(conn, :update, admin), admin: @invalid_attrs)
+      conn = put(conn, Routes.admin_path(conn, :update, admin), admin: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
@@ -94,7 +94,7 @@ defmodule BerlimWeb.AdminControllerTest do
     setup [:create_admin, :authenticate_taxi]
 
     test "renders unauthorized", %{conn: conn, admin: admin} do
-      conn = put(conn, admin_path(conn, :update, admin), admin: @update_attrs)
+      conn = put(conn, Routes.admin_path(conn, :update, admin), admin: @update_attrs)
       assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
     end
   end
@@ -103,11 +103,11 @@ defmodule BerlimWeb.AdminControllerTest do
     setup [:create_admin, :authenticate_admin]
 
     test "deletes chosen admin", %{conn: conn, admin: admin} do
-      conn = delete(conn, admin_path(conn, :delete, admin))
+      conn = delete(conn, Routes.admin_path(conn, :delete, admin))
       assert response(conn, 204)
 
       assert_error_sent(404, fn ->
-        get(conn, admin_path(conn, :show, admin))
+        get(conn, Routes.admin_path(conn, :show, admin))
       end)
     end
   end
@@ -116,7 +116,7 @@ defmodule BerlimWeb.AdminControllerTest do
     setup [:create_admin, :authenticate_taxi]
 
     test "renders unauthorized", %{conn: conn, admin: admin} do
-      conn = delete(conn, admin_path(conn, :delete, admin))
+      conn = delete(conn, Routes.admin_path(conn, :delete, admin))
       assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
     end
   end

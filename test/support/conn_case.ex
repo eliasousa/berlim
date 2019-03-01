@@ -21,7 +21,7 @@ defmodule BerlimWeb.ConnCase do
     quote do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
-      import BerlimWeb.Router.Helpers
+      alias BerlimWeb.Router.Helpers, as: Routes
       import BerlimWeb.ConnCaseHelper
 
       # The default endpoint for testing

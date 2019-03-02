@@ -3,7 +3,6 @@ defmodule Berlim.InternalAccountsTest do
 
   import Berlim.Factory
 
-  alias Bcrypt
   alias Berlim.InternalAccounts
 
   describe "admins" do

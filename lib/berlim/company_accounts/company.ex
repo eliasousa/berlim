@@ -4,7 +4,7 @@ defmodule Berlim.CompanyAccounts.Company do
   use Ecto.Schema
   import Ecto.Changeset
 
-  import Comeonin.Bcrypt, only: [hashpwsalt: 1]
+  import Bcrypt, only: [hash_pwd_salt: 1]
 
   schema "companies" do
     field :cnpj, :string
@@ -31,7 +31,7 @@ defmodule Berlim.CompanyAccounts.Company do
   defp put_pass_hash(
          %Ecto.Changeset{valid?: true, changes: %{encrypted_password: password}} = changeset
        ),
-       do: put_change(changeset, :encrypted_password, hashpwsalt(password))
+       do: put_change(changeset, :encrypted_password, hash_pwd_salt(password))
 
   defp put_pass_hash(changeset), do: changeset
 end

@@ -11,7 +11,7 @@ defmodule Berlim.Accounts do
     Repo
   }
 
-  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
+  import Bcrypt, only: [verify_pass: 2, no_user_verify: 0]
 
   @spec token_sign_in(String.t(), String.t()) ::
           {:ok, String.t(), struct()} | {:error, :unauthorised}
@@ -41,13 +41,13 @@ defmodule Berlim.Accounts do
         {:ok, taxi}
 
       true ->
-        dummy_checkpw()
+        no_user_verify()
         {:error, :invalid_credentials}
     end
   end
 
   defp verify_password(password, user) when is_binary(password) do
-    if checkpw(password, user.encrypted_password) do
+    if verify_pass(password, user.encrypted_password) do
       {:ok, user}
     else
       {:error, :invalid_credentials}

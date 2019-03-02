@@ -3,7 +3,6 @@ defmodule Berlim.CompanyAccountsFactory do
   Factory for modules inside the `CompanyAccounts` context
   """
   alias Berlim.CompanyAccounts.Company
-  alias Ecto.Changeset
 
   defmacro __using__(_opts) do
     quote do

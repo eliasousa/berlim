@@ -3,8 +3,8 @@ defmodule Berlim.CompanyAccountsTest do
 
   import Berlim.Factory
 
+  alias Bcrypt
   alias Berlim.CompanyAccounts
-  alias Comeonin.Bcrypt
 
   describe "companies" do
     alias Berlim.CompanyAccounts.Company

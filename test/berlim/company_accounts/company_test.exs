@@ -42,4 +42,11 @@ defmodule Berlim.CompanyAccounts.CompanyTest do
     assert {:error, changeset} = Repo.insert(new_company)
     assert %{cnpj: ["has already been taken"]} = errors_on(changeset)
   end
+
+  test "email is case insensitive" do
+    insert(:company, email: "johndoe@voo.com")
+
+    assert %Company{} = Repo.get_by(Company, email: "johndoe@voo.com")
+    assert %Company{} = Repo.get_by(Company, email: "JOHNDOE@VOO.COM")
+  end
 end

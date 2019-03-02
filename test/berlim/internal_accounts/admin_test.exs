@@ -37,4 +37,11 @@ defmodule Berlim.InternalAccounts.AdminTest do
     assert {:error, changeset} = Repo.insert(new_admin)
     assert %{email: ["has already been taken"]} = errors_on(changeset)
   end
+
+  test "email is case insensitive" do
+    insert(:admin, email: "johndoe@voo.com")
+
+    assert %Admin{} = Repo.get_by(Admin, email: "johndoe@voo.com")
+    assert %Admin{} = Repo.get_by(Admin, email: "JOHNDOE@VOO.COM")
+  end
 end

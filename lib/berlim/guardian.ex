@@ -4,7 +4,7 @@ defmodule Berlim.Guardian do
   """
 
   use Guardian, otp_app: :berlim
-  alias Berlim.InternalAccounts
+  alias Berlim.{CompanyAccounts, InternalAccounts}
 
   def subject_for_token(user, _claims) do
     {:ok, to_string(user.id)}
@@ -12,6 +12,11 @@ defmodule Berlim.Guardian do
 
   def resource_from_claims(%{"sub" => id, "type" => "Admin"}) do
     user = InternalAccounts.get_admin!(id)
+    {:ok, user}
+  end
+
+  def resource_from_claims(%{"sub" => id, "type" => "Company"}) do
+    user = CompanyAccounts.get_company!(id)
     {:ok, user}
   end
 

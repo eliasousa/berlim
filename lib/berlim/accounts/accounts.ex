@@ -3,7 +3,14 @@ defmodule Berlim.Accounts do
   The Accounts context.
   """
 
-  alias Berlim.{Guardian, InternalAccounts.Admin, InternalAccounts.Taxi, Repo}
+  alias Berlim.{
+    CompanyAccounts.Company,
+    Guardian,
+    InternalAccounts.Admin,
+    InternalAccounts.Taxi,
+    Repo
+  }
+
   import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   @spec token_sign_in(String.t(), String.t()) ::
@@ -26,6 +33,9 @@ defmodule Berlim.Accounts do
     cond do
       admin = Repo.get_by(Admin, email: email) ->
         {:ok, admin}
+
+      company = Repo.get_by(Company, email: email) ->
+        {:ok, company}
 
       taxi = Repo.get_by(Taxi, email: email) ->
         {:ok, taxi}

@@ -1,4 +1,4 @@
-defmodule Berlim.InternalAccounts.Admin do
+defmodule Berlim.CompanyAccounts.Company do
   @moduledoc false
 
   use Ecto.Schema
@@ -6,22 +6,24 @@ defmodule Berlim.InternalAccounts.Admin do
 
   import Bcrypt, only: [hash_pwd_salt: 1]
 
-  schema "admins" do
-    field(:email, :string)
-    field(:name, :string)
-    field(:encrypted_password, :string)
-    field(:phone, :string)
-    field(:active, :boolean)
+  schema "companies" do
+    field :cnpj, :string
+    field :email, :string
+    field :encrypted_password, :string
+    field :name, :string
+    field :phone, :string
+    field :active, :boolean, default: true
 
     timestamps()
   end
 
   @doc false
-  def changeset(admin, attrs) do
-    admin
-    |> cast(attrs, [:email, :encrypted_password, :name, :active, :phone])
-    |> validate_required([:email, :encrypted_password, :name, :active])
+  def changeset(company, attrs) do
+    company
+    |> cast(attrs, [:name, :cnpj, :email, :encrypted_password, :active, :phone])
+    |> validate_required([:name, :cnpj, :email, :encrypted_password, :active])
     |> unique_constraint(:email)
+    |> unique_constraint(:cnpj)
     |> validate_format(:email, ~r/@/)
     |> put_pass_hash()
   end

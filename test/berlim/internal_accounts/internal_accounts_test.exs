@@ -4,7 +4,6 @@ defmodule Berlim.InternalAccountsTest do
   import Berlim.Factory
 
   alias Berlim.InternalAccounts
-  alias Comeonin.Bcrypt
 
   describe "admins" do
     alias Berlim.InternalAccounts.Admin

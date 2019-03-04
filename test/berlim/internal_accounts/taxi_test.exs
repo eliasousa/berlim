@@ -42,4 +42,11 @@ defmodule Berlim.InternalAccounts.TaxiTest do
     assert {:error, changeset} = Repo.insert(new_taxi)
     assert %{smtt: ["has already been taken"]} = errors_on(changeset)
   end
+
+  test "email is case insensitive" do
+    insert(:taxi, email: "johndoe@voo.com")
+
+    assert %Taxi{} = Repo.get_by(Taxi, email: "johndoe@voo.com")
+    assert %Taxi{} = Repo.get_by(Taxi, email: "JOHNDOE@VOO.COM")
+  end
 end

@@ -5,4 +5,5 @@ defmodule Berlim.Factory do
 
   use ExMachina.Ecto, repo: Berlim.Repo
   use Berlim.InternalAccountsFactory
+  use Berlim.CompanyAccountsFactory
 end

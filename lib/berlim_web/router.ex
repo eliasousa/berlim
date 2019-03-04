@@ -26,5 +26,6 @@ defmodule BerlimWeb.Router do
 
     resources("/admins", AdminController, except: [:new, :edit])
     resources("/taxis", TaxiController, except: [:new, :edit, :delete])
+    resources("/companies", CompanyController, except: [:new, :edit, :delete])
   end
 end

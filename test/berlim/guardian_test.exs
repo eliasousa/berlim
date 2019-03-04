@@ -21,6 +21,12 @@ defmodule Berlim.GuardianTest do
     assert Guardian.resource_from_claims(claims) == {:ok, user}
   end
 
+  test "resource_from_claims/2 when user is an Company" do
+    user = insert(:company)
+    claims = %{"sub" => user.id, "type" => "Company"}
+    assert Guardian.resource_from_claims(claims) == {:ok, user}
+  end
+
   test "resource_from_claims/2 when user does not exist" do
     claims = %{"sub" => 999, "type" => "Xpto"}
     assert {:error, :resource_not_found} = Guardian.resource_from_claims(claims)

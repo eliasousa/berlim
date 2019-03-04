@@ -3,8 +3,15 @@ defmodule Berlim.Accounts do
   The Accounts context.
   """
 
-  alias Berlim.{Guardian, InternalAccounts.Admin, InternalAccounts.Taxi, Repo}
-  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
+  alias Berlim.{
+    CompanyAccounts.Company,
+    Guardian,
+    InternalAccounts.Admin,
+    InternalAccounts.Taxi,
+    Repo
+  }
+
+  import Bcrypt, only: [verify_pass: 2, no_user_verify: 0]
 
   @spec token_sign_in(String.t(), String.t()) ::
           {:ok, String.t(), struct()} | {:error, :unauthorised}
@@ -27,17 +34,20 @@ defmodule Berlim.Accounts do
       admin = Repo.get_by(Admin, email: email) ->
         {:ok, admin}
 
+      company = Repo.get_by(Company, email: email) ->
+        {:ok, company}
+
       taxi = Repo.get_by(Taxi, email: email) ->
         {:ok, taxi}
 
       true ->
-        dummy_checkpw()
+        no_user_verify()
         {:error, :invalid_credentials}
     end
   end
 
   defp verify_password(password, user) when is_binary(password) do
-    if checkpw(password, user.encrypted_password) do
+    if verify_pass(password, user.encrypted_password) do
       {:ok, user}
     else
       {:error, :invalid_credentials}

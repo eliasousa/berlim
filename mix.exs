@@ -44,8 +44,7 @@ defmodule Berlim.MixProject do
       {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
       {:exnumerator, "~> 1.6"},
       {:ex_machina, "~> 2.2", only: :test},
-      {:comeonin, "~> 4.1"},
-      {:bcrypt_elixir, "~> 1.1"},
+      {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 1.0"}
     ]
   end

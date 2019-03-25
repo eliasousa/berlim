@@ -17,7 +17,6 @@ defmodule BerlimWeb.SectorController do
     with {:ok, %Sector{} = sector} <- CompanyAccounts.create_sector(sector_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", Routes.sector_path(conn, :show, sector.company_id, sector))
       |> render("show.json", sector: sector)
     end
   end

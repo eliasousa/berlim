@@ -2,7 +2,7 @@ defmodule Berlim.CompanyAccountsFactory do
   @moduledoc """
   Factory for modules inside the `CompanyAccounts` context
   """
-  alias Berlim.CompanyAccounts.Company
+  alias Berlim.CompanyAccounts.{Company, Sector}
 
   defmacro __using__(_opts) do
     quote do
@@ -14,6 +14,13 @@ defmodule Berlim.CompanyAccountsFactory do
           encrypted_password: "1234abcd",
           active: true,
           phone: "7932120600"
+        }
+      end
+
+      def sector_factory do
+        %Sector{
+          name: "Financeiro",
+          company: build(:company)
         }
       end
     end

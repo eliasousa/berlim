@@ -6,6 +6,8 @@ defmodule Berlim.CompanyAccounts.Company do
 
   import Bcrypt, only: [hash_pwd_salt: 1]
 
+  alias Berlim.CompanyAccounts.Sector
+
   schema "companies" do
     field :cnpj, :string
     field :email, :string
@@ -13,6 +15,7 @@ defmodule Berlim.CompanyAccounts.Company do
     field :name, :string
     field :phone, :string
     field :active, :boolean, default: true
+    has_many :sectors, Sector
 
     timestamps()
   end

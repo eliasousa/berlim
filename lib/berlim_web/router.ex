@@ -15,6 +15,14 @@ defmodule BerlimWeb.Router do
     plug Plugs.RequireAdminAuth
   end
 
+  pipeline :ensure_company do
+    plug Plugs.RequireCompanyAuth
+  end
+
+  pipeline :check_sector_owner do
+    plug Plugs.CheckSectorOwner
+  end
+
   scope "/api", BerlimWeb do
     pipe_through :api
 
@@ -27,5 +35,17 @@ defmodule BerlimWeb.Router do
     resources("/admins", AdminController, except: [:new, :edit])
     resources("/taxis", TaxiController, except: [:new, :edit, :delete])
     resources("/companies", CompanyController, except: [:new, :edit, :delete])
+  end
+
+  scope "/api/companies/:company_id", BerlimWeb do
+    pipe_through([:api, :ensure_auth, :ensure_company])
+
+    resources("/sectors", SectorController, only: [:index, :create])
+  end
+
+  scope "/api/companies/:company_id", BerlimWeb do
+    pipe_through [:api, :ensure_auth, :ensure_company, :check_sector_owner]
+
+    resources("/sectors", SectorController, only: [:show, :update])
   end
 end

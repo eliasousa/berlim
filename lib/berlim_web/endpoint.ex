@@ -40,5 +40,6 @@ defmodule BerlimWeb.Endpoint do
     key: "_berlim_key",
     signing_salt: "HJZ0HXDn"
 
+  plug(CORSPlug, origin: System.get_env("CORS_ALLOWED_DOMAIN") || "http://localhost:3000")
   plug BerlimWeb.Router
 end

@@ -124,4 +124,73 @@ defmodule Berlim.CompanyAccountsTest do
       assert %Sector{} = changeset.data
     end
   end
+
+  describe "employees" do
+    alias Berlim.CompanyAccounts.Employee
+    import Berlim.Helpers.Unpreloader
+
+    @update_attrs %{name: "Elias", internal_id: "4321dcba"}
+    @invalid_attrs %{name: nil}
+
+    defp employee_params do
+      params_with_assocs(:employee)
+    end
+
+    test "list_company_employees/1, returns all employees that belongs to a company" do
+      employee = unpreload(insert(:employee), [:company, :sector])
+      _another_employee = insert(:employee)
+
+      assert CompanyAccounts.list_company_employees(employee.company_id) == [employee]
+    end
+
+    test "get_employee!/1, returns the employee with the given id" do
+      employee = unpreload(insert(:employee), [:company, :sector])
+      assert CompanyAccounts.get_employee!(employee.id) == employee
+    end
+
+    test "create_employee/1 with valid data, creates a employee" do
+      assert {:ok, employee} = CompanyAccounts.create_employee(employee_params())
+      assert employee.name == "Danilo"
+    end
+
+    test "create_employee/1 with invalid data, returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = CompanyAccounts.create_employee(@invalid_attrs)
+    end
+
+    test "update_employee/2 with valid data, updates the employee" do
+      employee = insert(:employee)
+
+      assert {:ok, employee} = CompanyAccounts.update_employee(employee, @update_attrs)
+      assert employee.name == "Elias"
+      assert employee.internal_id == "4321dcba"
+    end
+
+    test "update_employee/2 with invalid data, returns error changeset" do
+      employee = insert(:employee)
+
+      assert {:error, %Ecto.Changeset{}} =
+               CompanyAccounts.update_employee(employee, @invalid_attrs)
+    end
+
+    test "change_employee/0, returns a Employee changeset" do
+      changeset = CompanyAccounts.change_employee()
+
+      assert %Ecto.Changeset{} = changeset
+      assert %Employee{} = changeset.data
+    end
+
+    test "change_employee/1, returns a Employee changeset" do
+      changeset = CompanyAccounts.change_employee(insert(:employee))
+
+      assert %Ecto.Changeset{} = changeset
+      assert %Employee{} = changeset.data
+    end
+
+    test "change_employee/2, returns a Employee changeset" do
+      changeset = CompanyAccounts.change_employee(insert(:employee), @update_attrs)
+
+      assert %Ecto.Changeset{} = changeset
+      assert %Employee{} = changeset.data
+    end
+  end
 end

@@ -1,24 +1,27 @@
-defmodule Berlim.CompanyAccounts.Sector do
+defmodule Berlim.CompanyAccounts.Employee do
   @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Berlim.CompanyAccounts.{Company, Employee}
+  alias Berlim.CompanyAccounts.{Company, Sector}
 
-  schema "sectors" do
+  schema "employees" do
+    field :active, :boolean, default: true
+    field :internal_id, :string
     field :name, :string
     belongs_to :company, Company
-    has_many :employees, Employee
+    belongs_to :sector, Sector
 
     timestamps()
   end
 
   @doc false
-  def changeset(sector, attrs) do
-    sector
-    |> cast(attrs, [:name, :company_id])
+  def changeset(employee, attrs) do
+    employee
+    |> cast(attrs, [:name, :internal_id, :active, :company_id, :sector_id])
     |> validate_required([:name])
     |> cast_or_constraint_assoc(:company)
+    |> cast_or_constraint_assoc(:sector)
   end
 
   defp cast_or_constraint_assoc(changeset, name) do

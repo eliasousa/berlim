@@ -20,7 +20,11 @@ defmodule BerlimWeb.Router do
   end
 
   pipeline :check_sector_owner do
-    plug Plugs.CheckSectorOwner
+    plug Plugs.CheckCompanyOwns, :sector
+  end
+
+  pipeline :check_employee_owner do
+    plug Plugs.CheckCompanyOwns, :employee
   end
 
   scope "/api", BerlimWeb do
@@ -41,11 +45,18 @@ defmodule BerlimWeb.Router do
     pipe_through([:api, :ensure_auth, :ensure_company])
 
     resources("/sectors", SectorController, only: [:index, :create])
+    resources("/employees", EmployeeController, only: [:index, :create])
   end
 
   scope "/api/companies/:company_id", BerlimWeb do
     pipe_through [:api, :ensure_auth, :ensure_company, :check_sector_owner]
 
     resources("/sectors", SectorController, only: [:show, :update])
+  end
+
+  scope "/api/companies/:company_id", BerlimWeb do
+    pipe_through [:api, :ensure_auth, :ensure_company, :check_employee_owner]
+
+    resources("/employees", EmployeeController, only: [:show, :update])
   end
 end

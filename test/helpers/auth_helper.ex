@@ -16,8 +16,9 @@ defmodule BerlimWeb.Helpers.AuthHelper do
     {:ok, jwt, _claims} = Guardian.encode_and_sign(user, %{type: get_user_type(user)})
 
     conn = put_req_header(conn, "authorization", "Bearer #{jwt}")
+    auth_user = String.downcase(get_user_type(user))
 
-    %{conn: conn}
+    %{conn: conn, "#{auth_user}": user}
   end
 
   defp get_user_type(user) do

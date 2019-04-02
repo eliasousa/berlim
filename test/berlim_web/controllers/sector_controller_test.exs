@@ -4,10 +4,7 @@ defmodule BerlimWeb.SectorControllerTest do
 
   import Berlim.Factory
 
-  alias Berlim.{
-    CompanyAccounts,
-    Guardian
-  }
+  alias Berlim.CompanyAccounts
 
   alias BerlimWeb.SectorView
 
@@ -16,7 +13,7 @@ defmodule BerlimWeb.SectorControllerTest do
   @invalid_attrs %{name: nil}
 
   describe "GET /index" do
-    setup [:authenticate_company, :company_from_token]
+    setup [:authenticate_company]
 
     test "list all sectors that belongs to a company", %{conn: conn, company: company} do
       conn = get(conn, Routes.sector_path(conn, :index, company.id))
@@ -25,7 +22,7 @@ defmodule BerlimWeb.SectorControllerTest do
   end
 
   describe "GET /show" do
-    setup [:authenticate_company, :company_from_token, :create_sector]
+    setup [:authenticate_company, :create_sector]
 
     test "renders sector", %{conn: conn, sector: sector} do
       conn = get(conn, Routes.sector_path(conn, :show, sector.company_id, sector))
@@ -34,7 +31,7 @@ defmodule BerlimWeb.SectorControllerTest do
   end
 
   describe "POST /create" do
-    setup [:authenticate_company, :company_from_token]
+    setup [:authenticate_company]
 
     test "renders sector when data is valid", %{conn: conn, company: company} do
       conn = post(conn, Routes.sector_path(conn, :create, company, sector: @create_attrs))
@@ -52,7 +49,7 @@ defmodule BerlimWeb.SectorControllerTest do
   end
 
   describe "PUT /update" do
-    setup [:authenticate_company, :company_from_token, :create_sector]
+    setup [:authenticate_company, :create_sector]
 
     test "renders sector when data is valid", %{conn: conn, sector: sector} do
       conn =
@@ -85,13 +82,6 @@ defmodule BerlimWeb.SectorControllerTest do
       |> insert()
 
     %{sector: sector}
-  end
-
-  defp company_from_token(%{conn: conn}) do
-    with ["Bearer " <> token] = get_req_header(conn, "authorization"),
-         {:ok, company, _claims} = Guardian.resource_from_token(token) do
-      %{company: company}
-    end
   end
 
   defp authenticate_company(%{conn: conn}) do

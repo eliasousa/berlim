@@ -29,8 +29,8 @@ defmodule BerlimWeb.Plugs.CheckSectorOwnerTest do
         |> add_params(conn)
         |> call(%{})
 
-      assert conn.status == 401
-      assert conn.resp_body =~ "Você não pode fazer isso"
+      assert conn.status == 403
+      assert conn.resp_body =~ "Você não pode acessar esse recurso"
     end
   end
 

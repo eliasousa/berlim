@@ -26,7 +26,7 @@ defmodule BerlimWeb.AdminControllerTest do
 
     test "renders unauthorized", %{conn: conn} do
       conn = get(conn, Routes.admin_path(conn, :index))
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -44,7 +44,7 @@ defmodule BerlimWeb.AdminControllerTest do
 
     test "renders unauthorized", %{conn: conn, admin: admin} do
       conn = get(conn, Routes.admin_path(conn, :show, admin))
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -69,7 +69,7 @@ defmodule BerlimWeb.AdminControllerTest do
 
     test "renders unauthorized", %{conn: conn} do
       conn = post(conn, Routes.admin_path(conn, :create), admin: @create_attrs)
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -95,7 +95,7 @@ defmodule BerlimWeb.AdminControllerTest do
 
     test "renders unauthorized", %{conn: conn, admin: admin} do
       conn = put(conn, Routes.admin_path(conn, :update, admin), admin: @update_attrs)
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -117,7 +117,7 @@ defmodule BerlimWeb.AdminControllerTest do
 
     test "renders unauthorized", %{conn: conn, admin: admin} do
       conn = delete(conn, Routes.admin_path(conn, :delete, admin))
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 

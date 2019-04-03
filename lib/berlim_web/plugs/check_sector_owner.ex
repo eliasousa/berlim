@@ -24,8 +24,8 @@ defmodule BerlimWeb.Plugs.CheckSectorOwner do
     else
       _not_owner ->
         conn
-        |> put_status(401)
-        |> json(%{error: "Você não pode fazer isso"})
+        |> put_status(403)
+        |> json(%{error: "Você não pode acessar esse recurso"})
         |> halt()
     end
   end

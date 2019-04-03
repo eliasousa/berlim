@@ -26,7 +26,7 @@ defmodule BerlimWeb.CompanyControllerTest do
 
     test "renders unauthorized", %{conn: conn} do
       conn = get(conn, Routes.company_path(conn, :index))
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -46,7 +46,7 @@ defmodule BerlimWeb.CompanyControllerTest do
 
     test "renders unauthorized", %{conn: conn, company: company} do
       conn = get(conn, Routes.company_path(conn, :show, company))
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -72,7 +72,7 @@ defmodule BerlimWeb.CompanyControllerTest do
 
     test "renders unauthorized", %{conn: conn} do
       conn = post(conn, Routes.company_path(conn, :create), company: @create_attrs)
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -100,7 +100,7 @@ defmodule BerlimWeb.CompanyControllerTest do
 
     test "renders unauthorized", %{conn: conn, company: company} do
       conn = put(conn, Routes.company_path(conn, :update, company), company: @update_attrs)
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 

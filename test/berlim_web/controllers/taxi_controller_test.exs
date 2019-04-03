@@ -26,7 +26,7 @@ defmodule BerlimWeb.TaxiControllerTest do
 
     test "renders unauthorized", %{conn: conn} do
       conn = get(conn, Routes.taxi_path(conn, :index))
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -44,7 +44,7 @@ defmodule BerlimWeb.TaxiControllerTest do
 
     test "renders unauthorized", %{conn: conn, taxi: taxi} do
       conn = get(conn, Routes.taxi_path(conn, :show, taxi))
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -69,7 +69,7 @@ defmodule BerlimWeb.TaxiControllerTest do
 
     test "renders unauthorized", %{conn: conn} do
       conn = post(conn, Routes.taxi_path(conn, :create), taxi: @create_attrs)
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 
@@ -95,7 +95,7 @@ defmodule BerlimWeb.TaxiControllerTest do
 
     test "renders unauthorized", %{conn: conn, taxi: taxi} do
       conn = put(conn, Routes.taxi_path(conn, :update, taxi), taxi: @update_attrs)
-      assert json_response(conn, 401)["error"] == "Você não pode acessar esse recurso"
+      assert json_response(conn, 403)["error"] == "Você não pode acessar esse recurso"
     end
   end
 

@@ -19,7 +19,7 @@ defmodule BerlimWeb.Plugs.CheckCompanyOwnsTest do
         |> add_params(conn)
         |> call(:sector)
 
-      assert conn.status != 401
+      assert conn.status != 403
     end
 
     test "when company does not own the sector, send error message", %{conn: conn} do
@@ -28,8 +28,8 @@ defmodule BerlimWeb.Plugs.CheckCompanyOwnsTest do
         |> add_params(conn)
         |> call(:sector)
 
-      assert conn.status == 401
-      assert conn.resp_body =~ "Você não pode fazer isso"
+      assert conn.status == 403
+      assert conn.resp_body =~ "Você não pode acessar esse recurso"
     end
   end
 
@@ -46,7 +46,7 @@ defmodule BerlimWeb.Plugs.CheckCompanyOwnsTest do
         |> add_params(conn)
         |> call(:employee)
 
-      assert conn.status != 401
+      assert conn.status != 403
     end
 
     test "when company does not own the employee, send error message", %{conn: conn} do
@@ -55,8 +55,8 @@ defmodule BerlimWeb.Plugs.CheckCompanyOwnsTest do
         |> add_params(conn)
         |> call(:employee)
 
-      assert conn.status == 401
-      assert conn.resp_body =~ "Você não pode fazer isso"
+      assert conn.status == 403
+      assert conn.resp_body =~ "Você não pode acessar esse recurso"
     end
   end
 

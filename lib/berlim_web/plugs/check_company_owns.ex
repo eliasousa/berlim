@@ -43,8 +43,8 @@ defmodule BerlimWeb.Plugs.CheckCompanyOwns do
 
   defp error_return_and_halt(conn) do
     conn
-    |> put_status(401)
-    |> json(%{error: "Você não pode fazer isso"})
+    |> put_status(403)
+    |> json(%{error: "Você não pode acessar esse recurso"})
     |> halt()
   end
 end

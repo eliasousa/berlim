@@ -15,7 +15,7 @@ defmodule BerlimWeb.Plugs.RequireAdminAuthTest do
     test "send 401 response", %{conn: conn} do
       conn = call(conn, %{})
 
-      assert conn.status == 401
+      assert conn.status == 403
       assert conn.resp_body == "{\"error\":\"Você não pode acessar esse recurso\"}"
     end
   end
@@ -29,7 +29,7 @@ defmodule BerlimWeb.Plugs.RequireAdminAuthTest do
 
     test "user pass through when is authenticated as admin", %{conn: conn} do
       conn = call(conn, %{})
-      assert conn.status != 401
+      assert conn.status != 403
     end
   end
 end

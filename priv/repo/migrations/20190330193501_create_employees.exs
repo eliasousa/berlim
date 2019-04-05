@@ -7,7 +7,7 @@ defmodule Berlim.Repo.Migrations.CreateEmployees do
       add :internal_id, :string
       add :active, :boolean, default: true, null: false
       add :company_id, references(:companies, on_delete: :delete_all), null: false
-      add :sector_id, references(:sectors, on_delete: :nothing), null: false
+      add :sector_id, references(:sectors, on_delete: :nothing), null: true
 
       timestamps()
     end

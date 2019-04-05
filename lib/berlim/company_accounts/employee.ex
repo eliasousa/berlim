@@ -19,18 +19,8 @@ defmodule Berlim.CompanyAccounts.Employee do
   def changeset(employee, attrs) do
     employee
     |> cast(attrs, [:name, :internal_id, :active, :company_id, :sector_id])
-    |> validate_required([:name])
-    |> cast_or_constraint_assoc(:company)
-    |> cast_or_constraint_assoc(:sector)
-  end
-
-  defp cast_or_constraint_assoc(changeset, name) do
-    {:assoc, %{owner_key: key}} = changeset.types[name]
-
-    if changeset.changes[key] do
-      assoc_constraint(changeset, name)
-    else
-      cast_assoc(changeset, name, required: true)
-    end
+    |> validate_required([:name, :company_id])
+    |> foreign_key_constraint(:company_id)
+    |> foreign_key_constraint(:sector_id)
   end
 end

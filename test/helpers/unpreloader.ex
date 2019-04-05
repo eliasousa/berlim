@@ -3,7 +3,19 @@ defmodule Berlim.Helpers.Unpreloader do
   Module with method to unpreload ExMachina associations
   """
 
-  def unpreload(struct, field, cardinality \\ :one) do
+  def unpreload(struct, field, cardinality \\ :one)
+
+  def unpreload(struct, fields, cardinality) when is_list(fields) do
+    Enum.reduce(fields, struct, fn field, struct ->
+      build_not_loaded(struct, field, cardinality)
+    end)
+  end
+
+  def unpreload(struct, field, cardinality) do
+    build_not_loaded(struct, field, cardinality)
+  end
+
+  defp build_not_loaded(struct, field, cardinality) do
     %{
       struct
       | field => %Ecto.Association.NotLoaded{

@@ -7,6 +7,7 @@ defmodule Berlim.CompanyAccounts do
 
   alias Berlim.{
     CompanyAccounts.Company,
+    CompanyAccounts.Employee,
     CompanyAccounts.Sector,
     Repo
   }
@@ -55,5 +56,31 @@ defmodule Berlim.CompanyAccounts do
 
   def change_sector(sector \\ %Sector{}, sector_attrs \\ %{}) do
     Sector.changeset(sector, sector_attrs)
+  end
+
+  def list_company_employees(company_id) do
+    Repo.all(
+      from e in Employee,
+        where: e.company_id == ^company_id
+    )
+  end
+
+  def get_employee!(id), do: Repo.get!(Employee, id)
+
+  def create_employee(employee_attrs) do
+    %Employee{}
+    |> change_employee(employee_attrs)
+    |> Repo.insert()
+  end
+
+  def update_employee(employee, employee_attrs) do
+    employee
+    |> Repo.preload([:company, :sector])
+    |> change_employee(employee_attrs)
+    |> Repo.update()
+  end
+
+  def change_employee(employee \\ %Employee{}, employee_attrs \\ %{}) do
+    Employee.changeset(employee, employee_attrs)
   end
 end

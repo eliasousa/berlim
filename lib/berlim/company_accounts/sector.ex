@@ -3,11 +3,12 @@ defmodule Berlim.CompanyAccounts.Sector do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Berlim.CompanyAccounts.Company
+  alias Berlim.CompanyAccounts.{Company, Employee}
 
   schema "sectors" do
     field :name, :string
     belongs_to :company, Company
+    has_many :employees, Employee
 
     timestamps()
   end

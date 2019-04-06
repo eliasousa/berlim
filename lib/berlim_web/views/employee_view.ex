@@ -15,7 +15,8 @@ defmodule BerlimWeb.EmployeeView do
       id: employee.id,
       name: employee.name,
       internal_id: employee.internal_id,
-      active: employee.active
+      active: employee.active,
+      sector_id: employee.sector_id
     }
   end
 end

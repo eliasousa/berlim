@@ -9,7 +9,8 @@ defmodule BerlimWeb.EmployeeViewTest do
         id: 1,
         name: "Danilo",
         internal_id: "123456",
-        active: true
+        active: true,
+        sector_id: 1
       }
     }
   end

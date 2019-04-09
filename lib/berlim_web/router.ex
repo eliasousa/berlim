@@ -41,20 +41,20 @@ defmodule BerlimWeb.Router do
     resources("/companies", CompanyController, except: [:new, :edit, :delete])
   end
 
-  scope "/api/companies/:company_id", BerlimWeb do
+  scope "/api", BerlimWeb do
     pipe_through([:api, :ensure_auth, :ensure_company])
 
     resources("/sectors", SectorController, only: [:index, :create])
     resources("/employees", EmployeeController, only: [:index, :create])
   end
 
-  scope "/api/companies/:company_id", BerlimWeb do
+  scope "/api", BerlimWeb do
     pipe_through [:api, :ensure_auth, :ensure_company, :check_sector_owner]
 
     resources("/sectors", SectorController, only: [:show, :update])
   end
 
-  scope "/api/companies/:company_id", BerlimWeb do
+  scope "/api", BerlimWeb do
     pipe_through [:api, :ensure_auth, :ensure_company, :check_employee_owner]
 
     resources("/employees", EmployeeController, only: [:show, :update])

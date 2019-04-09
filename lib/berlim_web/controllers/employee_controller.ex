@@ -1,18 +1,21 @@
 defmodule BerlimWeb.EmployeeController do
   use BerlimWeb, :controller
 
-  alias Berlim.CompanyAccounts
-  alias Berlim.CompanyAccounts.Employee
+  alias Berlim.{
+    CompanyAccounts,
+    CompanyAccounts.Employee,
+    Guardian
+  }
 
   action_fallback BerlimWeb.FallbackController
 
-  def index(conn, %{"company_id" => company_id}) do
-    employees = CompanyAccounts.list_company_employees(company_id)
+  def index(conn, _params) do
+    employees = CompanyAccounts.list_company_employees(current_company(conn).id)
     render(conn, "index.json", employees: employees)
   end
 
-  def create(conn, %{"employee" => employee_params, "company_id" => company_id}) do
-    employee_params = Map.put(employee_params, "company_id", company_id)
+  def create(conn, %{"employee" => employee_params}) do
+    employee_params = Map.put(employee_params, "company_id", current_company(conn).id)
 
     with {:ok, %Employee{} = employee} <- CompanyAccounts.create_employee(employee_params) do
       conn
@@ -33,5 +36,9 @@ defmodule BerlimWeb.EmployeeController do
            CompanyAccounts.update_employee(employee, employee_params) do
       render(conn, "show.json", employee: employee)
     end
+  end
+
+  defp current_company(conn) do
+    Guardian.Plug.current_resource(conn)
   end
 end

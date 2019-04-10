@@ -3,19 +3,18 @@ defmodule BerlimWeb.SectorController do
 
   alias Berlim.{
     CompanyAccounts,
-    CompanyAccounts.Sector,
-    Guardian
+    CompanyAccounts.Sector
   }
 
   action_fallback BerlimWeb.FallbackController
 
-  def index(conn, _params) do
-    sectors = CompanyAccounts.list_company_sectors(current_company(conn).id)
+  def index(%{assigns: %{company: company}} = conn, _params) do
+    sectors = CompanyAccounts.list_company_sectors(company.id)
     render(conn, "index.json", sectors: sectors)
   end
 
-  def create(conn, %{"sector" => sector_params}) do
-    sector_params = Map.put(sector_params, "company_id", current_company(conn).id)
+  def create(%{assigns: %{company: company}} = conn, %{"sector" => sector_params}) do
+    sector_params = Map.put(sector_params, "company_id", company.id)
 
     with {:ok, %Sector{} = sector} <- CompanyAccounts.create_sector(sector_params) do
       conn
@@ -36,9 +35,5 @@ defmodule BerlimWeb.SectorController do
            CompanyAccounts.update_sector(sector, sector_params) do
       render(conn, "show.json", sector: sector)
     end
-  end
-
-  defp current_company(conn) do
-    Guardian.Plug.current_resource(conn)
   end
 end

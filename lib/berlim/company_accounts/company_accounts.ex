@@ -39,23 +39,19 @@ defmodule Berlim.CompanyAccounts do
     )
   end
 
-  def get_sector!(id), do: Repo.get!(Sector, id)
+  def get_sector!(id, company_id), do: Repo.get_by!(Sector, id: id, company_id: company_id)
 
-  def create_sector(sector_attrs) do
+  def create_sector(company, sector_attrs) do
     %Sector{}
-    |> change_sector(sector_attrs)
+    |> Sector.changeset(company, sector_attrs)
     |> Repo.insert()
   end
 
   def update_sector(sector, sector_attrs) do
     sector
     |> Repo.preload(:company)
-    |> change_sector(sector_attrs)
+    |> Sector.changeset(sector_attrs)
     |> Repo.update()
-  end
-
-  def change_sector(sector \\ %Sector{}, sector_attrs \\ %{}) do
-    Sector.changeset(sector, sector_attrs)
   end
 
   def list_company_employees(company_id) do
@@ -65,22 +61,18 @@ defmodule Berlim.CompanyAccounts do
     )
   end
 
-  def get_employee!(id), do: Repo.get!(Employee, id)
+  def get_employee!(id, company_id), do: Repo.get_by!(Employee, id: id, company_id: company_id)
 
-  def create_employee(employee_attrs) do
+  def create_employee(company, employee_attrs) do
     %Employee{}
-    |> change_employee(employee_attrs)
+    |> Employee.changeset(company, employee_attrs)
     |> Repo.insert()
   end
 
   def update_employee(employee, employee_attrs) do
     employee
     |> Repo.preload([:company, :sector])
-    |> change_employee(employee_attrs)
+    |> Employee.changeset(employee_attrs)
     |> Repo.update()
-  end
-
-  def change_employee(employee \\ %Employee{}, employee_attrs \\ %{}) do
-    Employee.changeset(employee, employee_attrs)
   end
 end

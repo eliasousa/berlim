@@ -20,8 +20,8 @@ defmodule BerlimWeb.Plugs.Helpers.RequireAuthHelper do
 
   def check_user_auth(:admin, conn) do
     case Guardian.Plug.current_resource(conn) do
-      %Admin{} ->
-        conn
+      %Admin{} = admin ->
+        assign(conn, :admin, admin)
 
       _ ->
         error_return_and_halt(conn)
@@ -30,8 +30,8 @@ defmodule BerlimWeb.Plugs.Helpers.RequireAuthHelper do
 
   def check_user_auth(:company, conn) do
     case Guardian.Plug.current_resource(conn) do
-      %Company{} ->
-        conn
+      %Company{} = company ->
+        assign(conn, :company, company)
 
       _ ->
         error_return_and_halt(conn)

@@ -5,32 +5,29 @@ defmodule Berlim.CompanyAccounts.EmployeeTest do
 
   alias Berlim.CompanyAccounts.Employee
 
-  test "changeset with valid attributes" do
+  test "changeset/2 with valid attributes" do
     changeset = Employee.changeset(%Employee{}, employee_params())
     assert changeset.valid?
   end
 
-  test "changeset with invalid attributes" do
+  test "changeset/2 with invalid attributes" do
     changeset = Employee.changeset(%Employee{}, %{})
     refute changeset.valid?
   end
 
-  test "company does not exist" do
-    attrs = %{employee_params() | company_id: 0}
-    employee = Employee.changeset(%Employee{}, attrs)
-
-    assert {:error, changeset} = Repo.insert(employee)
-    assert %{company_id: ["does not exist"]} = errors_on(changeset)
+  test "changeset/3 with valid attributes" do
+    changeset = Employee.changeset(%Employee{}, insert(:company), employee_params())
+    assert changeset.valid?
   end
 
-  test "company is required" do
-    changeset = Employee.changeset(%Employee{}, params_for(:employee))
-    assert %{company_id: ["can't be blank"]} = errors_on(changeset)
+  test "changeset/3 with invalid attributes" do
+    changeset = Employee.changeset(%Employee{}, insert(:company), %{})
+    refute changeset.valid?
   end
 
   test "sector does not exist" do
     attrs = %{employee_params() | sector_id: 0}
-    employee = Employee.changeset(%Employee{}, attrs)
+    employee = Employee.changeset(%Employee{}, insert(:company), attrs)
 
     assert {:error, changeset} = Repo.insert(employee)
     assert %{sector_id: ["does not exist"]} = errors_on(changeset)

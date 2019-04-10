@@ -5,27 +5,24 @@ defmodule Berlim.CompanyAccounts.SectorTest do
 
   alias Berlim.CompanyAccounts.Sector
 
-  test "changeset with valid attributes" do
+  test "changeset/2 with valid attributes" do
     changeset = Sector.changeset(%Sector{}, sector_params())
     assert changeset.valid?
   end
 
-  test "changeset with invalid attributes" do
+  test "changeset/2 with invalid attributes" do
     changeset = Sector.changeset(%Sector{}, %{})
     refute changeset.valid?
   end
 
-  test "company does not exist" do
-    attrs = %{sector_params() | company_id: 0}
-    sector = Sector.changeset(%Sector{}, attrs)
-
-    assert {:error, changeset} = Repo.insert(sector)
-    assert %{company: ["does not exist"]} = errors_on(changeset)
+  test "changeset/3 with valid attributes" do
+    changeset = Sector.changeset(%Sector{}, insert(:company), sector_params())
+    assert changeset.valid?
   end
 
-  test "company is required" do
-    changeset = Sector.changeset(%Sector{}, params_for(:sector))
-    assert %{company: ["can't be blank"]} = errors_on(changeset)
+  test "changeset/3 with invalid attributes" do
+    changeset = Sector.changeset(%Sector{}, insert(:company), %{})
+    refute changeset.valid?
   end
 
   defp sector_params do

@@ -78,9 +78,9 @@ defmodule Berlim.CompanyAccountsTest do
       assert CompanyAccounts.list_company_sectors(sector.company_id) == [sector]
     end
 
-    test "get_sector!/1, returns the sector with the given id" do
+    test "get_sector!/2, returns the sector with the given id and company id" do
       sector = unpreload(insert(:sector), :company)
-      assert CompanyAccounts.get_sector!(sector.id) == sector
+      assert CompanyAccounts.get_sector!(sector.id, sector.company_id) == sector
     end
 
     test "create_sector/1 with valid data, creates a sector" do
@@ -143,9 +143,9 @@ defmodule Berlim.CompanyAccountsTest do
       assert CompanyAccounts.list_company_employees(employee.company_id) == [employee]
     end
 
-    test "get_employee!/1, returns the employee with the given id" do
+    test "get_employee!/2, returns the employee with the given id and company id" do
       employee = unpreload(insert(:employee), [:company, :sector])
-      assert CompanyAccounts.get_employee!(employee.id) == employee
+      assert CompanyAccounts.get_employee!(employee.id, employee.company_id) == employee
     end
 
     test "create_employee/1 with valid data, creates a employee" do

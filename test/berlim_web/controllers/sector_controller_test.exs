@@ -35,7 +35,12 @@ defmodule BerlimWeb.SectorControllerTest do
 
     test "renders sector when data is valid", %{conn: conn} do
       conn = post(conn, Routes.sector_path(conn, :create, sector: @create_attrs))
-      sector = CompanyAccounts.get_sector!(json_response(conn, 201)["data"]["id"])
+
+      sector =
+        CompanyAccounts.get_sector!(
+          json_response(conn, 201)["data"]["id"],
+          conn.assigns[:company].id
+        )
 
       assert json_response(conn, 201) ==
                render_json(SectorView, "show.json", %{sector: sector})
@@ -58,7 +63,11 @@ defmodule BerlimWeb.SectorControllerTest do
           Routes.sector_path(conn, :update, sector, sector: @update_attrs)
         )
 
-      sector = CompanyAccounts.get_sector!(json_response(conn, 200)["data"]["id"])
+      sector =
+        CompanyAccounts.get_sector!(
+          json_response(conn, 200)["data"]["id"],
+          conn.assigns[:company].id
+        )
 
       assert json_response(conn, 200) == render_json(SectorView, "show.json", %{sector: sector})
       assert json_response(conn, 200)["data"]["name"] == "Recursos Humanos"

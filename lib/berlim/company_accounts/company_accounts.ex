@@ -39,7 +39,7 @@ defmodule Berlim.CompanyAccounts do
     )
   end
 
-  def get_sector!(id), do: Repo.get!(Sector, id)
+  def get_sector!(id, company_id), do: Repo.get_by!(Sector, id: id, company_id: company_id)
 
   def create_sector(sector_attrs) do
     %Sector{}
@@ -65,7 +65,7 @@ defmodule Berlim.CompanyAccounts do
     )
   end
 
-  def get_employee!(id), do: Repo.get!(Employee, id)
+  def get_employee!(id, company_id), do: Repo.get_by!(Employee, id: id, company_id: company_id)
 
   def create_employee(employee_attrs) do
     %Employee{}

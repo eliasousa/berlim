@@ -42,7 +42,12 @@ defmodule BerlimWeb.EmployeeControllerTest do
 
     test "renders employee when data is valid", %{conn: conn} do
       conn = post(conn, Routes.employee_path(conn, :create, employee: create_attrs()))
-      employee = CompanyAccounts.get_employee!(json_response(conn, 201)["data"]["id"])
+
+      employee =
+        CompanyAccounts.get_employee!(
+          json_response(conn, 201)["data"]["id"],
+          conn.assigns[:company].id
+        )
 
       assert json_response(conn, 201) ==
                render_json(EmployeeView, "show.json", %{employee: employee})
@@ -65,7 +70,11 @@ defmodule BerlimWeb.EmployeeControllerTest do
           Routes.employee_path(conn, :update, employee, employee: @update_attrs)
         )
 
-      employee = CompanyAccounts.get_employee!(json_response(conn, 200)["data"]["id"])
+      employee =
+        CompanyAccounts.get_employee!(
+          json_response(conn, 200)["data"]["id"],
+          conn.assigns[:company].id
+        )
 
       assert json_response(conn, 200) ==
                render_json(EmployeeView, "show.json", %{employee: employee})

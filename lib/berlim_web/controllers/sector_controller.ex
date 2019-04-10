@@ -23,13 +23,13 @@ defmodule BerlimWeb.SectorController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    sector = CompanyAccounts.get_sector!(id)
+  def show(%{assigns: %{company: company}} = conn, %{"id" => id}) do
+    sector = CompanyAccounts.get_sector!(id, company.id)
     render(conn, "show.json", sector: sector)
   end
 
-  def update(conn, %{"id" => id, "sector" => sector_params}) do
-    sector = CompanyAccounts.get_sector!(id)
+  def update(%{assigns: %{company: company}} = conn, %{"id" => id, "sector" => sector_params}) do
+    sector = CompanyAccounts.get_sector!(id, company.id)
 
     with {:ok, %Sector{} = sector} <-
            CompanyAccounts.update_sector(sector, sector_params) do

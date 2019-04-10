@@ -23,13 +23,13 @@ defmodule BerlimWeb.EmployeeController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    employee = CompanyAccounts.get_employee!(id)
+  def show(%{assigns: %{company: company}} = conn, %{"id" => id}) do
+    employee = CompanyAccounts.get_employee!(id, company.id)
     render(conn, "show.json", employee: employee)
   end
 
-  def update(conn, %{"id" => id, "employee" => employee_params}) do
-    employee = CompanyAccounts.get_employee!(id)
+  def update(%{assigns: %{company: company}} = conn, %{"id" => id, "employee" => employee_params}) do
+    employee = CompanyAccounts.get_employee!(id, company.id)
 
     with {:ok, %Employee{} = employee} <-
            CompanyAccounts.update_employee(employee, employee_params) do

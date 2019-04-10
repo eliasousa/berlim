@@ -16,11 +16,19 @@ defmodule Berlim.CompanyAccounts.Employee do
   end
 
   @doc false
+  def changeset(employee, company, attrs) do
+    employee
+    |> cast(attrs, [:name, :internal_id, :active, :sector_id])
+    |> validate_required([:name])
+    |> put_assoc(:company, company)
+    |> foreign_key_constraint(:sector_id)
+  end
+
+  @doc false
   def changeset(employee, attrs) do
     employee
-    |> cast(attrs, [:name, :internal_id, :active, :company_id, :sector_id])
-    |> validate_required([:name, :company_id])
-    |> foreign_key_constraint(:company_id)
+    |> cast(attrs, [:name, :internal_id, :active, :sector_id])
+    |> validate_required([:name])
     |> foreign_key_constraint(:sector_id)
   end
 end

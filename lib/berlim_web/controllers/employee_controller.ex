@@ -14,9 +14,8 @@ defmodule BerlimWeb.EmployeeController do
   end
 
   def create(%{assigns: %{company: company}} = conn, %{"employee" => employee_params}) do
-    employee_params = Map.put(employee_params, "company_id", company.id)
-
-    with {:ok, %Employee{} = employee} <- CompanyAccounts.create_employee(employee_params) do
+    with {:ok, %Employee{} = employee} <-
+           CompanyAccounts.create_employee(company, employee_params) do
       conn
       |> put_status(:created)
       |> render("show.json", employee: employee)

@@ -14,9 +14,7 @@ defmodule BerlimWeb.SectorController do
   end
 
   def create(%{assigns: %{company: company}} = conn, %{"sector" => sector_params}) do
-    sector_params = Map.put(sector_params, "company_id", company.id)
-
-    with {:ok, %Sector{} = sector} <- CompanyAccounts.create_sector(sector_params) do
+    with {:ok, %Sector{} = sector} <- CompanyAccounts.create_sector(company, sector_params) do
       conn
       |> put_status(:created)
       |> render("show.json", sector: sector)

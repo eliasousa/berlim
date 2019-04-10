@@ -28,15 +28,15 @@ defmodule BerlimWeb.Router do
   scope "/api", BerlimWeb do
     pipe_through [:api, :ensure_auth, :ensure_admin]
 
-    resources("/admins", AdminController, except: [:new, :edit])
-    resources("/taxis", TaxiController, except: [:new, :edit, :delete])
-    resources("/companies", CompanyController, except: [:new, :edit, :delete])
+    resources("/admins", AdminController, only: [:index, :show, :create, :update, :delete])
+    resources("/taxis", TaxiController, only: [:index, :show, :create, :update])
+    resources("/companies", CompanyController, only: [:index, :show, :create, :update])
   end
 
   scope "/api", BerlimWeb do
     pipe_through([:api, :ensure_auth, :ensure_company])
 
-    resources("/sectors", SectorController, except: [:new, :edit, :delete])
-    resources("/employees", EmployeeController, except: [:new, :edit, :delete])
+    resources("/sectors", SectorController, only: [:index, :show, :create, :update])
+    resources("/employees", EmployeeController, only: [:index, :show, :create, :update])
   end
 end

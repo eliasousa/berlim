@@ -14,20 +14,17 @@ defmodule Berlim.CompanyAccounts.Sector do
   end
 
   @doc false
-  def changeset(sector, attrs) do
+  def changeset(sector, company, attrs) do
     sector
-    |> cast(attrs, [:name, :company_id])
+    |> cast(attrs, [:name])
     |> validate_required([:name])
-    |> cast_or_constraint_assoc(:company)
+    |> put_assoc(:company, company)
   end
 
-  defp cast_or_constraint_assoc(changeset, name) do
-    {:assoc, %{owner_key: key}} = changeset.types[name]
-
-    if changeset.changes[key] do
-      assoc_constraint(changeset, name)
-    else
-      cast_assoc(changeset, name, required: true)
-    end
+  @doc false
+  def changeset(sector, attrs) do
+    sector
+    |> cast(attrs, [:name])
+    |> validate_required([:name])
   end
 end

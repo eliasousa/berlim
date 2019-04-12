@@ -32,6 +32,7 @@ defmodule Berlim.CompanyAccountsFactory do
         %Employee{
           name: "Danilo",
           email: sequence(:email, &"email-#{&1}@example.com"),
+          encrypted_password: "1234abcd",
           internal_id: "1234abcd",
           active: "true",
           company: build(:company),

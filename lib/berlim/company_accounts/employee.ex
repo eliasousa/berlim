@@ -9,6 +9,7 @@ defmodule Berlim.CompanyAccounts.Employee do
     field :active, :boolean, default: true
     field :internal_id, :string
     field :name, :string
+    field :email, :string
     belongs_to :company, Company
     belongs_to :sector, Sector
 
@@ -18,8 +19,10 @@ defmodule Berlim.CompanyAccounts.Employee do
   @doc false
   def changeset(employee, company, attrs) do
     employee
-    |> cast(attrs, [:name, :internal_id, :active, :sector_id])
-    |> validate_required([:name])
+    |> cast(attrs, [:name, :email, :internal_id, :active, :sector_id])
+    |> validate_required([:name, :email])
+    |> unique_constraint(:email)
+    |> validate_format(:email, ~r/@/)
     |> put_assoc(:company, company)
     |> foreign_key_constraint(:sector_id)
   end
@@ -27,8 +30,10 @@ defmodule Berlim.CompanyAccounts.Employee do
   @doc false
   def changeset(employee, attrs) do
     employee
-    |> cast(attrs, [:name, :internal_id, :active, :sector_id])
-    |> validate_required([:name])
+    |> cast(attrs, [:name, :email, :internal_id, :active, :sector_id])
+    |> validate_required([:name, :email])
+    |> unique_constraint(:email)
+    |> validate_format(:email, ~r/@/)
     |> foreign_key_constraint(:sector_id)
   end
 end

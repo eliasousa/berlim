@@ -8,6 +8,7 @@ defmodule BerlimWeb.EmployeeViewTest do
       employee: %{
         id: 1,
         name: "Danilo",
+        email: "danilo@infonet.com",
         internal_id: "123456",
         active: true,
         sector_id: 1

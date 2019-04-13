@@ -17,7 +17,14 @@ defmodule BerlimWeb.EmployeeView do
       email: employee.email,
       internal_id: employee.internal_id,
       active: employee.active,
-      sector_id: employee.sector_id
+      sector:
+        if(employee.sector,
+          do: %{
+            id: employee.sector.id,
+            name: employee.sector.name
+          },
+          else: nil
+        )
     }
   end
 end

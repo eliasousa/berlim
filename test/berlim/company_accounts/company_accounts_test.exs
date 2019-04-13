@@ -114,15 +114,27 @@ defmodule Berlim.CompanyAccountsTest do
       params_with_assocs(:employee)
     end
 
-    test "list_company_employees/1, returns all employees that belongs to a company" do
-      employee = unpreload(insert(:employee), [:company, :sector])
+    test "list_company_employees_with_sector/1, returns all employees that belongs to a company" do
+      employee = unpreload(insert(:employee), :company)
+
+      employee = %{
+        employee
+        | :sector => unpreload(employee.sector, :company)
+      }
+
       _another_employee = insert(:employee)
 
-      assert CompanyAccounts.list_company_employees(employee.company_id) == [employee]
+      assert CompanyAccounts.list_company_employees_with_sector(employee.company_id) == [employee]
     end
 
     test "get_employee!/2, returns the employee with the given id and company id" do
-      employee = unpreload(insert(:employee), [:company, :sector])
+      employee = unpreload(insert(:employee), :company)
+
+      employee = %{
+        employee
+        | :sector => unpreload(employee.sector, :company)
+      }
+
       assert CompanyAccounts.get_employee!(employee.id, employee.company_id) == employee
     end
 

@@ -54,25 +54,44 @@ defmodule Berlim.CompanyAccounts do
     |> Repo.update()
   end
 
-  def list_company_employees(company_id) do
+  def list_company_employees_with_sector(company_id) do
     Repo.all(
       from e in Employee,
-        where: e.company_id == ^company_id
+        where: e.company_id == ^company_id,
+        preload: [:sector]
     )
   end
 
-  def get_employee!(id, company_id), do: Repo.get_by!(Employee, id: id, company_id: company_id)
+  def get_employee!(id, company_id) do
+    Employee
+    |> Repo.get_by!(id: id, company_id: company_id)
+    |> Repo.preload(:sector)
+  end
 
   def create_employee(company, employee_attrs) do
-    %Employee{}
-    |> Employee.changeset(company, employee_attrs)
-    |> Repo.insert()
+    changeset = Employee.changeset(%Employee{}, company, employee_attrs)
+
+    case Repo.insert(changeset) do
+      {:ok, employee} ->
+        {:ok, Repo.preload(employee, :sector)}
+
+      {:error, employee} ->
+        {:error, employee}
+    end
   end
 
   def update_employee(employee, employee_attrs) do
-    employee
-    |> Repo.preload([:company, :sector])
-    |> Employee.changeset(employee_attrs)
-    |> Repo.update()
+    changeset =
+      employee
+      |> Repo.preload([:company, :sector])
+      |> Employee.changeset(employee_attrs)
+
+    case Repo.update(changeset) do
+      {:ok, employee} ->
+        {:ok, Repo.preload(employee, :sector)}
+
+      {:error, employee} ->
+        {:error, employee}
+    end
   end
 end

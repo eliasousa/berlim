@@ -9,7 +9,7 @@ defmodule BerlimWeb.EmployeeController do
   action_fallback BerlimWeb.FallbackController
 
   def index(%{assigns: %{company: company}} = conn, _params) do
-    employees = CompanyAccounts.list_company_employees(company.id)
+    employees = CompanyAccounts.list_company_employees_with_sector(company.id)
     render(conn, "index.json", employees: employees)
   end
 

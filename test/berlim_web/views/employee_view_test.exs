@@ -11,7 +11,10 @@ defmodule BerlimWeb.EmployeeViewTest do
         email: "danilo@infonet.com",
         internal_id: "123456",
         active: true,
-        sector_id: 1
+        sector: %{
+          id: 1,
+          name: "TI"
+        }
       }
     }
   end

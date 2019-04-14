@@ -3,7 +3,7 @@ defmodule Berlim.CompanyAccounts do
   The CompanyAccounts context.
   """
 
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query
 
   alias Berlim.{
     CompanyAccounts.Company,
@@ -33,10 +33,9 @@ defmodule Berlim.CompanyAccounts do
   end
 
   def list_company_sectors(company_id) do
-    Repo.all(
-      from s in Sector,
-        where: s.company_id == ^company_id
-    )
+    Sector
+    |> where([s], s.company_id == ^company_id)
+    |> Repo.all()
   end
 
   def get_sector!(id, company_id), do: Repo.get_by!(Sector, id: id, company_id: company_id)
@@ -55,11 +54,10 @@ defmodule Berlim.CompanyAccounts do
   end
 
   def list_company_employees_with_sector(company_id) do
-    Repo.all(
-      from e in Employee,
-        where: e.company_id == ^company_id,
-        preload: [:sector]
-    )
+    Employee
+    |> where([e], e.company_id == ^company_id)
+    |> preload(:sector)
+    |> Repo.all()
   end
 
   def get_employee!(id, company_id) do
@@ -71,27 +69,16 @@ defmodule Berlim.CompanyAccounts do
   def create_employee(company, employee_attrs) do
     changeset = Employee.changeset(%Employee{}, company, employee_attrs)
 
-    case Repo.insert(changeset) do
-      {:ok, employee} ->
-        {:ok, Repo.preload(employee, :sector)}
-
-      {:error, employee} ->
-        {:error, employee}
+    with {:ok, employee} <- Repo.insert(changeset) do
+      {:ok, Repo.preload(employee, :sector)}
     end
   end
 
   def update_employee(employee, employee_attrs) do
-    changeset =
-      employee
-      |> Repo.preload([:company, :sector])
-      |> Employee.changeset(employee_attrs)
+    changeset = Employee.changeset(employee, employee_attrs)
 
-    case Repo.update(changeset) do
-      {:ok, employee} ->
-        {:ok, Repo.preload(employee, :sector)}
-
-      {:error, employee} ->
-        {:error, employee}
+    with {:ok, employee} <- Repo.update(changeset) do
+      {:ok, Repo.preload(employee, :sector)}
     end
   end
 end

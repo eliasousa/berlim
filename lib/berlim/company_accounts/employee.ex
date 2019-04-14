@@ -22,18 +22,18 @@ defmodule Berlim.CompanyAccounts.Employee do
   @doc false
   def changeset(employee, company, attrs) do
     employee
-    |> cast(attrs, [:name, :email, :internal_id, :active, :encrypted_password, :sector_id])
-    |> validate_required([:name, :email, :encrypted_password])
-    |> unique_constraint(:email)
-    |> validate_format(:email, ~r/@/)
+    |> default_changeset(attrs)
     |> put_assoc(:company, company)
-    |> foreign_key_constraint(:sector_id)
-    |> put_pass_hash()
   end
 
   @doc false
   def changeset(employee, attrs) do
     employee
+    |> default_changeset(attrs)
+  end
+
+  defp default_changeset(changeset, attrs) do
+    changeset
     |> cast(attrs, [:name, :email, :internal_id, :active, :encrypted_password, :sector_id])
     |> validate_required([:name, :email, :encrypted_password])
     |> unique_constraint(:email)

@@ -115,27 +115,18 @@ defmodule Berlim.CompanyAccountsTest do
     end
 
     test "list_company_employees_with_sector/1, returns all employees that belongs to a company" do
-      employee = unpreload(insert(:employee), :company)
-
-      employee = %{
-        employee
-        | :sector => unpreload(employee.sector, :company)
-      }
-
+      employee = insert(:employee)
       _another_employee = insert(:employee)
 
-      assert CompanyAccounts.list_company_employees_with_sector(employee.company_id) == [employee]
+      company_list = CompanyAccounts.list_company_employees_with_sector(employee.company_id)
+      assert List.first(company_list).id == employee.id
+      assert Enum.count(company_list) == 1
     end
 
     test "get_employee!/2, returns the employee with the given id and company id" do
-      employee = unpreload(insert(:employee), :company)
+      employee = insert(:employee)
 
-      employee = %{
-        employee
-        | :sector => unpreload(employee.sector, :company)
-      }
-
-      assert CompanyAccounts.get_employee!(employee.id, employee.company_id) == employee
+      assert CompanyAccounts.get_employee!(employee.id, employee.company_id).id == employee.id
     end
 
     test "create_employee/2 with valid data, creates a employee" do

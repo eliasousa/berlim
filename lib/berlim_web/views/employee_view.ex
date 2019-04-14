@@ -17,14 +17,11 @@ defmodule BerlimWeb.EmployeeView do
       email: employee.email,
       internal_id: employee.internal_id,
       active: employee.active,
-      sector:
-        if(employee.sector,
-          do: %{
-            id: employee.sector.id,
-            name: employee.sector.name
-          },
-          else: nil
-        )
+      sector_id: employee.sector_id,
+      sector: sector_json(employee.sector)
     }
   end
+
+  defp sector_json(%{} = sector), do: %{name: sector.name}
+  defp sector_json(_), do: nil
 end

@@ -8,9 +8,13 @@ defmodule BerlimWeb.EmployeeViewTest do
       employee: %{
         id: 1,
         name: "Danilo",
+        email: "danilo@infonet.com",
         internal_id: "123456",
         active: true,
-        sector_id: 1
+        sector_id: 1,
+        sector: %{
+          name: "TI"
+        }
       }
     }
   end
@@ -28,7 +32,13 @@ defmodule BerlimWeb.EmployeeViewTest do
   end
 
   describe "employee.json/2" do
-    test "returns employee", %{employee: employee} do
+    test "returns employee when sector exists", %{employee: employee} do
+      assert EmployeeView.render("employee.json", %{employee: employee}) == employee
+    end
+
+    test "returns employee when sector is nil", %{employee: employee} do
+      employee = %{employee | :sector => nil}
+
       assert EmployeeView.render("employee.json", %{employee: employee}) == employee
     end
   end

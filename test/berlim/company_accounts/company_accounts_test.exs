@@ -61,7 +61,6 @@ defmodule Berlim.CompanyAccountsTest do
   end
 
   describe "sectors" do
-    alias Berlim.CompanyAccounts.Sector
     import Berlim.Helpers.Unpreloader
 
     @update_attrs %{name: "Recursos Humanos"}
@@ -78,18 +77,19 @@ defmodule Berlim.CompanyAccountsTest do
       assert CompanyAccounts.list_company_sectors(sector.company_id) == [sector]
     end
 
-    test "get_sector!/1, returns the sector with the given id" do
+    test "get_sector!/2, returns the sector with the given id and company id" do
       sector = unpreload(insert(:sector), :company)
-      assert CompanyAccounts.get_sector!(sector.id) == sector
+      assert CompanyAccounts.get_sector!(sector.id, sector.company_id) == sector
     end
 
-    test "create_sector/1 with valid data, creates a sector" do
-      assert {:ok, sector} = CompanyAccounts.create_sector(sector_params())
+    test "create_sector/2 with valid data, creates a sector" do
+      assert {:ok, sector} = CompanyAccounts.create_sector(insert(:company), sector_params())
       assert sector.name == "Financeiro"
     end
 
-    test "create_sector/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = CompanyAccounts.create_sector(@invalid_attrs)
+    test "create_sector/2 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} =
+               CompanyAccounts.create_sector(insert(:company), @invalid_attrs)
     end
 
     test "update_sector/2 with valid data, updates the sector" do
@@ -102,31 +102,9 @@ defmodule Berlim.CompanyAccountsTest do
       sector = insert(:sector)
       assert {:error, %Ecto.Changeset{}} = CompanyAccounts.update_sector(sector, @invalid_attrs)
     end
-
-    test "change_sector/0, returns a Sector changeset" do
-      changeset = CompanyAccounts.change_sector()
-
-      assert %Ecto.Changeset{} = changeset
-      assert %Sector{} = changeset.data
-    end
-
-    test "change_sector/1, returns a Sector changeset" do
-      changeset = CompanyAccounts.change_sector(insert(:sector))
-
-      assert %Ecto.Changeset{} = changeset
-      assert %Sector{} = changeset.data
-    end
-
-    test "change_sector/2, returns a Sector changeset" do
-      changeset = CompanyAccounts.change_sector(insert(:sector), @update_attrs)
-
-      assert %Ecto.Changeset{} = changeset
-      assert %Sector{} = changeset.data
-    end
   end
 
   describe "employees" do
-    alias Berlim.CompanyAccounts.Employee
     import Berlim.Helpers.Unpreloader
 
     @update_attrs %{name: "Elias", internal_id: "4321dcba"}
@@ -136,25 +114,31 @@ defmodule Berlim.CompanyAccountsTest do
       params_with_assocs(:employee)
     end
 
-    test "list_company_employees/1, returns all employees that belongs to a company" do
-      employee = unpreload(insert(:employee), [:company, :sector])
+    test "list_company_employees_with_sector/1, returns all employees that belongs to a company" do
+      employee = insert(:employee)
       _another_employee = insert(:employee)
 
-      assert CompanyAccounts.list_company_employees(employee.company_id) == [employee]
+      company_list = CompanyAccounts.list_company_employees_with_sector(employee.company_id)
+      assert List.first(company_list).id == employee.id
+      assert Enum.count(company_list) == 1
     end
 
-    test "get_employee!/1, returns the employee with the given id" do
-      employee = unpreload(insert(:employee), [:company, :sector])
-      assert CompanyAccounts.get_employee!(employee.id) == employee
+    test "get_employee!/2, returns the employee with the given id and company id" do
+      employee = insert(:employee)
+
+      assert CompanyAccounts.get_employee!(employee.id, employee.company_id).id == employee.id
     end
 
-    test "create_employee/1 with valid data, creates a employee" do
-      assert {:ok, employee} = CompanyAccounts.create_employee(employee_params())
+    test "create_employee/2 with valid data, creates a employee" do
+      assert {:ok, employee} =
+               CompanyAccounts.create_employee(insert(:company), employee_params())
+
       assert employee.name == "Danilo"
     end
 
-    test "create_employee/1 with invalid data, returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = CompanyAccounts.create_employee(@invalid_attrs)
+    test "create_employee/2 with invalid data, returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} =
+               CompanyAccounts.create_employee(insert(:company), @invalid_attrs)
     end
 
     test "update_employee/2 with valid data, updates the employee" do
@@ -170,27 +154,6 @@ defmodule Berlim.CompanyAccountsTest do
 
       assert {:error, %Ecto.Changeset{}} =
                CompanyAccounts.update_employee(employee, @invalid_attrs)
-    end
-
-    test "change_employee/0, returns a Employee changeset" do
-      changeset = CompanyAccounts.change_employee()
-
-      assert %Ecto.Changeset{} = changeset
-      assert %Employee{} = changeset.data
-    end
-
-    test "change_employee/1, returns a Employee changeset" do
-      changeset = CompanyAccounts.change_employee(insert(:employee))
-
-      assert %Ecto.Changeset{} = changeset
-      assert %Employee{} = changeset.data
-    end
-
-    test "change_employee/2, returns a Employee changeset" do
-      changeset = CompanyAccounts.change_employee(insert(:employee), @update_attrs)
-
-      assert %Ecto.Changeset{} = changeset
-      assert %Employee{} = changeset.data
     end
   end
 end

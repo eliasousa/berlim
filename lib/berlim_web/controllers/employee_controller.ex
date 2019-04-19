@@ -1,33 +1,34 @@
 defmodule BerlimWeb.EmployeeController do
   use BerlimWeb, :controller
 
-  alias Berlim.CompanyAccounts
-  alias Berlim.CompanyAccounts.Employee
+  alias Berlim.{
+    CompanyAccounts,
+    CompanyAccounts.Employee
+  }
 
   action_fallback BerlimWeb.FallbackController
 
-  def index(conn, %{"company_id" => company_id}) do
-    employees = CompanyAccounts.list_company_employees(company_id)
+  def index(%{assigns: %{company: company}} = conn, _params) do
+    employees = CompanyAccounts.list_company_employees_with_sector(company.id)
     render(conn, "index.json", employees: employees)
   end
 
-  def create(conn, %{"employee" => employee_params, "company_id" => company_id}) do
-    employee_params = Map.put(employee_params, "company_id", company_id)
-
-    with {:ok, %Employee{} = employee} <- CompanyAccounts.create_employee(employee_params) do
+  def create(%{assigns: %{company: company}} = conn, %{"employee" => employee_params}) do
+    with {:ok, %Employee{} = employee} <-
+           CompanyAccounts.create_employee(company, employee_params) do
       conn
       |> put_status(:created)
       |> render("show.json", employee: employee)
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    employee = CompanyAccounts.get_employee!(id)
+  def show(%{assigns: %{company: company}} = conn, %{"id" => id}) do
+    employee = CompanyAccounts.get_employee!(id, company.id)
     render(conn, "show.json", employee: employee)
   end
 
-  def update(conn, %{"id" => id, "employee" => employee_params}) do
-    employee = CompanyAccounts.get_employee!(id)
+  def update(%{assigns: %{company: company}} = conn, %{"id" => id, "employee" => employee_params}) do
+    employee = CompanyAccounts.get_employee!(id, company.id)
 
     with {:ok, %Employee{} = employee} <-
            CompanyAccounts.update_employee(employee, employee_params) do

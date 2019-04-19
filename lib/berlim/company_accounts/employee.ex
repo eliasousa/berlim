@@ -3,7 +3,11 @@ defmodule Berlim.CompanyAccounts.Employee do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Berlim.CompanyAccounts.{Company, Sector}
+  alias Berlim.{
+    CompanyAccounts.Company,
+    CompanyAccounts.Sector,
+    Vouchers.Voucher
+  }
 
   schema "employees" do
     field :active, :boolean, default: true
@@ -11,6 +15,7 @@ defmodule Berlim.CompanyAccounts.Employee do
     field :name, :string
     belongs_to :company, Company
     belongs_to :sector, Sector
+    has_many :vouchers, Voucher
 
     timestamps()
   end

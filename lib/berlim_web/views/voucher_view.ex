@@ -11,12 +11,14 @@ defmodule BerlimWeb.VoucherView do
   end
 
   def render("voucher.json", %{voucher: voucher}) do
-    %{id: voucher.id,
+    %{
+      id: voucher.id,
       value: voucher.value,
       from: voucher.from,
       to: voucher.to,
       km: voucher.km,
       note: voucher.note,
-      payed_at: voucher.payed_at}
+      payed_at: voucher.payed_at
+    }
   end
 end

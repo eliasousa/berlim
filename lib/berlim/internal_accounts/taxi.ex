@@ -6,6 +6,8 @@ defmodule Berlim.InternalAccounts.Taxi do
 
   import Bcrypt, only: [hash_pwd_salt: 1]
 
+  alias Berlim.Vouchers.Voucher
+
   schema "taxis" do
     field(:cpf, :string)
     field(:email, :string)
@@ -13,6 +15,7 @@ defmodule Berlim.InternalAccounts.Taxi do
     field(:phone, :string)
     field(:smtt, :integer)
     field(:active, :boolean)
+    has_many :vouchers, Voucher
 
     timestamps()
   end

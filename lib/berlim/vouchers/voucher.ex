@@ -19,7 +19,7 @@ defmodule Berlim.Vouchers.Voucher do
     field :payed_at, :utc_datetime
     belongs_to :employee, Employee
     belongs_to :taxi, Taxi
-    belongs_to :admin, Admin, foreign_key: :payed_by
+    belongs_to :payed_by, Admin, foreign_key: :payed_by_id
 
     timestamps()
   end
@@ -31,6 +31,6 @@ defmodule Berlim.Vouchers.Voucher do
     |> validate_required([:value, :from, :to, :taxi_id, :employee_id])
     |> foreign_key_constraint(:taxi_id)
     |> foreign_key_constraint(:employee_id)
-    |> put_assoc(:admin, admin)
+    |> put_assoc(:payed_by, admin)
   end
 end

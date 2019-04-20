@@ -16,7 +16,7 @@ defmodule Berlim.VouchersFactory do
           payed_at: DateTime.utc_now(),
           employee: build(:employee),
           taxi: build(:taxi),
-          admin: build(:admin)
+          payed_by: build(:admin)
         }
       end
     end

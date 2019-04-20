@@ -14,7 +14,6 @@ defmodule Berlim.InternalAccounts.Admin do
     field(:encrypted_password, :string)
     field(:phone, :string)
     field(:active, :boolean)
-    has_many :vouchers, Voucher
 
     timestamps()
   end

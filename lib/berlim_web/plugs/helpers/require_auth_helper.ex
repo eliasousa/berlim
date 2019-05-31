@@ -9,7 +9,8 @@ defmodule BerlimWeb.Plugs.Helpers.RequireAuthHelper do
   alias Berlim.{
     CompanyAccounts.Company,
     Guardian,
-    InternalAccounts.Admin
+    InternalAccounts.Admin,
+    InternalAccounts.Taxi
   }
 
   defmacro __using__(_) do
@@ -32,6 +33,16 @@ defmodule BerlimWeb.Plugs.Helpers.RequireAuthHelper do
     case Guardian.Plug.current_resource(conn) do
       %Company{} = company ->
         assign(conn, :company, company)
+
+      _ ->
+        error_return_and_halt(conn)
+    end
+  end
+
+  def check_user_auth(:taxi, conn) do
+    case Guardian.Plug.current_resource(conn) do
+      %Taxi{} = taxi ->
+        assign(conn, :taxi, taxi)
 
       _ ->
         error_return_and_halt(conn)

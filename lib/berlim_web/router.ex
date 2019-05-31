@@ -19,6 +19,9 @@ defmodule BerlimWeb.Router do
     plug Plugs.RequireCompanyAuth
   end
 
+  pipeline :ensure_taxi do
+  end
+
   scope "/api", BerlimWeb do
     pipe_through :api
 
@@ -38,5 +41,17 @@ defmodule BerlimWeb.Router do
 
     resources("/sectors", SectorController, only: [:index, :show, :create, :update])
     resources("/employees", EmployeeController, only: [:index, :show, :create, :update])
+  end
+
+  scope "/api", BerlimWeb do
+    pipe_through([:api, :ensure_auth])
+
+    resources("/vouchers", VoucherController, only: [:index, :show])
+  end
+
+  scope "/api", BerlimWeb do
+    pipe_through([:api, :ensure_taxi])
+
+    resources("/vouchers", VoucherController, only: [:create])
   end
 end

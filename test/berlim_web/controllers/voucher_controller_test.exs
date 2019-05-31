@@ -1,108 +1,63 @@
-# defmodule BerlimWeb.VoucherControllerTest do
-#   use BerlimWeb.ConnCase
+defmodule BerlimWeb.VoucherControllerTest do
+  use BerlimWeb.ConnCase, async: true
+  use BerlimWeb.Helpers.AuthHelper
 
-#   alias Berlim.Vouchers
-#   alias Berlim.Vouchers.Voucher
+  import Berlim.Factory
 
-#   @create_attrs %{
-#     from: "some from",
-#     km: "some km",
-#     note: "some note",
-#     payed_at: ~N[2010-04-17 14:00:00],
-#     to: "some to",
-#     value: 120.5
-#   }
-#   @update_attrs %{
-#     from: "some updated from",
-#     km: "some updated km",
-#     note: "some updated note",
-#     payed_at: ~N[2011-05-18 15:01:01],
-#     to: "some updated to",
-#     value: 456.7
-#   }
-#   @invalid_attrs %{from: nil, km: nil, note: nil, payed_at: nil, to: nil, value: nil}
+  alias Berlim.Vouchers
+  alias BerlimWeb.VoucherView
 
-#   def fixture(:voucher) do
-#     {:ok, voucher} = Vouchers.create_voucher(@create_attrs)
-#     voucher
-#   end
+  @invalid_attrs %{value: nil}
 
-#   setup %{conn: conn} do
-#     {:ok, conn: put_req_header(conn, "accept", "application/json")}
-#   end
+  describe "GET /index" do
+    setup [:authenticate_taxi]
 
-#   describe "index" do
-#     test "lists all vouchers", %{conn: conn} do
-#       conn = get(conn, Routes.voucher_path(conn, :index))
-#       assert json_response(conn, 200)["data"] == []
-#     end
-#   end
+    test "list all vouchers", %{conn: conn} do
+      conn = get(conn, Routes.voucher_path(conn, :index))
 
-#   describe "create voucher" do
-#     test "renders voucher when data is valid", %{conn: conn} do
-#       conn = post(conn, Routes.voucher_path(conn, :create), voucher: @create_attrs)
-#       assert %{"id" => id} = json_response(conn, 201)["data"]
+      assert json_response(conn, 200)["data"] == []
+    end
+  end
 
-#       conn = get(conn, Routes.voucher_path(conn, :show, id))
+  describe "GET /show" do
+    setup [:authenticate_taxi, :create_voucher]
 
-#       assert %{
-#                "id" => id,
-#                "from" => "some from",
-#                "km" => "some km",
-#                "note" => "some note",
-#                "payed_at" => "2010-04-17T14:00:00",
-#                "to" => "some to",
-#                "value" => 120.5
-#              } = json_response(conn, 200)["data"]
-#     end
+    test "renders voucher", %{conn: conn, voucher: voucher} do
+      conn = get(conn, Routes.voucher_path(conn, :show, voucher))
 
-#     test "renders errors when data is invalid", %{conn: conn} do
-#       conn = post(conn, Routes.voucher_path(conn, :create), voucher: @invalid_attrs)
-#       assert json_response(conn, 422)["errors"] != %{}
-#     end
-#   end
+      assert json_response(conn, 200) ==
+               render_json(VoucherView, "show.json", %{voucher: voucher})
+    end
+  end
 
-#   describe "update voucher" do
-#     setup [:create_voucher]
+  describe "POST /create" do
+    setup [:authenticate_taxi]
 
-#     test "renders voucher when data is valid", %{conn: conn, voucher: %Voucher{id: id} = voucher} do
-#       conn = put(conn, Routes.voucher_path(conn, :update, voucher), voucher: @update_attrs)
-#       assert %{"id" => ^id} = json_response(conn, 200)["data"]
+    test "renders voucher when data is valid", %{conn: conn} do
+      conn = post(conn, Routes.voucher_path(conn, :create), voucher: create_attrs())
 
-#       conn = get(conn, Routes.voucher_path(conn, :show, id))
+      voucher = Vouchers.get_voucher!(json_response(conn, 201)["data"]["id"])
 
-#       assert %{
-#                "id" => id,
-#                "from" => "some updated from",
-#                "km" => "some updated km",
-#                "note" => "some updated note",
-#                "payed_at" => "2011-05-18T15:01:01",
-#                "to" => "some updated to",
-#                "value" => 456.7
-#              } = json_response(conn, 200)["data"]
-#     end
+      assert json_response(conn, 201) ==
+               render_json(VoucherView, "show.json", %{voucher: voucher})
+    end
 
-#     test "renders errors when data is invalid", %{conn: conn, voucher: voucher} do
-#       conn = put(conn, Routes.voucher_path(conn, :update, voucher), voucher: @invalid_attrs)
-#       assert json_response(conn, 422)["errors"] != %{}
-#     end
-#   end
+    test "renders errors when data is invalid", %{conn: conn} do
+      conn = post(conn, Routes.voucher_path(conn, :create, voucher: @invalid_attrs))
 
-#   describe "delete voucher" do
-#     setup [:create_voucher]
+      assert json_response(conn, 422)["errors"] != %{}
+    end
+  end
 
-#     test "deletes chosen voucher", %{conn: conn, voucher: voucher} do
-#       conn = delete(conn, Routes.voucher_path(conn, :delete, voucher))
-#       assert response(conn, 204)
+  defp create_attrs do
+    params_for(:voucher, %{employee: insert(:employee), taxi: insert(:taxi)})
+  end
 
-#       assert_error_sent 404, fn ->
-#         get(conn, Routes.voucher_path(conn, :show, voucher))
-#       end
-#     end
-#   end
+  defp create_voucher(_) do
+    %{voucher: insert(:voucher)}
+  end
 
-#   defp create_voucher(_) do
-#     voucher = fixture(:voucher)
-#     {:ok, voucher: voucher}
-#   end
-# end
+  defp authenticate_taxi(%{conn: conn}) do
+    authenticate(conn, insert(:taxi))
+  end
+end

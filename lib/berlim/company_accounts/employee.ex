@@ -1,8 +1,8 @@
 defmodule Berlim.CompanyAccounts.Employee do
   @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
-
   import Bcrypt, only: [hash_pwd_salt: 1]
 
   alias Berlim.{

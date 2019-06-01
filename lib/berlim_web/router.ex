@@ -20,6 +20,7 @@ defmodule BerlimWeb.Router do
   end
 
   pipeline :ensure_taxi do
+    plug Plugs.RequireTaxiAuth
   end
 
   scope "/api", BerlimWeb do
@@ -50,7 +51,7 @@ defmodule BerlimWeb.Router do
   end
 
   scope "/api", BerlimWeb do
-    pipe_through([:api, :ensure_taxi])
+    pipe_through([:api, :ensure_auth, :ensure_taxi])
 
     resources("/vouchers", VoucherController, only: [:create])
   end

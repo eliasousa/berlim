@@ -28,7 +28,7 @@ defmodule Berlim.Vouchers.Voucher do
   def changeset(voucher, admin, attrs) do
     voucher
     |> default_changeset(attrs)
-    |> put_assoc(:payed_by, admin, required: true)
+    |> put_assoc(:payed_by, admin)
   end
 
   @doc false

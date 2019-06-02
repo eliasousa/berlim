@@ -31,13 +31,13 @@ defmodule Berlim.Accounts do
 
   defp get_by_email(email) do
     cond do
-      admin = Repo.get_by(Admin, email: email) ->
+      admin = Repo.get_by(Admin, email: email, active: true) ->
         {:ok, admin}
 
-      company = Repo.get_by(Company, email: email) ->
+      company = Repo.get_by(Company, email: email, active: true) ->
         {:ok, company}
 
-      taxi = Repo.get_by(Taxi, email: email) ->
+      taxi = Repo.get_by(Taxi, email: email, active: true) ->
         {:ok, taxi}
 
       true ->

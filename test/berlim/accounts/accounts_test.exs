@@ -43,4 +43,34 @@ defmodule Berlim.AccountsTest do
 
     assert {:error, :unauthorized} = Accounts.token_sign_in("john@email.com", "12345678")
   end
+
+  test "token_sign_in/2 when admin is inactive" do
+    insert(:admin, %{
+      email: "john@email.com",
+      encrypted_password: hash_pwd_salt("123456"),
+      active: false
+    })
+
+    assert {:error, :unauthorized} = Accounts.token_sign_in("john@email.com", "123456")
+  end
+
+  test "token_sign_in/2 when taxi is inactive" do
+    insert(:taxi, %{
+      email: "john@email.com",
+      encrypted_password: hash_pwd_salt("123456"),
+      active: false
+    })
+
+    assert {:error, :unauthorized} = Accounts.token_sign_in("john@email.com", "123456")
+  end
+
+  test "token_sign_in/2 when company is inactive" do
+    insert(:company, %{
+      email: "john@email.com",
+      encrypted_password: hash_pwd_salt("123456"),
+      active: false
+    })
+
+    assert {:error, :unauthorized} = Accounts.token_sign_in("john@email.com", "123456")
+  end
 end

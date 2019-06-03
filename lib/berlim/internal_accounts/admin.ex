@@ -15,7 +15,7 @@ defmodule Berlim.InternalAccounts.Admin do
     field(:phone, :string)
     field(:active, :boolean)
 
-    has_many :vouchers, Voucher
+    has_many :vouchers, Voucher, foreign_key: :payed_by_id
 
     timestamps()
   end

@@ -1,11 +1,15 @@
 defmodule Berlim.CompanyAccounts.Employee do
   @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
-
   import Bcrypt, only: [hash_pwd_salt: 1]
 
-  alias Berlim.CompanyAccounts.{Company, Sector}
+  alias Berlim.{
+    CompanyAccounts.Company,
+    CompanyAccounts.Sector,
+    Vouchers.Voucher
+  }
 
   schema "employees" do
     field :active, :boolean, default: true
@@ -15,6 +19,7 @@ defmodule Berlim.CompanyAccounts.Employee do
     field :encrypted_password, :string
     belongs_to :company, Company
     belongs_to :sector, Sector
+    has_many :vouchers, Voucher
 
     timestamps()
   end

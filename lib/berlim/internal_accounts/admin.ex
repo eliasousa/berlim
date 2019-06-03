@@ -6,12 +6,16 @@ defmodule Berlim.InternalAccounts.Admin do
 
   import Bcrypt, only: [hash_pwd_salt: 1]
 
+  alias Berlim.Vouchers.Voucher
+
   schema "admins" do
     field(:email, :string)
     field(:name, :string)
     field(:encrypted_password, :string)
     field(:phone, :string)
     field(:active, :boolean)
+
+    has_many :vouchers, Voucher
 
     timestamps()
   end

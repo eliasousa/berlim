@@ -17,10 +17,20 @@ defmodule Berlim.AccountsTest do
     assert claims["type"] == "Admin"
   end
 
-  test "token_sign_in/2 with valid taxi credentials" do
+  test "token_sign_in/2 with valid taxi credentials using email" do
     taxi = insert(:taxi, %{email: "john@email.com", encrypted_password: hash_pwd_salt("123456")})
 
     {:ok, token, claims} = Accounts.token_sign_in("john@email.com", "123456")
+
+    assert is_binary(token)
+    assert claims["sub"] == Integer.to_string(taxi.id)
+    assert claims["type"] == "Taxi"
+  end
+
+  test "token_sign_in/2 with valid taxi credentials using smtt" do
+    taxi = insert(:taxi, %{smtt: "7849", encrypted_password: hash_pwd_salt("123456")})
+
+    {:ok, token, claims} = Accounts.token_sign_in("7849", "123456")
 
     assert is_binary(token)
     assert claims["sub"] == Integer.to_string(taxi.id)

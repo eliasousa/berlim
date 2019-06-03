@@ -15,8 +15,8 @@ defmodule Berlim.Accounts do
 
   @spec token_sign_in(String.t(), String.t()) ::
           {:ok, String.t(), struct()} | {:error, :unauthorised}
-  def token_sign_in(email, password) do
-    case authenticate_user(email, password) do
+  def token_sign_in(username, password) do
+    case authenticate_user(username, password) do
       {:ok, user} ->
         Guardian.encode_and_sign(user, %{type: get_user_type(user)}, ttl: {24, :hours})
 
@@ -25,19 +25,22 @@ defmodule Berlim.Accounts do
     end
   end
 
-  defp authenticate_user(email, password) when is_binary(email) and is_binary(password) do
-    with {:ok, user} <- get_by_email(email), do: verify_password(password, user)
+  defp authenticate_user(username, password) when is_binary(username) and is_binary(password) do
+    with {:ok, user} <- get_by_username(username), do: verify_password(password, user)
   end
 
-  defp get_by_email(email) do
+  defp get_by_username(username) do
     cond do
-      admin = Repo.get_by(Admin, email: email, active: true) ->
+      admin = Repo.get_by(Admin, email: username, active: true) ->
         {:ok, admin}
 
-      company = Repo.get_by(Company, email: email, active: true) ->
+      company = Repo.get_by(Company, email: username, active: true) ->
         {:ok, company}
 
-      taxi = Repo.get_by(Taxi, email: email, active: true) ->
+      taxi = Repo.get_by(Taxi, email: username, active: true) ->
+        {:ok, taxi}
+
+      taxi = get_taxi_by_smtt(username) ->
         {:ok, taxi}
 
       true ->
@@ -51,6 +54,13 @@ defmodule Berlim.Accounts do
       {:ok, user}
     else
       {:error, :invalid_credentials}
+    end
+  end
+
+  defp get_taxi_by_smtt(username) do
+    case Integer.parse(username) do
+      {_, ""} -> Repo.get_by(Taxi, smtt: username, active: true)
+      _ -> nil
     end
   end
 

@@ -9,13 +9,18 @@ defmodule BerlimWeb.VoucherControllerTest do
 
   @invalid_attrs %{value: nil}
 
-  describe "GET /index" do
-    setup [:authenticate_taxi]
+  describe "GET /index, when user is admin" do
+    setup [:authenticate_admin]
 
     test "list all vouchers", %{conn: conn} do
+      insert_list(3, :voucher)
+
       conn = get(conn, Routes.voucher_path(conn, :index))
 
-      assert json_response(conn, 200)["data"] == []
+      vouchers = json_response(conn, 200)["data"]
+
+      assert is_list(vouchers)
+      assert Enum.count(vouchers) == 3
     end
   end
 
@@ -49,15 +54,23 @@ defmodule BerlimWeb.VoucherControllerTest do
     end
   end
 
+  defp authenticate_admin(%{conn: conn}) do
+    authenticate(conn, insert(:admin))
+  end
+
+  defp authenticate_company(%{conn: conn}) do
+    authenticate(conn, insert(:company))
+  end
+
+  defp authenticate_taxi(%{conn: conn}) do
+    authenticate(conn, insert(:taxi))
+  end
+
   defp create_attrs do
     params_for(:voucher, %{employee: insert(:employee), taxi: insert(:taxi)})
   end
 
   defp create_voucher(_) do
     %{voucher: insert(:voucher)}
-  end
-
-  defp authenticate_taxi(%{conn: conn}) do
-    authenticate(conn, insert(:taxi))
   end
 end

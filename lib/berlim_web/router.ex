@@ -23,6 +23,10 @@ defmodule BerlimWeb.Router do
     plug Plugs.RequireTaxiAuth
   end
 
+  pipeline :ensure_old_token do
+    plug Plugs.RequireOldToken
+  end
+
   scope "/api", BerlimWeb do
     pipe_through :api
 
@@ -54,5 +58,11 @@ defmodule BerlimWeb.Router do
     pipe_through([:api, :ensure_auth, :ensure_taxi])
 
     resources("/vouchers", VoucherController, only: [:create])
+  end
+
+  scope "/api", BerlimWeb do
+    pipe_through([:api, :ensure_old_token])
+
+    get "/taxistas", Old.TaxiController, :show, as: :old_taxi
   end
 end

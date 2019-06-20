@@ -64,5 +64,6 @@ defmodule BerlimWeb.Router do
     pipe_through([:api, :ensure_old_token])
 
     get "/taxistas", Old.TaxiController, :show, as: :old_taxi
+    get "/funcionarios", Old.EmployeeController, :show, as: :old_employee
   end
 end

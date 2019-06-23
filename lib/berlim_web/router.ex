@@ -57,9 +57,11 @@ defmodule BerlimWeb.Router do
   scope "/api", BerlimWeb do
     pipe_through([:api, :ensure_auth, :ensure_taxi])
 
-    resources("/vouchers", VoucherController, only: [:create])
+    # CHANGE TO /vouchers after every taxi change to store apk
+    resources("/new_vouchers", VoucherController, only: [:create])
   end
 
+  # REMMOVE after every taxi change to store apk
   scope "/api", BerlimWeb do
     pipe_through([:api, :ensure_old_token])
 

@@ -9,3 +9,4 @@
 /.elixir_ls
 **/.DS_Store
 /config/*.secret.exs
+.env

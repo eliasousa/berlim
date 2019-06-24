@@ -27,6 +27,7 @@ defmodule BerlimWeb.Router do
     pipe_through :api
 
     resources("/sessions", SessionController, only: [:create])
+    resources("/versions", VersionController, only: [:index])
   end
 
   scope "/api", BerlimWeb do

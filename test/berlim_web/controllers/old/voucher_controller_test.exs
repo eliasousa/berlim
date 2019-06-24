@@ -4,6 +4,8 @@ defmodule BerlimWeb.Old.VoucherControllerTest do
 
   import Berlim.Factory
 
+  alias Berlim.Vouchers
+
   describe "GET /index, when exists not payed vouchers" do
     setup [:authenticate]
 
@@ -37,6 +39,77 @@ defmodule BerlimWeb.Old.VoucherControllerTest do
 
     test "renders false", %{conn: conn} do
       conn = get(conn, Routes.old_voucher_path(conn, :index, 0))
+
+      refute json_response(conn, 200)
+    end
+  end
+
+  describe "POST /create, with valid params" do
+    setup [:authenticate]
+
+    test "renders 200 with voucher id", %{conn: conn} do
+      voucher_attrs = %{
+        funcionario_id: insert(:employee).id,
+        taxista_id: insert(:taxi).id,
+        saida: "sample from",
+        chegada: "sample to",
+        valor: "10.5",
+        km: "5",
+        obs: "sample note"
+      }
+
+      conn = post(conn, Routes.old_voucher_path(conn, :create, voucher: voucher_attrs))
+      voucher = Vouchers.get_voucher!(json_response(conn, 200)["id"])
+
+      assert json_response(conn, 200)["id"] == voucher.id
+    end
+  end
+
+  describe "POST /create, with invalid params" do
+    setup [:authenticate]
+
+    test "renders false", %{conn: conn} do
+      conn = post(conn, Routes.old_voucher_path(conn, :create, voucher: %{valor: nil}))
+
+      refute json_response(conn, 200)
+    end
+  end
+
+  describe "POST /create, when taxi does not exists" do
+    setup [:authenticate]
+
+    test "renders false", %{conn: conn} do
+      voucher_attrs = %{
+        funcionario_id: insert(:employee).id,
+        taxista_id: 999,
+        saida: "sample from",
+        chegada: "sample to",
+        valor: "10.5",
+        km: "5",
+        obs: "sample note"
+      }
+
+      conn = post(conn, Routes.old_voucher_path(conn, :create, voucher: voucher_attrs))
+
+      refute json_response(conn, 200)
+    end
+  end
+
+  describe "POST /create, when employee does not exists" do
+    setup [:authenticate]
+
+    test "renders false", %{conn: conn} do
+      voucher_attrs = %{
+        funcionario_id: 999,
+        taxista_id: insert(:taxi).id,
+        saida: "sample from",
+        chegada: "sample to",
+        valor: "10.5",
+        km: "5",
+        obs: "sample note"
+      }
+
+      conn = post(conn, Routes.old_voucher_path(conn, :create, voucher: voucher_attrs))
 
       refute json_response(conn, 200)
     end

@@ -68,5 +68,6 @@ defmodule BerlimWeb.Router do
     get "/taxistas", Old.TaxiController, :show, as: :old_taxi
     get "/funcionarios", Old.EmployeeController, :show, as: :old_employee
     get "/vouchers/taxista/:id", Old.VoucherController, :index, as: :old_voucher
+    post "/vouchers", Old.VoucherController, :create, as: :old_voucher
   end
 end

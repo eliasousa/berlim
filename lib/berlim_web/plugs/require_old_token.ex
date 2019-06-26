@@ -3,14 +3,14 @@ defmodule BerlimWeb.Plugs.RequireOldToken do
   The require admin auth Plug.
   """
 
-  import Plug.Conn, only: [put_status: 2]
+  import Plug.Conn, only: [put_status: 2, get_req_header: 2]
   use Phoenix.Controller
 
   def init(params), do: params
 
   def call(conn, _params) do
-    case List.keyfind(conn.req_headers, "authorization", 0) do
-      {_, "Token token=dd8b755606431913f5a3d96c4f90d6c5"} -> conn
+    case conn |> get_req_header("authorization") |> List.first() do
+      "Token token=dd8b755606431913f5a3d96c4f90d6c5" -> conn
       _ -> error_return_and_halt(conn)
     end
   end

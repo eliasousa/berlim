@@ -21,6 +21,10 @@ defmodule BerlimWeb.Helpers.AuthHelper do
     %{conn: conn, "#{auth_user}": user}
   end
 
+  def authenticate_with_token(conn) do
+    %{conn: put_req_header(conn, "authorization", "Token token=dd8b755606431913f5a3d96c4f90d6c5")}
+  end
+
   defp get_user_type(user) do
     user.__struct__ |> Module.split() |> List.last()
   end

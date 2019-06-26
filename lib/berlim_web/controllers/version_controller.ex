@@ -2,6 +2,6 @@ defmodule BerlimWeb.VersionController do
   use BerlimWeb, :controller
 
   def index(conn, _params) do
-    render(conn, "index.json", app_version: System.get_env("APP_VERSION"))
+    json(conn, %{app_version: 1})
   end
 end

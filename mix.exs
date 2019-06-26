@@ -46,7 +46,8 @@ defmodule Berlim.MixProject do
       {:ex_machina, "~> 2.2", only: :test},
       {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 1.0"},
-      {:cors_plug, "~> 2.0"}
+      {:cors_plug, "~> 2.0"},
+      {:swoosh, "~> 0.23"}
     ]
   end
 

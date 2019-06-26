@@ -54,3 +54,6 @@ config :berlim, Berlim.Repo,
   database: "berlim_dev",
   hostname: "localhost",
   pool_size: 10
+
+# SMTP
+config :berlim, Berlim.Mailer, adapter: Swoosh.Adapters.Local

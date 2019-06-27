@@ -3,7 +3,7 @@ defmodule Berlim.InternalAccounts do
   The InternalAccounts context.
   """
 
-  alias Berlim.{InternalAccounts.Admin, InternalAccounts.Taxi, Repo}
+  alias Berlim.{Email, InternalAccounts.Admin, InternalAccounts.Taxi, Mailer, Repo}
 
   def list_admins, do: Repo.all(Admin)
 
@@ -34,9 +34,15 @@ defmodule Berlim.InternalAccounts do
   def get_taxi!(id), do: Repo.get!(Taxi, id)
 
   def create_taxi(taxi_attrs) do
-    %Taxi{}
-    |> change_taxi(taxi_attrs)
-    |> Repo.insert()
+    changeset = change_taxi(%Taxi{}, taxi_attrs)
+
+    with {:ok, taxi} <- Repo.insert(changeset) do
+      taxi.email
+      |> Email.welcome(taxi.smtt, get_password(taxi_attrs))
+      |> Mailer.deliver()
+
+      {:ok, taxi}
+    end
   end
 
   def update_taxi(taxi, taxi_attrs) do
@@ -48,4 +54,7 @@ defmodule Berlim.InternalAccounts do
   def change_taxi(taxi \\ %Taxi{}, taxi_attrs \\ %{}) do
     Taxi.changeset(taxi, taxi_attrs)
   end
+
+  defp get_password(%{"encrypted_password" => password}), do: password
+  defp get_password(%{encrypted_password: password}), do: password
 end

@@ -2,8 +2,9 @@ defmodule Berlim.InternalAccountsTest do
   use Berlim.DataCase, async: true
 
   import Berlim.Factory
+  import Swoosh.TestAssertions
 
-  alias Berlim.InternalAccounts
+  alias Berlim.{Email, InternalAccounts}
 
   describe "admins" do
     alias Berlim.InternalAccounts.Admin
@@ -77,6 +78,7 @@ defmodule Berlim.InternalAccountsTest do
 
     test "create_taxi/1 with valid data creates a taxi" do
       assert {:ok, taxi} = InternalAccounts.create_taxi(@create_attrs)
+      assert_email_sent(Email.welcome(taxi.email, taxi.smtt, "1234abcd"))
       assert taxi.cpf == "02005445698"
       assert taxi.active == true
       assert Bcrypt.check_pass(taxi, "1234abcd") == {:ok, taxi}

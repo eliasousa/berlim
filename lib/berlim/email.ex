@@ -1,12 +1,18 @@
 defmodule Berlim.Email do
-  import Bamboo.Email
-  import Bamboo.Phoenix
+  @moduledoc false
 
-  def welcome_text_email(email_address) do
-    new_email()
-    |> to(email_address)
-    |> from("us@example.com")
-    |> subject("Welcome!")
-    |> text_body("Welcome to MyApp!")
+  import Swoosh.Email
+
+  def welcome(email, username, password) do
+    base_email()
+    |> to({"", email})
+    |> put_provider_option(:template_id, "d-8583f55b7332474ab864a9372d48c04f")
+    |> put_provider_option(:dynamic_template_data, %{username: username, password: password})
+  end
+
+  defp base_email do
+    new()
+    |> from({"Voo de Taxi", "naoresponda@voodetaxi.com.br"})
+    |> text_body("nil")
   end
 end

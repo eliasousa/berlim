@@ -3,7 +3,7 @@ defmodule Berlim.Vouchers do
   The Vouchers context.
   """
 
-  alias Berlim.{Email, Mailer, Repo, Vouchers.Voucher}
+  alias Berlim.{EmailGenerator, Mailer, Repo, Vouchers.Voucher}
 
   def list_vouchers, do: Repo.all(Voucher)
 
@@ -28,6 +28,6 @@ defmodule Berlim.Vouchers do
   end
 
   defp send_voucher_receipt(email, voucher) do
-    email |> Email.voucher_receipt(voucher) |> Mailer.deliver()
+    email |> EmailGenerator.voucher_receipt(voucher) |> Mailer.deliver()
   end
 end

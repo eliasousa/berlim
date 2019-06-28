@@ -4,7 +4,7 @@ defmodule Berlim.CompanyAccountsTest do
   import Berlim.Factory
   import Swoosh.TestAssertions
 
-  alias Berlim.{CompanyAccounts, Email}
+  alias Berlim.{CompanyAccounts, EmailGenerator}
 
   describe "companies" do
     alias Berlim.CompanyAccounts.Company
@@ -25,7 +25,7 @@ defmodule Berlim.CompanyAccountsTest do
 
     test "create_company/1 with valid data creates a company" do
       assert {:ok, company} = CompanyAccounts.create_company(@valid_attrs)
-      assert_email_sent(Email.welcome(company.email, company.email, "1234abcd"))
+      assert_email_sent(EmailGenerator.welcome(company.email, company.email, "1234abcd"))
       assert company.active == true
       assert company.name == "Voo de Taxi"
       assert Bcrypt.check_pass(company, "1234abcd") == {:ok, company}
@@ -135,7 +135,7 @@ defmodule Berlim.CompanyAccountsTest do
       assert {:ok, employee} =
                CompanyAccounts.create_employee(insert(:company), employee_params())
 
-      assert_email_sent(Email.welcome(employee.email, employee.id, "1234abcd"))
+      assert_email_sent(EmailGenerator.welcome(employee.email, employee.id, "1234abcd"))
       assert employee.name == "Danilo"
     end
 

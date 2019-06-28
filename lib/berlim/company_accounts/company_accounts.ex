@@ -9,7 +9,7 @@ defmodule Berlim.CompanyAccounts do
     CompanyAccounts.Company,
     CompanyAccounts.Employee,
     CompanyAccounts.Sector,
-    Email,
+    EmailGenerator,
     Mailer,
     Repo
   }
@@ -22,9 +22,7 @@ defmodule Berlim.CompanyAccounts do
     changeset = change_company(%Company{}, company_attrs)
 
     with {:ok, company} <- Repo.insert(changeset) do
-      company.email
-      |> Email.welcome(company.email, get_password(company_attrs))
-      |> Mailer.deliver()
+      send_welcome_email(company.email, company.email, get_password(company_attrs))
 
       {:ok, company}
     end
@@ -78,9 +76,7 @@ defmodule Berlim.CompanyAccounts do
     changeset = Employee.changeset(%Employee{}, company, employee_attrs)
 
     with {:ok, employee} <- Repo.insert(changeset) do
-      employee.email
-      |> Email.welcome(employee.id, get_password(employee_attrs))
-      |> Mailer.deliver()
+      send_welcome_email(employee.email, employee.id, get_password(employee_attrs))
 
       {:ok, Repo.preload(employee, :sector)}
     end
@@ -96,4 +92,8 @@ defmodule Berlim.CompanyAccounts do
 
   defp get_password(%{"encrypted_password" => password}), do: password
   defp get_password(%{encrypted_password: password}), do: password
+
+  defp send_welcome_email(email, username, password) do
+    email |> EmailGenerator.welcome(username, password) |> Mailer.deliver()
+  end
 end

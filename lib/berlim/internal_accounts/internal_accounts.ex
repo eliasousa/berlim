@@ -3,7 +3,7 @@ defmodule Berlim.InternalAccounts do
   The InternalAccounts context.
   """
 
-  alias Berlim.{Email, InternalAccounts.Admin, InternalAccounts.Taxi, Mailer, Repo}
+  alias Berlim.{EmailGenerator, InternalAccounts.Admin, InternalAccounts.Taxi, Mailer, Repo}
 
   def list_admins, do: Repo.all(Admin)
 
@@ -38,7 +38,7 @@ defmodule Berlim.InternalAccounts do
 
     with {:ok, taxi} <- Repo.insert(changeset) do
       taxi.email
-      |> Email.welcome(taxi.smtt, get_password(taxi_attrs))
+      |> EmailGenerator.welcome(taxi.smtt, get_password(taxi_attrs))
       |> Mailer.deliver()
 
       {:ok, taxi}

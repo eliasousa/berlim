@@ -2,7 +2,7 @@ defmodule BerlimWeb.Old.VoucherController do
   use BerlimWeb, :controller
 
   alias Bcrypt
-  alias Berlim.{Repo, Vouchers.Voucher}
+  alias Berlim.{Repo, Vouchers, Vouchers.Voucher}
   import Ecto.Query, only: [from: 2]
 
   def index(conn, %{"id" => taxi_id}) do
@@ -28,11 +28,9 @@ defmodule BerlimWeb.Old.VoucherController do
   end
 
   defp create_old_voucher(old_voucher_attrs) do
-    new_voucher_attrs = old_to_new_voucher_attrs(old_voucher_attrs)
-
-    %Voucher{}
-    |> Voucher.changeset(new_voucher_attrs)
-    |> Repo.insert()
+    old_voucher_attrs
+    |> old_to_new_voucher_attrs()
+    |> Vouchers.create_voucher()
   end
 
   defp old_to_new_voucher_attrs(voucher_attrs) do

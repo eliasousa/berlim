@@ -9,7 +9,7 @@ defmodule Berlim.CompanyAccountsTest do
   describe "companies" do
     alias Berlim.CompanyAccounts.Company
 
-    @valid_attrs params_for(:company)
+    @valid_attrs params_for(:company, %{password: "1234abcd"})
     @update_attrs %{name: "Jaya"}
     @invalid_attrs %{cnpj: nil, email: nil}
 
@@ -45,20 +45,6 @@ defmodule Berlim.CompanyAccountsTest do
     test "update_company/2 with invalid data returns error changeset" do
       company = insert(:company)
       assert {:error, %Ecto.Changeset{}} = CompanyAccounts.update_company(company, @invalid_attrs)
-    end
-
-    test "change_company/0 returns a company changeset" do
-      assert %Ecto.Changeset{} = CompanyAccounts.change_company()
-    end
-
-    test "change_company/1 returns a company changeset" do
-      company = insert(:company)
-      assert %Ecto.Changeset{} = CompanyAccounts.change_company(company)
-    end
-
-    test "change_company/2 returns a company changeset" do
-      company = insert(:company)
-      assert %Ecto.Changeset{} = CompanyAccounts.change_company(company, @update_attrs)
     end
   end
 
@@ -113,7 +99,7 @@ defmodule Berlim.CompanyAccountsTest do
     @invalid_attrs %{name: nil}
 
     defp employee_params do
-      params_with_assocs(:employee)
+      params_with_assocs(:employee, %{password: "1234abcd"})
     end
 
     test "list_company_employees_with_sector/1, returns all employees that belongs to a company" do

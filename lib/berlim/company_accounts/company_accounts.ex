@@ -19,7 +19,7 @@ defmodule Berlim.CompanyAccounts do
   def get_company!(id), do: Repo.get!(Company, id)
 
   def create_company(company_attrs) do
-    changeset = change_company(%Company{}, company_attrs)
+    changeset = Company.create_changeset(%Company{}, company_attrs)
 
     with {:ok, company} <- Repo.insert(changeset) do
       send_welcome_email(company.email, company.email, get_password(company_attrs))
@@ -30,12 +30,8 @@ defmodule Berlim.CompanyAccounts do
 
   def update_company(company, company_attrs) do
     company
-    |> change_company(company_attrs)
+    |> Company.changeset(company_attrs)
     |> Repo.update()
-  end
-
-  def change_company(company \\ %Company{}, company_attrs \\ %{}) do
-    Company.changeset(company, company_attrs)
   end
 
   def list_company_sectors(company_id) do
@@ -73,7 +69,7 @@ defmodule Berlim.CompanyAccounts do
   end
 
   def create_employee(company, employee_attrs) do
-    changeset = Employee.changeset(%Employee{}, company, employee_attrs)
+    changeset = Employee.create_changeset(%Employee{}, company, employee_attrs)
 
     with {:ok, employee} <- Repo.insert(changeset) do
       send_welcome_email(employee.email, employee.id, get_password(employee_attrs))
@@ -90,8 +86,8 @@ defmodule Berlim.CompanyAccounts do
     end
   end
 
-  defp get_password(%{"encrypted_password" => password}), do: password
-  defp get_password(%{encrypted_password: password}), do: password
+  defp get_password(%{"password" => password}), do: password
+  defp get_password(%{password: password}), do: password
 
   defp send_welcome_email(email, username, password) do
     email |> EmailGenerator.welcome(username, password) |> Mailer.deliver()

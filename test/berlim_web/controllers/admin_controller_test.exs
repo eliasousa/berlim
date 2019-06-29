@@ -8,7 +8,7 @@ defmodule BerlimWeb.AdminControllerTest do
   alias Berlim.InternalAccounts.Admin
   alias BerlimWeb.AdminView
 
-  @create_attrs params_for(:admin)
+  @create_attrs params_for(:admin, %{password: "1234abcd"})
   @update_attrs %{name: "Lionel Ritchie"}
   @invalid_attrs %{name: nil, email: nil}
 

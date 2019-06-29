@@ -15,19 +15,25 @@ defmodule Berlim.CompanyAccounts.EmployeeTest do
     refute changeset.valid?
   end
 
-  test "changeset/3 with valid attributes" do
-    changeset = Employee.changeset(%Employee{}, insert(:company), employee_params())
+  test "create_changeset/3 with valid attributes" do
+    changeset = Employee.create_changeset(%Employee{}, insert(:company), employee_params())
     assert changeset.valid?
   end
 
-  test "changeset/3 with invalid attributes" do
-    changeset = Employee.changeset(%Employee{}, insert(:company), %{})
+  test "create_changeset/3 with invalid attributes" do
+    changeset = Employee.create_changeset(%Employee{}, insert(:company), %{})
     refute changeset.valid?
+  end
+
+  test "password is required" do
+    attrs = %{employee_params() | password: ""}
+    changeset = Employee.create_changeset(%Employee{}, insert(:company), attrs)
+    assert %{password: ["can't be blank"]} = errors_on(changeset)
   end
 
   test "sector does not exist" do
     attrs = %{employee_params() | sector_id: 0}
-    employee = Employee.changeset(%Employee{}, insert(:company), attrs)
+    employee = Employee.create_changeset(%Employee{}, insert(:company), attrs)
 
     assert {:error, changeset} = Repo.insert(employee)
     assert %{sector_id: ["does not exist"]} = errors_on(changeset)
@@ -43,7 +49,7 @@ defmodule Berlim.CompanyAccounts.EmployeeTest do
     employee_existent = insert(:employee)
 
     attrs = %{employee_params() | email: employee_existent.email}
-    new_employee = Employee.changeset(%Employee{}, insert(:company), attrs)
+    new_employee = Employee.create_changeset(%Employee{}, insert(:company), attrs)
 
     assert {:error, changeset} = Repo.insert(new_employee)
     assert %{email: ["has already been taken"]} = errors_on(changeset)
@@ -57,6 +63,6 @@ defmodule Berlim.CompanyAccounts.EmployeeTest do
   end
 
   defp employee_params do
-    params_with_assocs(:employee)
+    params_with_assocs(:employee, %{password: "1234abcd"})
   end
 end

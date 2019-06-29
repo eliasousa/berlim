@@ -11,7 +11,7 @@ defmodule Berlim.InternalAccounts do
 
   def create_admin(attrs \\ %{}) do
     %Admin{}
-    |> Admin.changeset(attrs)
+    |> Admin.create_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -25,16 +25,12 @@ defmodule Berlim.InternalAccounts do
     Repo.delete(admin)
   end
 
-  def change_admin(%Admin{} = admin) do
-    Admin.changeset(admin, %{})
-  end
-
   def list_taxis, do: Repo.all(Taxi)
 
   def get_taxi!(id), do: Repo.get!(Taxi, id)
 
   def create_taxi(taxi_attrs) do
-    changeset = change_taxi(%Taxi{}, taxi_attrs)
+    changeset = Taxi.create_changeset(%Taxi{}, taxi_attrs)
 
     with {:ok, taxi} <- Repo.insert(changeset) do
       taxi.email
@@ -47,14 +43,10 @@ defmodule Berlim.InternalAccounts do
 
   def update_taxi(taxi, taxi_attrs) do
     taxi
-    |> change_taxi(taxi_attrs)
+    |> Taxi.changeset(taxi_attrs)
     |> Repo.update()
   end
 
-  def change_taxi(taxi \\ %Taxi{}, taxi_attrs \\ %{}) do
-    Taxi.changeset(taxi, taxi_attrs)
-  end
-
-  defp get_password(%{"encrypted_password" => password}), do: password
-  defp get_password(%{encrypted_password: password}), do: password
+  defp get_password(%{"password" => password}), do: password
+  defp get_password(%{password: password}), do: password
 end

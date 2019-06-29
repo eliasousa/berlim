@@ -5,16 +5,32 @@ defmodule Berlim.CompanyAccounts.CompanyTest do
 
   alias Berlim.CompanyAccounts.Company
 
-  @valid_attrs params_for(:company)
+  @valid_attrs params_for(:company, %{password: "1234abcd"})
 
-  test "changeset with valid attributes" do
+  test "changeset/2 with valid attributes" do
     changeset = Company.changeset(%Company{}, @valid_attrs)
     assert changeset.valid?
   end
 
-  test "changeset with invalid attributes" do
+  test "changeset/2 with invalid attributes" do
     changeset = Company.changeset(%Company{}, %{})
     refute changeset.valid?
+  end
+
+  test "create_changeset/2 with valid attributes" do
+    changeset = Company.create_changeset(%Company{}, @valid_attrs)
+    assert changeset.valid?
+  end
+
+  test "create_changeset/2 with invalid attributes" do
+    changeset = Company.create_changeset(%Company{}, %{})
+    refute changeset.valid?
+  end
+
+  test "password is required" do
+    attrs = %{@valid_attrs | password: ""}
+    changeset = Company.create_changeset(%Company{}, attrs)
+    assert %{password: ["can't be blank"]} = errors_on(changeset)
   end
 
   test "email must contain at least an @" do

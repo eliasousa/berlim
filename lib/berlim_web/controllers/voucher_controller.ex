@@ -8,8 +8,18 @@ defmodule BerlimWeb.VoucherController do
 
   action_fallback BerlimWeb.FallbackController
 
-  def index(conn, _params) do
+  def index(%{assigns: %{admin: _admin}} = conn, _params) do
     vouchers = Vouchers.list_vouchers()
+    render(conn, "index.json", vouchers: vouchers)
+  end
+
+  def index(%{assigns: %{company: company}} = conn, _params) do
+    vouchers = Vouchers.list_company_vouchers(company)
+    render(conn, "index.json", vouchers: vouchers)
+  end
+
+  def index(%{assigns: %{taxi: taxi}} = conn, _params) do
+    vouchers = Vouchers.list_taxi_vouchers(taxi)
     render(conn, "index.json", vouchers: vouchers)
   end
 

@@ -20,7 +20,8 @@ defmodule Berlim.MixProject do
   def application do
     [
       mod: {Berlim.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools],
+      applications: [:timex]
     ]
   end
 
@@ -46,7 +47,8 @@ defmodule Berlim.MixProject do
       {:ex_machina, "~> 2.2", only: :test},
       {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 1.0"},
-      {:cors_plug, "~> 2.0"}
+      {:cors_plug, "~> 2.0"},
+      {:timex, "~> 3.0"}
     ]
   end
 

@@ -3,12 +3,15 @@ defmodule Berlim.Vouchers.Voucher do
 
   use Ecto.Schema
   import Ecto.Changeset
+  import Ecto.Query, only: [from: 2]
 
   alias Berlim.{
     CompanyAccounts.Employee,
     InternalAccounts.Taxi,
     InternalAccounts.Admin
   }
+
+  @timestamps_opts [type: :utc_datetime]
 
   schema "vouchers" do
     field :from, :string
@@ -42,5 +45,61 @@ defmodule Berlim.Vouchers.Voucher do
     |> validate_required([:value, :from, :to, :taxi_id, :employee_id])
     |> foreign_key_constraint(:taxi_id)
     |> foreign_key_constraint(:employee_id)
+  end
+
+  def belongs_to_taxi(query, taxi_id) do
+    from v in query,
+      where: v.taxi_id == ^taxi_id
+  end
+
+  def belongs_to_company(query, company_id) do
+    from v in query,
+      join: e in assoc(v, :employee),
+      where: e.company_id == ^company_id
+  end
+
+  def sorted_created_desc(query) do
+    from v in query,
+      order_by: [desc: v.inserted_at]
+  end
+
+  def with_associations(query) do
+    from v in query,
+      preload: [:taxi, :employee, employee: :company]
+  end
+
+  def query_filtered_by(query, filters) do
+    Enum.reduce(filters, query, fn {key, value}, query ->
+      case key do
+        "created_start_at" ->
+          from v in query,
+            where: v.inserted_at >= ^value
+
+        "created_end_at" ->
+          from v in query,
+            where: v.inserted_at <= ^value
+
+        "payed_start_at" ->
+          from v in query,
+            where: v.payed_at >= ^value
+
+        "payed_end_at" ->
+          from v in query,
+            where: v.payed_at <= ^value
+
+        "company_id" ->
+          belongs_to_company(query, value)
+
+        "employee_id" ->
+          from v in query,
+            where: v.employee_id == ^value
+
+        "taxi_id" ->
+          belongs_to_taxi(query, value)
+
+        _ ->
+          query
+      end
+    end)
   end
 end

@@ -5,16 +5,32 @@ defmodule Berlim.InternalAccounts.TaxiTest do
 
   alias Berlim.InternalAccounts.Taxi
 
-  @valid_attrs params_for(:taxi)
+  @valid_attrs params_for(:taxi, %{password: "1234abcd"})
 
-  test "changeset with valid attributes" do
+  test "changeset/2 with valid attributes" do
     changeset = Taxi.changeset(%Taxi{}, @valid_attrs)
     assert changeset.valid?
   end
 
-  test "changeset with invalid attributes" do
+  test "changeset/2 with invalid attributes" do
     changeset = Taxi.changeset(%Taxi{}, %{})
     refute changeset.valid?
+  end
+
+  test "create_changeset/2 with valid attributes" do
+    changeset = Taxi.create_changeset(%Taxi{}, @valid_attrs)
+    assert changeset.valid?
+  end
+
+  test "create_changeset/2 with invalid attributes" do
+    changeset = Taxi.create_changeset(%Taxi{}, %{})
+    refute changeset.valid?
+  end
+
+  test "password is required" do
+    attrs = %{@valid_attrs | password: ""}
+    changeset = Taxi.create_changeset(%Taxi{}, attrs)
+    assert %{password: ["can't be blank"]} = errors_on(changeset)
   end
 
   test "email must contain at least an @" do

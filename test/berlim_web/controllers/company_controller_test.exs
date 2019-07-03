@@ -8,7 +8,7 @@ defmodule BerlimWeb.CompanyControllerTest do
   alias Berlim.CompanyAccounts.Company
   alias BerlimWeb.CompanyView
 
-  @create_attrs params_for(:company)
+  @create_attrs params_for(:company, %{password: "1234abcd"})
   @update_attrs %{name: "Jaya"}
   @invalid_attrs %{cnpj: nil, email: nil}
 

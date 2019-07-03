@@ -16,7 +16,9 @@ defmodule Berlim.CompanyAccounts.Employee do
     field :internal_id, :string
     field :name, :string
     field :email, :string
+    field :password, :string, virtual: true
     field :encrypted_password, :string
+
     belongs_to :company, Company
     belongs_to :sector, Sector
     has_many :vouchers, Voucher
@@ -25,32 +27,25 @@ defmodule Berlim.CompanyAccounts.Employee do
   end
 
   @doc false
-  def changeset(employee, company, attrs) do
-    employee
-    |> default_changeset(attrs)
-    |> put_assoc(:company, company)
-  end
-
-  @doc false
   def changeset(employee, attrs) do
     employee
-    |> default_changeset(attrs)
-  end
-
-  defp default_changeset(changeset, attrs) do
-    changeset
-    |> cast(attrs, [:name, :email, :internal_id, :active, :encrypted_password, :sector_id])
-    |> validate_required([:name, :email, :encrypted_password])
+    |> cast(attrs, [:name, :email, :internal_id, :active, :password, :sector_id])
+    |> validate_required([:name, :email])
     |> unique_constraint(:email)
     |> validate_format(:email, ~r/@/)
     |> foreign_key_constraint(:sector_id)
     |> put_pass_hash()
   end
 
-  defp put_pass_hash(
-         %Ecto.Changeset{valid?: true, changes: %{encrypted_password: password}} = changeset
-       ),
-       do: put_change(changeset, :encrypted_password, hash_pwd_salt(password))
+  def create_changeset(employee, company, attrs) do
+    employee
+    |> changeset(attrs)
+    |> validate_required(:password)
+    |> put_assoc(:company, company)
+  end
+
+  defp put_pass_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset),
+    do: put_change(changeset, :encrypted_password, hash_pwd_salt(password))
 
   defp put_pass_hash(changeset), do: changeset
 end

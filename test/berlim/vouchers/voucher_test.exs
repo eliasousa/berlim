@@ -73,7 +73,7 @@ defmodule Berlim.Vouchers.VoucherTest do
        :taxi, :employee and the nested association: employee: :company" do
     expected_query =
       from v in Voucher,
-        preload: [:taxi, :employee, employee: :company]
+        preload: [:taxi, employee: :company]
 
     query_result = Voucher.with_associations(Voucher)
 

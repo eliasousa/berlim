@@ -149,7 +149,7 @@ defmodule Berlim.VouchersTest do
   end
 
   describe "list_company_vouchers" do
-    setup [:build_company_and_employee]
+    setup [:create_company, :create_employee]
 
     test "list_company_vouchers/1 returns all vouchers that belongs to the company", %{
       company: company,
@@ -308,28 +308,31 @@ defmodule Berlim.VouchersTest do
     assert %Ecto.Changeset{} = Vouchers.change_voucher(voucher, %{value: 100})
   end
 
-  defp build_company_and_employee(_) do
-    company = insert(:company)
-    %{company: company, employee: insert(:employee, %{company: company})}
+  defp create_company(_) do
+    %{company: insert(:company)}
   end
 
-  defp start_date() do
+  defp create_employee(%{company: company}) do
+    %{employee: insert(:employee, %{company: company})}
+  end
+
+  defp start_date do
     Timex.to_datetime({{2019, 6, 8}, {0, 0, 0}})
   end
 
-  defp pre_start_date() do
+  defp pre_start_date do
     Timex.subtract(start_date(), Duration.from_days(1))
   end
 
-  defp between_start_and_end_dates() do
+  defp between_start_and_end_dates do
     Timex.add(start_date(), Duration.from_days(1))
   end
 
-  defp end_date() do
+  defp end_date do
     Timex.add(between_start_and_end_dates(), Duration.from_days(1))
   end
 
-  defp post_end_date() do
+  defp post_end_date do
     Timex.add(end_date(), Duration.from_days(1))
   end
 end

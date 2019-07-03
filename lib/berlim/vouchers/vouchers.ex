@@ -12,7 +12,7 @@ defmodule Berlim.Vouchers do
     Vouchers.Voucher
   }
 
-  def list_vouchers() do
+  def list_vouchers do
     Voucher
     |> Voucher.sorted_created_desc()
     |> Voucher.with_associations()
@@ -47,7 +47,7 @@ defmodule Berlim.Vouchers do
     changeset = change_voucher(%Voucher{}, attrs)
 
     with {:ok, voucher} <- Repo.insert(changeset) do
-      voucher = Voucher.with_associations(voucher)
+      voucher = Repo.preload(voucher, [:taxi, employee: :company])
 
       send_voucher_receipt(voucher.taxi.email, voucher)
       send_voucher_receipt(voucher.employee.email, voucher)

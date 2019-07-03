@@ -65,7 +65,7 @@ defmodule Berlim.Vouchers.Voucher do
 
   def with_associations(query) do
     from v in query,
-      preload: [:taxi, :employee, employee: :company]
+      preload: [:taxi, employee: :company]
   end
 
   def query_filtered_by(query, filters) do

@@ -5,16 +5,32 @@ defmodule Berlim.InternalAccounts.AdminTest do
 
   alias Berlim.InternalAccounts.Admin
 
-  @valid_attrs params_for(:admin)
+  @valid_attrs params_for(:admin, %{password: "1234abcd"})
 
-  test "changeset with valid attributes" do
+  test "changeset/2 with valid attributes" do
     changeset = Admin.changeset(%Admin{}, @valid_attrs)
     assert changeset.valid?
   end
 
-  test "changeset with invalid attributes" do
+  test "changeset/2 with invalid attributes" do
     changeset = Admin.changeset(%Admin{}, %{})
     refute changeset.valid?
+  end
+
+  test "create_changeset/2 with valid attributes" do
+    changeset = Admin.create_changeset(%Admin{}, @valid_attrs)
+    assert changeset.valid?
+  end
+
+  test "create_changeset/2 with invalid attributes" do
+    changeset = Admin.create_changeset(%Admin{}, %{})
+    refute changeset.valid?
+  end
+
+  test "password is required" do
+    attrs = %{@valid_attrs | password: ""}
+    changeset = Admin.create_changeset(%Admin{}, attrs)
+    assert %{password: ["can't be blank"]} = errors_on(changeset)
   end
 
   test "phone is not required" do

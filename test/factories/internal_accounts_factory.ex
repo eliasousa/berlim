@@ -37,7 +37,7 @@ defmodule Berlim.InternalAccountsFactory do
 
       defp set_password(user, password) do
         user
-        |> user.__struct__.changeset(%{encrypted_password: password})
+        |> user.__struct__.changeset(%{password: password})
         |> Changeset.apply_changes()
       end
     end

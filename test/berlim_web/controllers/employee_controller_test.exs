@@ -94,7 +94,7 @@ defmodule BerlimWeb.EmployeeControllerTest do
   end
 
   defp create_attrs do
-    params_for(:employee, %{sector: insert(:sector)})
+    params_for(:employee, %{sector: insert(:sector), password: "1234abcd"})
   end
 
   defp create_employee(%{company: company}) do

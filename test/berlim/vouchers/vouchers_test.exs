@@ -3,8 +3,9 @@ defmodule Berlim.VouchersTest do
   use Timex
 
   import Berlim.Factory
+  import Swoosh.TestAssertions
 
-  alias Berlim.Vouchers
+  alias Berlim.{EmailGenerator, Vouchers}
 
   @invalid_attrs %{value: nil}
 
@@ -283,6 +284,9 @@ defmodule Berlim.VouchersTest do
 
   test "create_voucher/1 with valid data, creates a voucher" do
     assert {:ok, voucher} = Vouchers.create_voucher(voucher_params())
+    assert_email_sent(EmailGenerator.voucher_receipt(voucher.taxi.email, voucher))
+    assert_email_sent(EmailGenerator.voucher_receipt(voucher.employee.email, voucher))
+    assert_email_sent(EmailGenerator.voucher_receipt(voucher.employee.company.email, voucher))
     assert voucher.to == "São Paulo"
   end
 

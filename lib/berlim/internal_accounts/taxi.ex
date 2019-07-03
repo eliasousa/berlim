@@ -11,6 +11,7 @@ defmodule Berlim.InternalAccounts.Taxi do
   schema "taxis" do
     field(:cpf, :string)
     field(:email, :string)
+    field(:password, :string, virtual: true)
     field(:encrypted_password, :string)
     field(:phone, :string)
     field(:smtt, :integer)
@@ -23,18 +24,22 @@ defmodule Berlim.InternalAccounts.Taxi do
   @doc false
   def changeset(taxi, attrs) do
     taxi
-    |> cast(attrs, [:email, :encrypted_password, :active, :phone, :smtt, :cpf])
-    |> validate_required([:email, :encrypted_password, :active, :phone, :smtt, :cpf])
+    |> cast(attrs, [:email, :password, :active, :phone, :smtt, :cpf])
+    |> validate_required([:email, :active, :phone, :smtt, :cpf])
     |> validate_format(:email, ~r/@/)
     |> unique_constraint(:smtt)
     |> unique_constraint(:email)
     |> put_pass_hash()
   end
 
-  defp put_pass_hash(
-         %Ecto.Changeset{valid?: true, changes: %{encrypted_password: password}} = changeset
-       ),
-       do: put_change(changeset, :encrypted_password, hash_pwd_salt(password))
+  def create_changeset(taxi, attrs) do
+    taxi
+    |> changeset(attrs)
+    |> validate_required(:password)
+  end
+
+  defp put_pass_hash(%Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset),
+    do: put_change(changeset, :encrypted_password, hash_pwd_salt(password))
 
   defp put_pass_hash(changeset), do: changeset
 end

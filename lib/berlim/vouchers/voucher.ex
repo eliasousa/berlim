@@ -7,8 +7,8 @@ defmodule Berlim.Vouchers.Voucher do
 
   alias Berlim.{
     CompanyAccounts.Employee,
-    InternalAccounts.Taxi,
-    InternalAccounts.Admin
+    InternalAccounts.Admin,
+    InternalAccounts.Taxi
   }
 
   @timestamps_opts [type: :utc_datetime]

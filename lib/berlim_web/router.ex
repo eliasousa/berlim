@@ -24,10 +24,15 @@ defmodule BerlimWeb.Router do
     plug Plugs.RequireTaxiAuth
   end
 
+  pipeline :ensure_old_token do
+    plug Plugs.RequireOldToken
+  end
+
   scope "/api", BerlimWeb do
     pipe_through :api
 
     resources("/sessions", SessionController, only: [:create])
+    resources("/versions", VersionController, only: [:index])
   end
 
   scope "/api", BerlimWeb do
@@ -54,6 +59,17 @@ defmodule BerlimWeb.Router do
   scope "/api", BerlimWeb do
     pipe_through([:api, :ensure_auth_and_assign, :ensure_taxi])
 
-    resources("/vouchers", VoucherController, only: [:create])
+    # CHANGE TO /vouchers after every taxi change to store apk
+    resources("/new_vouchers", VoucherController, only: [:create])
+  end
+
+  # REMMOVE after every taxi change to store apk
+  scope "/api", BerlimWeb do
+    pipe_through([:api, :ensure_old_token])
+
+    get "/taxistas", Old.TaxiController, :show, as: :old_taxi
+    get "/funcionarios", Old.EmployeeController, :show, as: :old_employee
+    get "/vouchers/taxista/:id", Old.VoucherController, :index, as: :old_voucher
+    post "/vouchers", Old.VoucherController, :create, as: :old_voucher
   end
 end

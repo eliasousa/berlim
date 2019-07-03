@@ -3,11 +3,12 @@ defmodule Berlim.Vouchers do
   The Vouchers context.
   """
 
-  alias Berlim.Repo
-
   alias Berlim.{
     CompanyAccounts.Company,
+    EmailGenerator,
     InternalAccounts.Taxi,
+    Mailer,
+    Repo,
     Vouchers.Voucher
   }
 
@@ -46,11 +47,21 @@ defmodule Berlim.Vouchers do
     changeset = change_voucher(%Voucher{}, attrs)
 
     with {:ok, voucher} <- Repo.insert(changeset) do
-      {:ok, Repo.preload(voucher, [:taxi, :employee, employee: :company])}
+      voucher = Voucher.with_associations(voucher)
+
+      send_voucher_receipt(voucher.taxi.email, voucher)
+      send_voucher_receipt(voucher.employee.email, voucher)
+      send_voucher_receipt(voucher.employee.company.email, voucher)
+
+      {:ok, voucher}
     end
   end
 
   def change_voucher(voucher \\ %Voucher{}, voucher_attrs \\ %{}) do
     Voucher.changeset(voucher, voucher_attrs)
+  end
+
+  defp send_voucher_receipt(email, voucher) do
+    email |> EmailGenerator.voucher_receipt(voucher) |> Mailer.deliver()
   end
 end

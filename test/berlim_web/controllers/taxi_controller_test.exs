@@ -8,7 +8,7 @@ defmodule BerlimWeb.TaxiControllerTest do
   alias Berlim.InternalAccounts.Taxi
   alias BerlimWeb.TaxiView
 
-  @create_attrs params_for(:taxi)
+  @create_attrs params_for(:taxi, %{password: "1234abcd"})
   @update_attrs %{cpf: "12345678910"}
   @invalid_attrs %{cpf: nil, email: nil}
 

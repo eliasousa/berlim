@@ -4,7 +4,13 @@ defmodule BerlimWeb.VoucherViewTest do
   alias BerlimWeb.VoucherView
 
   setup do
-    employee = %{id: 1, name: "Elias", company: %{id: 1, name: "Voo"}}
+    employee = %{
+      id: 1,
+      internal_id: "1234",
+      name: "Elias",
+      sector: %{id: 1, name: "Financeiro"},
+      company: %{id: 1, name: "Voo"}
+    }
 
     %{
       voucher: %{
@@ -14,6 +20,7 @@ defmodule BerlimWeb.VoucherViewTest do
         note: "Voucher view",
         from: "Ponto Novo",
         to: "Av. Rio de Janeiro",
+        inserted_at: DateTime.utc_now(),
         payed_at: DateTime.utc_now(),
         company: employee.company,
         employee: employee,

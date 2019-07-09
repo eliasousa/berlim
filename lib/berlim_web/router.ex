@@ -28,6 +28,10 @@ defmodule BerlimWeb.Router do
     plug Plugs.RequireOldToken
   end
 
+  pipeline :validate_vouchers_filters do
+    plug Plugs.VoucherFiltersValidator
+  end
+
   scope "/api", BerlimWeb do
     pipe_through :api
 
@@ -51,9 +55,15 @@ defmodule BerlimWeb.Router do
   end
 
   scope "/api", BerlimWeb do
+    pipe_through([:api, :ensure_auth_and_assign, :validate_vouchers_filters])
+
+    resources("/vouchers", VoucherController, only: [:index])
+  end
+
+  scope "/api", BerlimWeb do
     pipe_through([:api, :ensure_auth_and_assign])
 
-    resources("/vouchers", VoucherController, only: [:index, :show])
+    resources("/vouchers", VoucherController, only: [:show])
   end
 
   scope "/api", BerlimWeb do

@@ -2,22 +2,29 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidator do
   @moduledoc """
   The voucher filters validator Plug
   """
-  use Phoenix.Controller
   use Timex
 
-  import Plug.Conn
+  import Plug.Conn,
+    only: [
+      assign: 3,
+      halt: 1,
+      put_resp_content_type: 2,
+      resp: 3
+    ]
 
   @date_params ~w(payed_start_at payed_end_at created_start_at created_end_at)
   @integer_params ~w(company_id employee_id sector_id taxi_id voucher_id)
+  @admin_validators ~w(company_id employee_id taxi_id voucher_id)
+  @company_validators ~w(employee_id matricula sector_id)
   def init(params), do: params
 
   def call(%{assigns: %{admin: _admin}} = conn, _params) do
-    ~w(company_id employee_id taxi_id voucher_id)
+    @admin_validators
     |> validate_and_assign_filters(conn)
   end
 
   def call(%{assigns: %{company: _company}} = conn, _params) do
-    ~w(employee_id matricula sector_id)
+    @company_validators
     |> validate_and_assign_filters(conn)
   end
 
@@ -102,9 +109,11 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidator do
   end
 
   defp error_return_and_halt(conn, errors) do
+    response = Poison.encode!(%{error: errors})
+
     conn
-    |> put_status(400)
-    |> json(%{error: errors})
+    |> put_resp_content_type("application/json")
+    |> resp(400, response)
     |> halt()
   end
 end

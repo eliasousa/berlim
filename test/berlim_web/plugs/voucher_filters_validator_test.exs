@@ -66,15 +66,6 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
       assert conn.resp_body =~ "Invalid taxi_id format"
       assert conn.resp_body =~ "Invalid voucher_id format"
     end
-
-    test "filters assign is empty, if no param is given", %{conn: conn} do
-      conn =
-        conn
-        |> Map.put(:params, %{})
-        |> call(%{})
-
-      assert conn.assigns.filters == []
-    end
   end
 
   describe "user is authenticated as taxi" do
@@ -129,15 +120,6 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
       assert conn.resp_body =~ "Invalid created_end_at format"
       assert conn.resp_body =~ "Invalid payed_start_at format"
       assert conn.resp_body =~ "Invalid payed_end_at format"
-    end
-
-    test "filters assign is empty, if no param is given", %{conn: conn} do
-      conn =
-        conn
-        |> Map.put(:params, %{})
-        |> call(%{})
-
-      assert conn.assigns.filters == []
     end
   end
 
@@ -201,14 +183,14 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
       assert conn.resp_body =~ "Invalid sector_id format"
       assert conn.resp_body =~ "Invalid matricula format"
     end
+  end
 
-    test "filters assign is empty, if no param is given", %{conn: conn} do
-      conn =
-        conn
-        |> Map.put(:params, %{})
-        |> call(%{})
+  test "filters assign is empty, if no param is given", %{conn: conn} do
+    conn =
+      conn
+      |> Map.put(:params, %{})
+      |> call(%{})
 
-      assert conn.assigns.filters == []
-    end
+    assert conn.assigns.filters == []
   end
 end

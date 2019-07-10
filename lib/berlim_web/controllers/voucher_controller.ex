@@ -7,6 +7,7 @@ defmodule BerlimWeb.VoucherController do
   }
 
   action_fallback BerlimWeb.FallbackController
+  plug BerlimWeb.Plugs.VoucherFiltersValidator when action in [:index]
 
   def index(%{assigns: %{admin: _admin, filters: filters}} = conn, _params) do
     vouchers = Vouchers.list_vouchers(filters)

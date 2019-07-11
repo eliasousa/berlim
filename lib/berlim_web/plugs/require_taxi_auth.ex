@@ -16,7 +16,7 @@ defmodule BerlimWeb.Plugs.RequireTaxiAuth do
     if conn.assigns[:taxi] do
       conn
     else
-      response = Poison.encode!(%{error: "Você não pode acessar esse recurso"})
+      response = Jason.encode!(%{error: "Você não pode acessar esse recurso"})
 
       conn
       |> put_resp_content_type("application/json")

@@ -49,8 +49,7 @@ defmodule Berlim.MixProject do
       {:guardian, "~> 1.0"},
       {:cors_plug, "~> 2.0"},
       {:swoosh, "~> 0.23"},
-      {:timex, "~> 3.0"},
-      {:poison, "~> 3.1"}
+      {:timex, "~> 3.0"}
     ]
   end
 

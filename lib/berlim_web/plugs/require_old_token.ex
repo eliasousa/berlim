@@ -21,7 +21,7 @@ defmodule BerlimWeb.Plugs.RequireOldToken do
   end
 
   defp error_return_and_halt(conn) do
-    response = Poison.encode!(%{error: "Token inválido"})
+    response = Jason.encode!(%{error: "Token inválido"})
 
     conn
     |> put_resp_content_type("application/json")

@@ -15,7 +15,7 @@ defmodule BerlimWeb.Plugs.RequireCompanyAuth do
     if conn.assigns[:company] do
       conn
     else
-      response = Poison.encode!(%{error: "Você não pode acessar esse recurso"})
+      response = Jason.encode!(%{error: "Você não pode acessar esse recurso"})
 
       conn
       |> put_resp_content_type("application/json")

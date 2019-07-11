@@ -109,7 +109,7 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidator do
   end
 
   defp error_return_and_halt(conn, errors) do
-    response = Poison.encode!(%{error: errors})
+    response = Jason.encode!(%{error: errors})
 
     conn
     |> put_resp_content_type("application/json")

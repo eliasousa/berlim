@@ -10,6 +10,8 @@ defmodule Berlim.Vouchers.Voucher do
     InternalAccounts.Taxi
   }
 
+  @timestamps_opts [type: :utc_datetime]
+
   schema "vouchers" do
     field :from, :string
     field :km, :string

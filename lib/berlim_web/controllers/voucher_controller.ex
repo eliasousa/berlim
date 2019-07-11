@@ -7,9 +7,20 @@ defmodule BerlimWeb.VoucherController do
   }
 
   action_fallback BerlimWeb.FallbackController
+  plug BerlimWeb.Plugs.VoucherFiltersValidator when action in [:index]
 
-  def index(conn, _params) do
-    vouchers = Vouchers.list_vouchers()
+  def index(%{assigns: %{admin: _admin, filters: filters}} = conn, _params) do
+    vouchers = Vouchers.list_vouchers(filters)
+    render(conn, "index.json", vouchers: vouchers)
+  end
+
+  def index(%{assigns: %{company: company, filters: filters}} = conn, _params) do
+    vouchers = Vouchers.list_company_vouchers(company, filters)
+    render(conn, "index.json", vouchers: vouchers)
+  end
+
+  def index(%{assigns: %{taxi: taxi, filters: filters}} = conn, _params) do
+    vouchers = Vouchers.list_taxi_vouchers(taxi, filters)
     render(conn, "index.json", vouchers: vouchers)
   end
 

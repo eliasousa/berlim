@@ -7,8 +7,9 @@ defmodule BerlimWeb.Router do
     plug :accepts, ["json"]
   end
 
-  pipeline :ensure_auth do
+  pipeline :ensure_auth_and_assign do
     plug Plugs.Guardian.AuthPipeline
+    plug Plugs.AssignUser
   end
 
   pipeline :ensure_admin do
@@ -35,7 +36,7 @@ defmodule BerlimWeb.Router do
   end
 
   scope "/api", BerlimWeb do
-    pipe_through [:api, :ensure_auth, :ensure_admin]
+    pipe_through [:api, :ensure_auth_and_assign, :ensure_admin]
 
     resources("/admins", AdminController, only: [:index, :show, :create, :update, :delete])
     resources("/taxis", TaxiController, only: [:index, :show, :create, :update])
@@ -43,20 +44,20 @@ defmodule BerlimWeb.Router do
   end
 
   scope "/api", BerlimWeb do
-    pipe_through([:api, :ensure_auth, :ensure_company])
+    pipe_through([:api, :ensure_auth_and_assign, :ensure_company])
 
     resources("/sectors", SectorController, only: [:index, :show, :create, :update])
     resources("/employees", EmployeeController, only: [:index, :show, :create, :update])
   end
 
   scope "/api", BerlimWeb do
-    pipe_through([:api, :ensure_auth])
+    pipe_through([:api, :ensure_auth_and_assign])
 
     resources("/vouchers", VoucherController, only: [:index, :show])
   end
 
   scope "/api", BerlimWeb do
-    pipe_through([:api, :ensure_auth, :ensure_taxi])
+    pipe_through([:api, :ensure_auth_and_assign, :ensure_taxi])
 
     # CHANGE TO /vouchers after every taxi change to store apk
     resources("/new_vouchers", VoucherController, only: [:create])

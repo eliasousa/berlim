@@ -5,7 +5,7 @@ defmodule Berlim.MixProject do
     [
       app: :berlim,
       version: "1.0.0",
-      elixir: "~> 1.8.1",
+      elixir: "~> 1.9.0",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -20,7 +20,8 @@ defmodule Berlim.MixProject do
   def application do
     [
       mod: {Berlim.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools],
+      applications: [:timex]
     ]
   end
 
@@ -47,7 +48,8 @@ defmodule Berlim.MixProject do
       {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 1.0"},
       {:cors_plug, "~> 2.0"},
-      {:swoosh, "~> 0.23"}
+      {:swoosh, "~> 0.23"},
+      {:timex, "~> 3.0"}
     ]
   end
 

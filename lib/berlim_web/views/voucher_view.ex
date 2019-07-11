@@ -18,7 +18,26 @@ defmodule BerlimWeb.VoucherView do
       to: voucher.to,
       km: voucher.km,
       note: voucher.note,
-      payed_at: voucher.payed_at
+      inserted_at: voucher.inserted_at,
+      payed_at: voucher.payed_at,
+      company: company_json(voucher.employee.company),
+      employee: employee_json(voucher.employee),
+      taxi: taxi_json(voucher.taxi)
     }
   end
+
+  defp company_json(%{} = company), do: %{id: company.id, name: company.name}
+
+  defp employee_json(%{} = employee),
+    do: %{
+      id: employee.id,
+      internal_id: employee.internal_id,
+      name: employee.name,
+      sector: %{
+        id: employee.sector.id,
+        name: employee.sector.name
+      }
+    }
+
+  defp taxi_json(%{} = taxi), do: %{id: taxi.id, smtt: taxi.smtt}
 end

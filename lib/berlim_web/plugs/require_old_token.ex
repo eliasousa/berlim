@@ -3,8 +3,13 @@ defmodule BerlimWeb.Plugs.RequireOldToken do
   The require admin auth Plug.
   """
 
-  import Plug.Conn, only: [put_status: 2, get_req_header: 2]
-  use Phoenix.Controller
+  import Plug.Conn,
+    only: [
+      get_req_header: 2,
+      halt: 1,
+      put_resp_content_type: 2,
+      resp: 3
+    ]
 
   def init(params), do: params
 
@@ -16,9 +21,11 @@ defmodule BerlimWeb.Plugs.RequireOldToken do
   end
 
   defp error_return_and_halt(conn) do
+    response = Jason.encode!(%{error: "Token inválido"})
+
     conn
-    |> put_status(403)
-    |> json(%{error: "Token inválido"})
+    |> put_resp_content_type("application/json")
+    |> resp(403, response)
     |> halt()
   end
 end

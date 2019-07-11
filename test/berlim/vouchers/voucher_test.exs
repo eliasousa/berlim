@@ -1,5 +1,6 @@
 defmodule Berlim.Vouchers.VoucherTest do
   use Berlim.DataCase, async: true
+  use Timex
 
   import Berlim.Factory
 

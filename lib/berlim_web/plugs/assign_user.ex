@@ -6,7 +6,7 @@ defmodule BerlimWeb.Plugs.AssignUser do
 
   use Phoenix.Controller
 
-  alias Berlim.Guardian
+  alias BerlimWeb.Guardian
 
   def init(params), do: params
 

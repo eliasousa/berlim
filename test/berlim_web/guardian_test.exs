@@ -1,8 +1,8 @@
-defmodule Berlim.GuardianTest do
+defmodule BerlimWeb.GuardianTest do
   use Berlim.DataCase, async: true
 
   import Berlim.Factory
-  alias Berlim.Guardian
+  alias BerlimWeb.Guardian
 
   test "subject_for_token/2" do
     user = insert(:admin)

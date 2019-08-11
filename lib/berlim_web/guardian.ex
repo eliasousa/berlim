@@ -1,4 +1,4 @@
-defmodule Berlim.Guardian do
+defmodule BerlimWeb.Guardian do
   @moduledoc """
   The Guardian file
   """

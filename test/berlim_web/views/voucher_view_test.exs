@@ -41,6 +41,10 @@ defmodule BerlimWeb.VoucherViewTest do
            }
   end
 
+  test "update.json/2, returns updated count" do
+    assert VoucherView.render("update.json", %{count: 10}) == %{data: %{count: 10}}
+  end
+
   test "voucher.json/2, returns voucher", %{voucher: voucher} do
     assert VoucherView.render("voucher.json", %{voucher: voucher}) == %{
              voucher

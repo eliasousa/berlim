@@ -10,6 +10,10 @@ defmodule BerlimWeb.VoucherView do
     %{data: render_one(voucher, VoucherView, "voucher.json")}
   end
 
+  def render("update.json", %{count: count}) do
+    %{data: %{count: count}}
+  end
+
   def render("voucher.json", %{voucher: voucher}) do
     %{
       id: voucher.id,
@@ -33,11 +37,10 @@ defmodule BerlimWeb.VoucherView do
       id: employee.id,
       internal_id: employee.internal_id,
       name: employee.name,
-      sector: %{
-        id: employee.sector.id,
-        name: employee.sector.name
-      }
+      sector: sector_json(employee.sector)
     }
 
   defp taxi_json(%{} = taxi), do: %{id: taxi.id, smtt: taxi.smtt}
+  defp sector_json(%{} = sector), do: %{id: sector.id, name: sector.name}
+  defp sector_json(_), do: nil
 end

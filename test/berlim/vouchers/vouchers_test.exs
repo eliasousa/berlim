@@ -516,6 +516,20 @@ defmodule Berlim.VouchersTest do
     assert {:error, %Ecto.Changeset{}} = Vouchers.create_voucher(@invalid_attrs)
   end
 
+  test "pay_vouchers/2 updates all vouchers payed_at, updated_at and payed_by" do
+    admin = insert(:admin)
+    ids = insert_list(10, :voucher) |> Enum.map(& &1.id)
+
+    assert {:ok, count} = Vouchers.pay_vouchers(ids, admin)
+    assert Enum.count(ids) == count
+
+    vouchers = Vouchers.list_vouchers()
+
+    assert Enum.all?(vouchers, fn v ->
+             v.payed_by_id == admin.id && not is_nil(v.payed_at) && v.updated_at == v.payed_at
+           end)
+  end
+
   test "change_voucher/0 returns a voucher changeset" do
     assert %Ecto.Changeset{} = Vouchers.change_voucher()
   end

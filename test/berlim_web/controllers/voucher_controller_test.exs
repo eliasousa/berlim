@@ -630,6 +630,19 @@ defmodule BerlimWeb.VoucherControllerTest do
     end
   end
 
+  describe "PATCH /update" do
+    setup [:authenticate_admin]
+
+    test "renders voucher when data is valid", %{conn: conn} do
+      ids = insert_list(10, :voucher) |> Enum.map(& &1.id)
+
+      conn = patch(conn, Routes.voucher_path(conn, :update), vouchers: ids)
+
+      assert json_response(conn, 200) ==
+               render_json(VoucherView, "update.json", %{count: Enum.count(ids)})
+    end
+  end
+
   defp authenticate_admin(%{conn: conn}) do
     authenticate(conn, insert(:admin))
   end

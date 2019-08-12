@@ -41,6 +41,7 @@ defmodule BerlimWeb.Router do
     resources("/admins", AdminController, only: [:index, :show, :create, :update, :delete])
     resources("/taxis", TaxiController, only: [:index, :show, :create, :update])
     resources("/companies", CompanyController, only: [:index, :show, :create, :update])
+    resources("/vouchers", VoucherController, singleton: true, only: [:update])
   end
 
   scope "/api", BerlimWeb do

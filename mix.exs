@@ -20,8 +20,7 @@ defmodule Berlim.MixProject do
   def application do
     [
       mod: {Berlim.Application, []},
-      extra_applications: [:logger, :runtime_tools],
-      applications: [:timex]
+      extra_applications: [:logger, :runtime_tools, :timex]
     ]
   end
 

@@ -4,7 +4,7 @@ defmodule BerlimWeb.Plugs.AssignUserTest do
   import BerlimWeb.Plugs.AssignUser, only: [call: 2]
   import Berlim.Factory, only: [insert: 1]
 
-  alias Berlim.Guardian
+  alias BerlimWeb.Guardian
 
   describe "user is authenticated as taxi" do
     setup %{conn: conn} do

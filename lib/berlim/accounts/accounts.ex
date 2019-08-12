@@ -5,11 +5,12 @@ defmodule Berlim.Accounts do
 
   alias Berlim.{
     CompanyAccounts.Company,
-    Guardian,
     InternalAccounts.Admin,
     InternalAccounts.Taxi,
     Repo
   }
+
+  alias BerlimWeb.Guardian
 
   import Bcrypt, only: [verify_pass: 2, no_user_verify: 0]
 

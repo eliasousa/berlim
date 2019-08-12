@@ -5,7 +5,7 @@ defmodule BerlimWeb.Plugs.Guardian.AuthPipeline do
 
   use Guardian.Plug.Pipeline,
     otp_app: :Berlim,
-    module: Berlim.Guardian,
+    module: BerlimWeb.Guardian,
     error_handler: BerlimWeb.Plugs.Guardian.AuthErrorHandler
 
   plug Guardian.Plug.VerifyHeader, realm: "Bearer"

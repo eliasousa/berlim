@@ -9,7 +9,7 @@ config :berlim, BerlimWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
-config :berlim, Berlim.Guardian, secret_key: System.get_env("GUARDIAN_SECRET_KEY")
+config :berlim, BerlimWeb.Guardian, secret_key: System.get_env("GUARDIAN_SECRET_KEY")
 
 # Configure your database
 config :berlim, Berlim.Repo,

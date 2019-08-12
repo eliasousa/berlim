@@ -4,7 +4,7 @@ defmodule BerlimWeb.Helpers.AuthHelper do
   """
 
   import Plug.Conn, only: [put_req_header: 3]
-  alias Berlim.Guardian
+  alias BerlimWeb.Guardian
 
   defmacro __using__(_) do
     quote do

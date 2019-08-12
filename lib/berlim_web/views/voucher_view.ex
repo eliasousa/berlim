@@ -10,6 +10,10 @@ defmodule BerlimWeb.VoucherView do
     %{data: render_one(voucher, VoucherView, "voucher.json")}
   end
 
+  def render("update.json", %{count: count}) do
+    %{data: %{count: count}}
+  end
+
   def render("voucher.json", %{voucher: voucher}) do
     %{
       id: voucher.id,

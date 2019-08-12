@@ -27,18 +27,7 @@ defmodule Berlim.Vouchers.Voucher do
   end
 
   @doc false
-  def changeset(voucher, admin, attrs) do
-    voucher
-    |> default_changeset(attrs)
-    |> put_assoc(:payed_by, admin)
-  end
-
-  @doc false
-  def changeset(voucher, attrs) do
-    default_changeset(voucher, attrs)
-  end
-
-  defp default_changeset(changeset, attrs) do
+  def changeset(changeset, attrs) do
     changeset
     |> cast(attrs, [:from, :km, :note, :to, :value, :payed_at, :employee_id, :taxi_id])
     |> validate_required([:value, :from, :to, :taxi_id, :employee_id])

@@ -14,6 +14,7 @@ defmodule Berlim.Vouchers do
   alias Berlim.{
     CompanyAccounts.Company,
     EmailGenerator,
+    InternalAccounts.Admin,
     InternalAccounts.Taxi,
     Mailer,
     Repo,
@@ -63,6 +64,16 @@ defmodule Berlim.Vouchers do
       send_voucher_receipt(voucher.employee.company.email, voucher)
 
       {:ok, voucher}
+    end
+  end
+
+  def pay_vouchers(ids, %Admin{} = payed_by) do
+    query = from v in Voucher, where: v.id in ^ids
+    now = DateTime.utc_now()
+
+    with {count, nil} <-
+           Repo.update_all(query, set: [payed_at: now, updated_at: now, payed_by_id: payed_by.id]) do
+      {:ok, count}
     end
   end
 

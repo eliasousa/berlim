@@ -520,10 +520,14 @@ defmodule Berlim.VouchersTest do
     admin = insert(:admin)
     ids = insert_list(10, :voucher) |> Enum.map(& &1.id)
 
-    assert {:ok, count} = Vouchers.pay_vouchers(ids, admin)
-    assert Enum.count(ids) == count
+    assert {:ok, total_paid} = Vouchers.pay_vouchers(ids, admin)
 
     vouchers = Vouchers.list_vouchers()
+
+    vouchers_sum =
+      vouchers |> Enum.map(& &1.value) |> Enum.sum() |> :erlang.float_to_binary(decimals: 1)
+
+    assert vouchers_sum == total_paid
 
     assert Enum.all?(vouchers, fn v ->
              v.payed_by_id == admin.id && not is_nil(v.payed_at) && v.updated_at == v.payed_at

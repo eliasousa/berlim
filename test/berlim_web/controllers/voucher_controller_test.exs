@@ -636,10 +636,16 @@ defmodule BerlimWeb.VoucherControllerTest do
     test "renders voucher when data is valid", %{conn: conn} do
       ids = insert_list(10, :voucher) |> Enum.map(& &1.id)
 
+      vouchers_sum =
+        Vouchers.list_vouchers()
+        |> Enum.map(& &1.value)
+        |> Enum.sum()
+        |> :erlang.float_to_binary(decimals: 1)
+
       conn = patch(conn, Routes.voucher_path(conn, :update), vouchers: ids)
 
       assert json_response(conn, 200) ==
-               render_json(VoucherView, "update.json", %{count: Enum.count(ids)})
+               render_json(VoucherView, "update.json", %{total_paid: vouchers_sum})
     end
   end
 

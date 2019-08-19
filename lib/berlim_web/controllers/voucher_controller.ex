@@ -38,8 +38,8 @@ defmodule BerlimWeb.VoucherController do
   end
 
   def update(%{assigns: %{admin: admin}} = conn, %{"vouchers" => voucher_ids}) do
-    with {:ok, count} <- Vouchers.pay_vouchers(voucher_ids, admin) do
-      render(conn, "update.json", count: count)
+    with {:ok, total_paid} <- Vouchers.pay_vouchers(voucher_ids, admin) do
+      render(conn, "update.json", total_paid: total_paid)
     end
   end
 end

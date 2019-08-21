@@ -22,46 +22,46 @@ defmodule Berlim.VouchersTest do
       assert Enum.count(vouchers) == 1
     end
 
-    test "list_vouchers/1 with payed_start_at filter,
+    test "list_vouchers/1 with paid_start_at filter,
           returns all vouchers that were paid during or after a date" do
-      create_voucher(%{payed_at: start_date()})
-      create_voucher(%{payed_at: pre_start_date()})
+      create_voucher(%{paid_at: start_date()})
+      create_voucher(%{paid_at: pre_start_date()})
 
-      vouchers = Vouchers.list_vouchers([{"payed_start_at", start_date()}])
+      vouchers = Vouchers.list_vouchers([{"paid_start_at", start_date()}])
 
       assert is_list(vouchers)
       assert Enum.count(vouchers) == 1
 
       voucher = List.first(vouchers)
 
-      assert voucher.payed_at >= start_date()
+      assert voucher.paid_at >= start_date()
     end
 
-    test "list_vouchers/1 with payed_end_at filter,
+    test "list_vouchers/1 with paid_end_at filter,
           returns all vouchers that were paid before or during a date" do
-      create_voucher(%{payed_at: end_date()})
-      create_voucher(%{payed_at: post_end_date()})
+      create_voucher(%{paid_at: end_date()})
+      create_voucher(%{paid_at: post_end_date()})
 
-      vouchers = Vouchers.list_vouchers([{"payed_end_at", end_date()}])
+      vouchers = Vouchers.list_vouchers([{"paid_end_at", end_date()}])
 
       assert is_list(vouchers)
       assert Enum.count(vouchers) == 1
 
       voucher = List.first(vouchers)
 
-      assert voucher.payed_at <= end_date()
+      assert voucher.paid_at <= end_date()
     end
 
-    test "list_vouchers/1 with payed_start_at and payed_end_at filters,
+    test "list_vouchers/1 with paid_start_at and paid_end_at filters,
           returns all vouchers that were paid between a date interval" do
-      create_voucher(%{payed_at: between_start_and_end_dates()})
-      create_voucher(%{payed_at: pre_start_date()})
-      create_voucher(%{payed_at: post_end_date()})
+      create_voucher(%{paid_at: between_start_and_end_dates()})
+      create_voucher(%{paid_at: pre_start_date()})
+      create_voucher(%{paid_at: post_end_date()})
 
       vouchers =
         Vouchers.list_vouchers([
-          {"payed_start_at", start_date()},
-          {"payed_end_at", end_date()}
+          {"paid_start_at", start_date()},
+          {"paid_end_at", end_date()}
         ])
 
       assert is_list(vouchers)
@@ -69,7 +69,7 @@ defmodule Berlim.VouchersTest do
 
       voucher = List.first(vouchers)
 
-      assert Timex.between?(voucher.payed_at, start_date(), end_date())
+      assert Timex.between?(voucher.paid_at, start_date(), end_date())
     end
 
     test "list_vouchers/1 with created_start_at filter,
@@ -190,14 +190,14 @@ defmodule Berlim.VouchersTest do
       assert Enum.all?(taxi_vouchers, fn v -> v.taxi_id == taxi.id end)
     end
 
-    test "list_taxi_vouchers/2 with payed_start_at filter,
+    test "list_taxi_vouchers/2 with paid_start_at filter,
           returns all vouchers that belongs to the taxi that were paid during or after a date" do
       taxi = insert(:taxi)
 
-      create_voucher(%{taxi: taxi, payed_at: start_date()})
-      create_voucher(%{taxi: taxi, payed_at: pre_start_date()})
+      create_voucher(%{taxi: taxi, paid_at: start_date()})
+      create_voucher(%{taxi: taxi, paid_at: pre_start_date()})
 
-      taxi_vouchers = Vouchers.list_taxi_vouchers(taxi, [{"payed_start_at", start_date()}])
+      taxi_vouchers = Vouchers.list_taxi_vouchers(taxi, [{"paid_start_at", start_date()}])
 
       assert is_list(taxi_vouchers)
       assert Enum.count(taxi_vouchers) == 1
@@ -205,17 +205,17 @@ defmodule Berlim.VouchersTest do
       voucher = List.first(taxi_vouchers)
 
       assert voucher.taxi_id == taxi.id
-      assert voucher.payed_at >= start_date()
+      assert voucher.paid_at >= start_date()
     end
 
-    test "list_taxi_vouchers/2 with payed_end_at filter,
+    test "list_taxi_vouchers/2 with paid_end_at filter,
           returns all vouchers that belongs to the taxi that were paid before or during a date" do
       taxi = insert(:taxi)
 
-      create_voucher(%{taxi: taxi, payed_at: end_date()})
-      create_voucher(%{taxi: taxi, payed_at: post_end_date()})
+      create_voucher(%{taxi: taxi, paid_at: end_date()})
+      create_voucher(%{taxi: taxi, paid_at: post_end_date()})
 
-      taxi_vouchers = Vouchers.list_taxi_vouchers(taxi, [{"payed_end_at", end_date()}])
+      taxi_vouchers = Vouchers.list_taxi_vouchers(taxi, [{"paid_end_at", end_date()}])
 
       assert is_list(taxi_vouchers)
       assert Enum.count(taxi_vouchers) == 1
@@ -223,21 +223,21 @@ defmodule Berlim.VouchersTest do
       voucher = List.first(taxi_vouchers)
 
       assert voucher.taxi_id == taxi.id
-      assert voucher.payed_at <= end_date()
+      assert voucher.paid_at <= end_date()
     end
 
-    test "list_taxi_vouchers/2 with payed_start_at and payed_end_at filters,
+    test "list_taxi_vouchers/2 with paid_start_at and paid_end_at filters,
           returns all vouchers that belongs to the taxi that were paid between a date interval" do
       taxi = insert(:taxi)
 
-      create_voucher(%{taxi: taxi, payed_at: between_start_and_end_dates()})
-      create_voucher(%{taxi: taxi, payed_at: pre_start_date()})
-      create_voucher(%{taxi: taxi, payed_at: post_end_date()})
+      create_voucher(%{taxi: taxi, paid_at: between_start_and_end_dates()})
+      create_voucher(%{taxi: taxi, paid_at: pre_start_date()})
+      create_voucher(%{taxi: taxi, paid_at: post_end_date()})
 
       taxi_vouchers =
         Vouchers.list_taxi_vouchers(taxi, [
-          {"payed_start_at", start_date()},
-          {"payed_end_at", end_date()}
+          {"paid_start_at", start_date()},
+          {"paid_end_at", end_date()}
         ])
 
       assert is_list(taxi_vouchers)
@@ -246,7 +246,7 @@ defmodule Berlim.VouchersTest do
       voucher = List.first(taxi_vouchers)
 
       assert voucher.taxi_id == taxi.id
-      assert Timex.between?(voucher.payed_at, start_date(), end_date())
+      assert Timex.between?(voucher.paid_at, start_date(), end_date())
     end
 
     test "list_taxi_vouchers/2 with created_start_at filter,
@@ -326,14 +326,14 @@ defmodule Berlim.VouchersTest do
       assert Enum.all?(company_vouchers, fn v -> v.employee.company_id == company.id end)
     end
 
-    test "list_company_vouchers/2 with payed_start_at filter,
+    test "list_company_vouchers/2 with paid_start_at filter,
           returns all vouchers that belongs to the company that were paid during or after a date",
          %{company: company, employee: company_employee} do
-      create_voucher(%{employee: company_employee, payed_at: start_date()})
-      create_voucher(%{employee: company_employee, payed_at: pre_start_date()})
+      create_voucher(%{employee: company_employee, paid_at: start_date()})
+      create_voucher(%{employee: company_employee, paid_at: pre_start_date()})
 
       company_vouchers =
-        Vouchers.list_company_vouchers(company, [{"payed_start_at", start_date()}])
+        Vouchers.list_company_vouchers(company, [{"paid_start_at", start_date()}])
 
       assert is_list(company_vouchers)
       assert Enum.count(company_vouchers) == 1
@@ -341,16 +341,16 @@ defmodule Berlim.VouchersTest do
       voucher = List.first(company_vouchers)
 
       assert voucher.employee.company_id == company.id
-      assert voucher.payed_at >= start_date()
+      assert voucher.paid_at >= start_date()
     end
 
-    test "list_company_vouchers/2 with payed_end_at filter,
+    test "list_company_vouchers/2 with paid_end_at filter,
           returns all vouchers that belongs to the company that were paid before or during a date",
          %{company: company, employee: company_employee} do
-      create_voucher(%{employee: company_employee, payed_at: end_date()})
-      create_voucher(%{employee: company_employee, payed_at: post_end_date()})
+      create_voucher(%{employee: company_employee, paid_at: end_date()})
+      create_voucher(%{employee: company_employee, paid_at: post_end_date()})
 
-      company_vouchers = Vouchers.list_company_vouchers(company, [{"payed_end_at", end_date()}])
+      company_vouchers = Vouchers.list_company_vouchers(company, [{"paid_end_at", end_date()}])
 
       assert is_list(company_vouchers)
       assert Enum.count(company_vouchers) == 1
@@ -358,20 +358,20 @@ defmodule Berlim.VouchersTest do
       voucher = List.first(company_vouchers)
 
       assert voucher.employee.company_id == company.id
-      assert voucher.payed_at <= end_date()
+      assert voucher.paid_at <= end_date()
     end
 
-    test "list_company_vouchers/2 with payed_start_at and payed_end_at filters,
+    test "list_company_vouchers/2 with paid_start_at and paid_end_at filters,
           returns all vouchers that belongs to the company that were paid between a date interval",
          %{company: company, employee: company_employee} do
-      create_voucher(%{employee: company_employee, payed_at: between_start_and_end_dates()})
-      create_voucher(%{employee: company_employee, payed_at: pre_start_date()})
-      create_voucher(%{employee: company_employee, payed_at: post_end_date()})
+      create_voucher(%{employee: company_employee, paid_at: between_start_and_end_dates()})
+      create_voucher(%{employee: company_employee, paid_at: pre_start_date()})
+      create_voucher(%{employee: company_employee, paid_at: post_end_date()})
 
       company_vouchers =
         Vouchers.list_company_vouchers(company, [
-          {"payed_start_at", start_date()},
-          {"payed_end_at", end_date()}
+          {"paid_start_at", start_date()},
+          {"paid_end_at", end_date()}
         ])
 
       assert is_list(company_vouchers)
@@ -380,7 +380,7 @@ defmodule Berlim.VouchersTest do
       voucher = List.first(company_vouchers)
 
       assert voucher.employee.company_id == company.id
-      assert Timex.between?(voucher.payed_at, start_date(), end_date())
+      assert Timex.between?(voucher.paid_at, start_date(), end_date())
     end
 
     test "list_company_vouchers/2 with created_start_at filter,
@@ -516,7 +516,7 @@ defmodule Berlim.VouchersTest do
     assert {:error, %Ecto.Changeset{}} = Vouchers.create_voucher(@invalid_attrs)
   end
 
-  test "pay_vouchers/2 updates all vouchers payed_at, updated_at and payed_by" do
+  test "pay_vouchers/2 updates all vouchers paid_at, updated_at and paid_by" do
     admin = insert(:admin)
     ids = insert_list(10, :voucher) |> Enum.map(& &1.id)
 
@@ -530,7 +530,7 @@ defmodule Berlim.VouchersTest do
     assert vouchers_sum == total_paid
 
     assert Enum.all?(vouchers, fn v ->
-             v.payed_by_id == admin.id && not is_nil(v.payed_at) && v.updated_at == v.payed_at
+             v.paid_by_id == admin.id && not is_nil(v.paid_at) && v.updated_at == v.paid_at
            end)
   end
 

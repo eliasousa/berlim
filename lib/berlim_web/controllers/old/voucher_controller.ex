@@ -6,7 +6,7 @@ defmodule BerlimWeb.Old.VoucherController do
   import Ecto.Query, only: [from: 2]
 
   def index(conn, %{"id" => taxi_id}) do
-    query = from v in Voucher, where: v.taxi_id == ^taxi_id and is_nil(v.payed_at)
+    query = from v in Voucher, where: v.taxi_id == ^taxi_id and is_nil(v.paid_at)
 
     case query |> Repo.all() |> Repo.preload(employee: [:company]) do
       [%Voucher{} | _] = vouchers ->

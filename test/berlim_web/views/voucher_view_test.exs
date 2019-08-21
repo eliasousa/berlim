@@ -21,7 +21,7 @@ defmodule BerlimWeb.VoucherViewTest do
         from: "Ponto Novo",
         to: "Av. Rio de Janeiro",
         inserted_at: DateTime.utc_now(),
-        payed_at: DateTime.utc_now(),
+        paid_at: DateTime.utc_now(),
         company: employee.company,
         employee: employee,
         taxi: %{id: 1, smtt: 1234}

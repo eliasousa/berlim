@@ -23,7 +23,7 @@ defmodule BerlimWeb.VoucherView do
       km: voucher.km,
       note: voucher.note,
       inserted_at: voucher.inserted_at,
-      payed_at: voucher.payed_at,
+      paid_at: voucher.paid_at,
       company: company_json(voucher.employee.company),
       employee: employee_json(voucher.employee),
       taxi: taxi_json(voucher.taxi)

@@ -67,12 +67,12 @@ defmodule Berlim.Vouchers do
     end
   end
 
-  def pay_vouchers(ids, %Admin{} = payed_by) do
+  def pay_vouchers(ids, %Admin{} = paid_by) do
     query = from v in Voucher, where: v.id in ^ids, select: v.value
     now = DateTime.utc_now()
 
     with {_count, values} <-
-           Repo.update_all(query, set: [payed_at: now, updated_at: now, payed_by_id: payed_by.id]) do
+           Repo.update_all(query, set: [paid_at: now, updated_at: now, paid_by_id: paid_by.id]) do
       total_paid = :erlang.float_to_binary(Enum.sum(values), decimals: 1)
       {:ok, total_paid}
     end
@@ -123,14 +123,14 @@ defmodule Berlim.Vouchers do
       where: v.inserted_at <= ^value
   end
 
-  defp filter_by({"payed_start_at", value}, query) do
+  defp filter_by({"paid_start_at", value}, query) do
     from v in query,
-      where: v.payed_at >= ^value
+      where: v.paid_at >= ^value
   end
 
-  defp filter_by({"payed_end_at", value}, query) do
+  defp filter_by({"paid_end_at", value}, query) do
     from v in query,
-      where: v.payed_at <= ^value
+      where: v.paid_at <= ^value
   end
 
   defp filter_by({"company_id", value}, query) do

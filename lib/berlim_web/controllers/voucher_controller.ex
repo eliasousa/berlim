@@ -21,6 +21,7 @@ defmodule BerlimWeb.VoucherController do
 
   def index(%{assigns: %{taxi: taxi, filters: filters}} = conn, _params) do
     vouchers = Vouchers.list_taxi_vouchers(taxi, filters)
+
     render(conn, "index.json", vouchers: vouchers)
   end
 

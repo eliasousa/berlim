@@ -25,13 +25,13 @@ defmodule BerlimWeb.VoucherControllerTest do
     end
 
     test "list all vouchers that were paid during or after a date", %{conn: conn} do
-      create_voucher(%{payed_at: start_date()})
-      create_voucher(%{payed_at: pre_start_date()})
+      create_voucher(%{paid_at: start_date()})
+      create_voucher(%{paid_at: pre_start_date()})
 
       conn =
         get(
           conn,
-          Routes.voucher_path(conn, :index, payed_start_at: DateTime.to_string(start_date()))
+          Routes.voucher_path(conn, :index, paid_start_at: DateTime.to_string(start_date()))
         )
 
       vouchers = json_response(conn, 200)["data"]
@@ -39,41 +39,41 @@ defmodule BerlimWeb.VoucherControllerTest do
       assert is_list(vouchers)
       assert Enum.count(vouchers) == 1
 
-      voucher_payment_date = parse_date(List.first(vouchers)["payed_at"])
+      voucher_payment_date = parse_date(List.first(vouchers)["paid_at"])
 
       assert voucher_payment_date >= start_date()
     end
 
     test "list all vouchers that were paid before or during a date", %{conn: conn} do
-      create_voucher(%{payed_at: end_date()})
-      create_voucher(%{payed_at: post_end_date()})
+      create_voucher(%{paid_at: end_date()})
+      create_voucher(%{paid_at: post_end_date()})
 
       conn =
         get(
           conn,
-          Routes.voucher_path(conn, :index, payed_end_at: DateTime.to_string(end_date()))
+          Routes.voucher_path(conn, :index, paid_end_at: DateTime.to_string(end_date()))
         )
 
       vouchers = json_response(conn, 200)["data"]
       assert is_list(vouchers)
       assert Enum.count(vouchers) == 1
 
-      voucher_payment_date = parse_date(List.first(vouchers)["payed_at"])
+      voucher_payment_date = parse_date(List.first(vouchers)["paid_at"])
 
       assert voucher_payment_date <= end_date()
     end
 
     test "list all vouchers that were paid between a date interval", %{conn: conn} do
-      create_voucher(%{payed_at: between_start_and_end_dates()})
-      create_voucher(%{payed_at: pre_start_date()})
-      create_voucher(%{payed_at: post_end_date()})
+      create_voucher(%{paid_at: between_start_and_end_dates()})
+      create_voucher(%{paid_at: pre_start_date()})
+      create_voucher(%{paid_at: post_end_date()})
 
       conn =
         get(
           conn,
           Routes.voucher_path(conn, :index,
-            payed_start_at: DateTime.to_string(start_date()),
-            payed_end_at: DateTime.to_string(end_date())
+            paid_start_at: DateTime.to_string(start_date()),
+            paid_end_at: DateTime.to_string(end_date())
           )
         )
 
@@ -82,7 +82,7 @@ defmodule BerlimWeb.VoucherControllerTest do
       assert is_list(vouchers)
       assert Enum.count(vouchers) == 1
 
-      voucher_payment_date = parse_date(List.first(vouchers)["payed_at"])
+      voucher_payment_date = parse_date(List.first(vouchers)["paid_at"])
 
       assert Timex.between?(voucher_payment_date, start_date(), end_date())
     end
@@ -229,14 +229,14 @@ defmodule BerlimWeb.VoucherControllerTest do
 
     test "list all vouchers that belongs to the taxi that were paid during or after a date",
          %{conn: conn, taxi: taxi} do
-      create_voucher(%{taxi: taxi, payed_at: start_date()})
-      create_voucher(%{taxi: taxi, payed_at: pre_start_date()})
-      create_voucher(%{payed_at: start_date()})
+      create_voucher(%{taxi: taxi, paid_at: start_date()})
+      create_voucher(%{taxi: taxi, paid_at: pre_start_date()})
+      create_voucher(%{paid_at: start_date()})
 
       conn =
         get(
           conn,
-          Routes.voucher_path(conn, :index, payed_start_at: DateTime.to_string(start_date()))
+          Routes.voucher_path(conn, :index, paid_start_at: DateTime.to_string(start_date()))
         )
 
       taxi_vouchers = json_response(conn, 200)["data"]
@@ -247,19 +247,19 @@ defmodule BerlimWeb.VoucherControllerTest do
       voucher = List.first(taxi_vouchers)
 
       assert voucher["taxi"]["id"] == taxi.id
-      assert parse_date(voucher["payed_at"]) >= start_date()
+      assert parse_date(voucher["paid_at"]) >= start_date()
     end
 
     test "list all vouchers that belongs to the taxi that were paid before or during a date",
          %{conn: conn, taxi: taxi} do
-      create_voucher(%{taxi: taxi, payed_at: end_date()})
-      create_voucher(%{taxi: taxi, payed_at: post_end_date()})
-      create_voucher(%{payed_at: end_date()})
+      create_voucher(%{taxi: taxi, paid_at: end_date()})
+      create_voucher(%{taxi: taxi, paid_at: post_end_date()})
+      create_voucher(%{paid_at: end_date()})
 
       conn =
         get(
           conn,
-          Routes.voucher_path(conn, :index, payed_end_at: DateTime.to_string(end_date()))
+          Routes.voucher_path(conn, :index, paid_end_at: DateTime.to_string(end_date()))
         )
 
       taxi_vouchers = json_response(conn, 200)["data"]
@@ -270,22 +270,22 @@ defmodule BerlimWeb.VoucherControllerTest do
       voucher = List.first(taxi_vouchers)
 
       assert voucher["taxi"]["id"] == taxi.id
-      assert parse_date(voucher["payed_at"]) <= end_date()
+      assert parse_date(voucher["paid_at"]) <= end_date()
     end
 
     test "list all vouchers that belongs to the taxi that were paid between a date interval",
          %{conn: conn, taxi: taxi} do
-      create_voucher(%{taxi: taxi, payed_at: between_start_and_end_dates()})
-      create_voucher(%{taxi: taxi, payed_at: pre_start_date()})
-      create_voucher(%{taxi: taxi, payed_at: post_end_date()})
-      create_voucher(%{payed_at: between_start_and_end_dates()})
+      create_voucher(%{taxi: taxi, paid_at: between_start_and_end_dates()})
+      create_voucher(%{taxi: taxi, paid_at: pre_start_date()})
+      create_voucher(%{taxi: taxi, paid_at: post_end_date()})
+      create_voucher(%{paid_at: between_start_and_end_dates()})
 
       conn =
         get(
           conn,
           Routes.voucher_path(conn, :index,
-            payed_start_at: DateTime.to_string(start_date()),
-            payed_end_at: DateTime.to_string(end_date())
+            paid_start_at: DateTime.to_string(start_date()),
+            paid_end_at: DateTime.to_string(end_date())
           )
         )
 
@@ -297,7 +297,7 @@ defmodule BerlimWeb.VoucherControllerTest do
       voucher = List.first(taxi_vouchers)
 
       assert voucher["taxi"]["id"] == taxi.id
-      assert Timex.between?(parse_date(voucher["payed_at"]), start_date(), end_date())
+      assert Timex.between?(parse_date(voucher["paid_at"]), start_date(), end_date())
     end
 
     test "list all vouchers that belongs to the taxi that were created during or after a date",
@@ -393,14 +393,14 @@ defmodule BerlimWeb.VoucherControllerTest do
 
     test "list all vouchers that belongs to the company that were paid during or after a date",
          %{conn: conn, company: company, employee: company_employee} do
-      create_voucher(%{employee: company_employee, payed_at: start_date()})
-      create_voucher(%{employee: company_employee, payed_at: pre_start_date()})
-      create_voucher(%{payed_at: start_date()})
+      create_voucher(%{employee: company_employee, paid_at: start_date()})
+      create_voucher(%{employee: company_employee, paid_at: pre_start_date()})
+      create_voucher(%{paid_at: start_date()})
 
       conn =
         get(
           conn,
-          Routes.voucher_path(conn, :index, payed_start_at: DateTime.to_string(start_date()))
+          Routes.voucher_path(conn, :index, paid_start_at: DateTime.to_string(start_date()))
         )
 
       company_vouchers = json_response(conn, 200)["data"]
@@ -411,19 +411,19 @@ defmodule BerlimWeb.VoucherControllerTest do
       voucher = List.first(company_vouchers)
 
       assert voucher["company"]["id"] == company.id
-      assert parse_date(voucher["payed_at"]) >= start_date()
+      assert parse_date(voucher["paid_at"]) >= start_date()
     end
 
     test "list all vouchers that belongs to the company that were paid before or during a date",
          %{conn: conn, company: company, employee: company_employee} do
-      create_voucher(%{employee: company_employee, payed_at: end_date()})
-      create_voucher(%{employee: company_employee, payed_at: post_end_date()})
-      create_voucher(%{payed_at: end_date()})
+      create_voucher(%{employee: company_employee, paid_at: end_date()})
+      create_voucher(%{employee: company_employee, paid_at: post_end_date()})
+      create_voucher(%{paid_at: end_date()})
 
       conn =
         get(
           conn,
-          Routes.voucher_path(conn, :index, payed_end_at: DateTime.to_string(end_date()))
+          Routes.voucher_path(conn, :index, paid_end_at: DateTime.to_string(end_date()))
         )
 
       company_vouchers = json_response(conn, 200)["data"]
@@ -434,22 +434,22 @@ defmodule BerlimWeb.VoucherControllerTest do
       voucher = List.first(company_vouchers)
 
       assert voucher["company"]["id"] == company.id
-      assert parse_date(voucher["payed_at"]) <= end_date()
+      assert parse_date(voucher["paid_at"]) <= end_date()
     end
 
     test "list all vouchers that belongs to the company that were paid between a date interval",
          %{conn: conn, company: company, employee: company_employee} do
-      create_voucher(%{employee: company_employee, payed_at: between_start_and_end_dates()})
-      create_voucher(%{employee: company_employee, payed_at: pre_start_date()})
-      create_voucher(%{employee: company_employee, payed_at: post_end_date()})
-      create_voucher(%{payed_at: between_start_and_end_dates()})
+      create_voucher(%{employee: company_employee, paid_at: between_start_and_end_dates()})
+      create_voucher(%{employee: company_employee, paid_at: pre_start_date()})
+      create_voucher(%{employee: company_employee, paid_at: post_end_date()})
+      create_voucher(%{paid_at: between_start_and_end_dates()})
 
       conn =
         get(
           conn,
           Routes.voucher_path(conn, :index,
-            payed_start_at: DateTime.to_string(start_date()),
-            payed_end_at: DateTime.to_string(end_date())
+            paid_start_at: DateTime.to_string(start_date()),
+            paid_end_at: DateTime.to_string(end_date())
           )
         )
 
@@ -461,7 +461,7 @@ defmodule BerlimWeb.VoucherControllerTest do
       voucher = List.first(company_vouchers)
 
       assert voucher["company"]["id"] == company.id
-      assert Timex.between?(parse_date(voucher["payed_at"]), start_date(), end_date())
+      assert Timex.between?(parse_date(voucher["paid_at"]), start_date(), end_date())
     end
 
     test "list all vouchers that belongs to the company that were created during or after a date",

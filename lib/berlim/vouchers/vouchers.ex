@@ -73,8 +73,7 @@ defmodule Berlim.Vouchers do
 
     with {_count, values} <-
            Repo.update_all(query, set: [paid_at: now, updated_at: now, paid_by_id: paid_by.id]) do
-      total_paid = :erlang.float_to_binary(Enum.sum(values), decimals: 1)
-      {:ok, total_paid}
+      {:ok, Enum.sum(values)}
     end
   end
 

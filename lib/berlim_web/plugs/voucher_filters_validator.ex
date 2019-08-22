@@ -12,7 +12,7 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidator do
       resp: 3
     ]
 
-  @date_params ~w(payed_start_at payed_end_at created_start_at created_end_at)
+  @date_params ~w(paid_start_at paid_end_at created_start_at created_end_at)
   @integer_params ~w(company_id employee_id sector_id taxi_id voucher_id)
   @admin_validators ~w(company_id employee_id taxi_id voucher_id)
   @company_validators ~w(employee_id matricula sector_id)

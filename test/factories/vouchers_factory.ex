@@ -13,10 +13,10 @@ defmodule Berlim.VouchersFactory do
           note: "Voucher test",
           to: "São Paulo",
           value: 100,
-          payed_at: DateTime.utc_now(),
+          paid_at: DateTime.utc_now(),
           employee: build(:employee),
           taxi: build(:taxi),
-          payed_by: build(:admin)
+          paid_by: build(:admin)
         }
       end
     end

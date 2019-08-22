@@ -21,7 +21,7 @@ defmodule BerlimWeb.VoucherViewTest do
         from: "Ponto Novo",
         to: "Av. Rio de Janeiro",
         inserted_at: DateTime.utc_now(),
-        payed_at: DateTime.utc_now(),
+        paid_at: DateTime.utc_now(),
         company: employee.company,
         employee: employee,
         taxi: %{id: 1, smtt: 1234}
@@ -42,7 +42,7 @@ defmodule BerlimWeb.VoucherViewTest do
   end
 
   test "update.json/2, returns updated count" do
-    assert VoucherView.render("update.json", %{count: 10}) == %{data: %{count: 10}}
+    assert VoucherView.render("update.json", %{total_paid: 10}) == %{data: %{total_paid: 10}}
   end
 
   test "voucher.json/2, returns voucher", %{voucher: voucher} do

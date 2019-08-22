@@ -10,8 +10,8 @@ defmodule BerlimWeb.VoucherView do
     %{data: render_one(voucher, VoucherView, "voucher.json")}
   end
 
-  def render("update.json", %{count: count}) do
-    %{data: %{count: count}}
+  def render("update.json", %{total_paid: total_paid}) do
+    %{data: %{total_paid: total_paid}}
   end
 
   def render("voucher.json", %{voucher: voucher}) do
@@ -23,7 +23,7 @@ defmodule BerlimWeb.VoucherView do
       km: voucher.km,
       note: voucher.note,
       inserted_at: voucher.inserted_at,
-      payed_at: voucher.payed_at,
+      paid_at: voucher.paid_at,
       company: company_json(voucher.employee.company),
       employee: employee_json(voucher.employee),
       taxi: taxi_json(voucher.taxi)

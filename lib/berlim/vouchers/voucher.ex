@@ -18,10 +18,10 @@ defmodule Berlim.Vouchers.Voucher do
     field :note, :string
     field :to, :string
     field :value, :float
-    field :payed_at, :utc_datetime
+    field :paid_at, :utc_datetime
     belongs_to :employee, Employee
     belongs_to :taxi, Taxi
-    belongs_to :payed_by, Admin, foreign_key: :payed_by_id
+    belongs_to :paid_by, Admin, foreign_key: :paid_by_id
 
     timestamps()
   end
@@ -29,7 +29,7 @@ defmodule Berlim.Vouchers.Voucher do
   @doc false
   def changeset(changeset, attrs) do
     changeset
-    |> cast(attrs, [:from, :km, :note, :to, :value, :payed_at, :employee_id, :taxi_id])
+    |> cast(attrs, [:from, :km, :note, :to, :value, :paid_at, :employee_id, :taxi_id])
     |> validate_required([:value, :from, :to, :taxi_id, :employee_id])
     |> foreign_key_constraint(:taxi_id)
     |> foreign_key_constraint(:employee_id)

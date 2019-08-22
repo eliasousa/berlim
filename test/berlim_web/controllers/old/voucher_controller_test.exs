@@ -6,22 +6,22 @@ defmodule BerlimWeb.Old.VoucherControllerTest do
 
   alias Berlim.Vouchers
 
-  describe "GET /index, when exists not payed vouchers" do
+  describe "GET /index, when exists not paid vouchers" do
     setup [:authenticate]
 
-    test "renders not payed taxi vouchers", %{conn: conn} do
+    test "renders not paid taxi vouchers", %{conn: conn} do
       taxi = insert(:taxi)
       build(:voucher, taxi: taxi) |> insert()
-      not_payed_voucher = build(:voucher, %{taxi: taxi, payed_at: nil}) |> insert()
+      not_paid_voucher = build(:voucher, %{taxi: taxi, paid_at: nil}) |> insert()
 
       conn = get(conn, Routes.old_voucher_path(conn, :index, taxi.id))
 
       assert Enum.count(json_response(conn, 200)) == 1
-      assert List.first(json_response(conn, 200))["id"] == not_payed_voucher.id
+      assert List.first(json_response(conn, 200))["id"] == not_paid_voucher.id
     end
   end
 
-  describe "GET /index, when does not exists not payed vouchers" do
+  describe "GET /index, when does not exists not paid vouchers" do
     setup [:authenticate]
 
     test "renders false", %{conn: conn} do

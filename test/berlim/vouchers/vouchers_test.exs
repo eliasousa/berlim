@@ -176,6 +176,32 @@ defmodule Berlim.VouchersTest do
       voucher_returned = List.first(voucher_returned)
       assert voucher_returned.id == voucher.id
     end
+
+    test "list_vouchers/1 with paid filter and its value equals true, returns all vouchers that were paid" do
+      create_voucher()
+      _not_paid_voucher = create_voucher(%{paid_at: nil})
+
+      vouchers = Vouchers.list_vouchers([{"paid", true}])
+
+      assert is_list(vouchers)
+      assert Enum.count(vouchers) == 1
+
+      voucher = List.first(vouchers)
+      refute is_nil(voucher.paid_at)
+    end
+
+    test "list_vouchers/1 with paid filter and its value equals false, returns all vouchers that not were paid" do
+      create_voucher()
+      _not_paid_voucher = create_voucher(%{paid_at: nil})
+
+      vouchers = Vouchers.list_vouchers([{"paid", false}])
+
+      assert is_list(vouchers)
+      assert Enum.count(vouchers) == 1
+
+      voucher = List.first(vouchers)
+      assert is_nil(voucher.paid_at)
+    end
   end
 
   describe "list_taxi_vouchers" do
@@ -306,6 +332,40 @@ defmodule Berlim.VouchersTest do
 
       assert voucher.taxi_id == taxi.id
       assert Timex.between?(voucher.inserted_at, start_date(), end_date())
+    end
+
+    test "list_taxi_vouchers/2 with paid filter and its value equals true,
+          returns all vouchers that belongs to the taxi that were paid" do
+      taxi = insert(:taxi)
+      create_voucher(%{taxi: taxi})
+      _not_paid_voucher = create_voucher(%{taxi: taxi, paid_at: nil})
+
+      vouchers = Vouchers.list_taxi_vouchers(taxi, [{"paid", true}])
+
+      assert is_list(vouchers)
+      assert Enum.count(vouchers) == 1
+
+      voucher = List.first(vouchers)
+
+      assert voucher.taxi_id == taxi.id
+      refute is_nil(voucher.paid_at)
+    end
+
+    test "list_taxi_vouchers/2 with paid filter and its value equals false,
+          returns all vouchers that belongs to the taxi that not were paid" do
+      taxi = insert(:taxi)
+      create_voucher(%{taxi: taxi})
+      _not_paid_voucher = create_voucher(%{taxi: taxi, paid_at: nil})
+
+      vouchers = Vouchers.list_taxi_vouchers(taxi, [{"paid", false}])
+
+      assert is_list(vouchers)
+      assert Enum.count(vouchers) == 1
+
+      voucher = List.first(vouchers)
+
+      assert voucher.taxi_id == taxi.id
+      assert is_nil(voucher.paid_at)
     end
   end
 
@@ -495,6 +555,40 @@ defmodule Berlim.VouchersTest do
       voucher = List.first(company_sector_vouchers)
 
       assert voucher.employee.sector_id == company_sector.id
+    end
+
+    test "list_company_vouchers/2 with paid filter and its value equals true,
+          returns all vouchers that belongs to the company that were paid",
+         %{company: company, employee: company_employee} do
+      create_voucher(%{employee: company_employee})
+      _not_paid_voucher = create_voucher(%{employee: company_employee, paid_at: nil})
+
+      vouchers = Vouchers.list_company_vouchers(company, [{"paid", true}])
+
+      assert is_list(vouchers)
+      assert Enum.count(vouchers) == 1
+
+      voucher = List.first(vouchers)
+
+      assert voucher.employee.company_id == company.id
+      refute is_nil(voucher.paid_at)
+    end
+
+    test "list_company_vouchers/2 with paid filter and its value equals false,
+          returns all vouchers that belongs to the company that not were paid",
+         %{company: company, employee: company_employee} do
+      create_voucher(%{employee: company_employee})
+      _not_paid_voucher = create_voucher(%{employee: company_employee, paid_at: nil})
+
+      vouchers = Vouchers.list_company_vouchers(company, [{"paid", false}])
+
+      assert is_list(vouchers)
+      assert Enum.count(vouchers) == 1
+
+      voucher = List.first(vouchers)
+
+      assert voucher.employee.company_id == company.id
+      assert is_nil(voucher.paid_at)
     end
   end
 

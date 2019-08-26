@@ -14,6 +14,8 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidator do
 
   @date_params ~w(paid_start_at paid_end_at created_start_at created_end_at)
   @integer_params ~w(company_id employee_id sector_id taxi_id voucher_id)
+  @boolean_params ~w(paid)
+
   @admin_validators ~w(company_id employee_id taxi_id voucher_id)
   @company_validators ~w(employee_id matricula sector_id)
   def init(params), do: params
@@ -34,8 +36,7 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidator do
 
   defp validate_and_assign_filters(filters \\ [], conn) do
     parsed_filters =
-      @date_params
-      |> Enum.concat(filters)
+      (@date_params ++ @boolean_params ++ filters)
       |> parse_params(conn.params)
 
     case errors = filter_malformed_params(parsed_filters) do
@@ -66,21 +67,16 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidator do
     end)
   end
 
-  defp assign_filters(valid_filters, conn) do
-    assign(conn, :filters, valid_filters)
-  end
+  defp assign_filters(valid_filters, conn), do: assign(conn, :filters, valid_filters)
 
-  defp validate_param(param, value) when not is_binary(value) do
-    {:error, param_format_error(param, value)}
-  end
+  defp validate_param(param, value) when not is_binary(value),
+    do: {:error, param_format_error(param, value)}
 
-  defp validate_param(param, value) when param in @date_params do
-    parse_date(param, value)
-  end
+  defp validate_param(param, value) when param in @date_params, do: parse_date(param, value)
 
-  defp validate_param(param, value) when param in @integer_params do
-    parse_integer(param, value)
-  end
+  defp validate_param(param, value) when param in @integer_params, do: parse_integer(param, value)
+
+  defp validate_param(param, value) when param in @boolean_params, do: parse_boolean(param, value)
 
   defp validate_param(_param, value), do: {:ok, value}
 
@@ -103,6 +99,12 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidator do
         {:error, param_format_error(param, number)}
     end
   end
+
+  defp parse_boolean(_param, "true"), do: {:ok, true}
+
+  defp parse_boolean(_param, "false"), do: {:ok, false}
+
+  defp parse_boolean(param, bool), do: {:error, param_format_error(param, bool)}
 
   defp param_format_error(param, value) do
     "Invalid #{param} format, value: #{value}"

@@ -6,7 +6,7 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
 
   describe "user is authenticated as admin" do
     @valid_admin_voucher_filters ~w(paid_start_at paid_end_at created_start_at created_end_at
-                           company_id employee_id taxi_id voucher_id)
+                           company_id employee_id taxi_id voucher_id paid)
 
     setup %{conn: conn} do
       conn = assign(conn, :admin, insert(:admin))
@@ -27,7 +27,8 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
           "company_id" => "1",
           "voucher_id" => "1",
           "sector_id" => "1",
-          "matricula" => "1234"
+          "matricula" => "1234",
+          "paid" => "true"
         })
         |> call(%{})
 
@@ -51,7 +52,8 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
           "taxi_id" => "a1",
           "employee_id" => "a1",
           "company_id" => "a1",
-          "voucher_id" => "a1"
+          "voucher_id" => "a1",
+          "paid" => "a1"
         })
         |> call(%{})
 
@@ -65,11 +67,12 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
       assert conn.resp_body =~ "Invalid employee_id format"
       assert conn.resp_body =~ "Invalid taxi_id format"
       assert conn.resp_body =~ "Invalid voucher_id format"
+      assert conn.resp_body =~ "Invalid paid format"
     end
   end
 
   describe "user is authenticated as taxi" do
-    @valid_taxi_voucher_filters ~w(paid_start_at paid_end_at created_start_at created_end_at)
+    @valid_taxi_voucher_filters ~w(paid_start_at paid_end_at created_start_at created_end_at paid)
 
     setup %{conn: conn} do
       conn = assign(conn, :taxi, insert(:taxi))
@@ -90,7 +93,8 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
           "company_id" => "1",
           "voucher_id" => "1",
           "sector_id" => "1",
-          "matricula" => "1234"
+          "matricula" => "1234",
+          "paid" => "false"
         })
         |> call(%{})
 
@@ -110,7 +114,8 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
           "paid_start_at" => "20-07-04 00:00:00Z",
           "paid_end_at" => "20-07-05 00:00:00Z",
           "created_start_at" => "20-07-04 00:00:00Z",
-          "created_end_at" => "20-07-05 00:00:00Z"
+          "created_end_at" => "20-07-05 00:00:00Z",
+          "paid" => "a1"
         })
         |> call(%{})
 
@@ -120,12 +125,13 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
       assert conn.resp_body =~ "Invalid created_end_at format"
       assert conn.resp_body =~ "Invalid paid_start_at format"
       assert conn.resp_body =~ "Invalid paid_end_at format"
+      assert conn.resp_body =~ "Invalid paid format"
     end
   end
 
   describe "user is authenticated as company" do
     @valid_company_voucher_filters ~w(paid_start_at paid_end_at created_start_at created_end_at employee_id
-                              matricula sector_id)
+                              matricula sector_id paid)
 
     setup %{conn: conn} do
       conn = assign(conn, :company, insert(:company))
@@ -146,7 +152,8 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
           "sector_id" => "1",
           "taxi_id" => "1",
           "company_id" => "1",
-          "voucher_id" => "1"
+          "voucher_id" => "1",
+          "paid" => "true"
         })
         |> call(%{})
 
@@ -169,6 +176,7 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
           "created_end_at" => "20-07-05 00:00:00Z",
           "employee_id" => "a1",
           "sector_id" => "a1",
+          "paid" => "a1",
           "matricula" => 1
         })
         |> call(%{})
@@ -182,6 +190,7 @@ defmodule BerlimWeb.Plugs.VoucherFiltersValidatorTest do
       assert conn.resp_body =~ "Invalid employee_id format"
       assert conn.resp_body =~ "Invalid sector_id format"
       assert conn.resp_body =~ "Invalid matricula format"
+      assert conn.resp_body =~ "Invalid paid format"
     end
   end
 

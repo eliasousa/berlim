@@ -162,6 +162,16 @@ defmodule Berlim.Vouchers do
       where: v.id == ^value
   end
 
+  defp filter_by({"paid", true}, query) do
+    from v in query,
+      where: not is_nil(v.paid_at)
+  end
+
+  defp filter_by({"paid", false}, query) do
+    from v in query,
+      where: is_nil(v.paid_at)
+  end
+
   defp filter_by(_, query) do
     query
   end

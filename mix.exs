@@ -5,7 +5,7 @@ defmodule Berlim.MixProject do
     [
       app: :berlim,
       version: "1.0.0",
-      elixir: "~> 1.9.2",
+      elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -41,11 +41,11 @@ defmodule Berlim.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.3.0", only: [:dev, :test], runtime: false},
       {:exnumerator, "~> 1.6"},
       {:ex_machina, "~> 2.2", only: :test},
       {:bcrypt_elixir, "~> 2.0"},
-      {:guardian, "~> 1.0"},
+      {:guardian, "~> 2.0"},
       {:cors_plug, "~> 2.0"},
       {:swoosh, "~> 0.23"},
       {:timex, "~> 3.0"}

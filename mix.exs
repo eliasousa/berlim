@@ -47,7 +47,7 @@ defmodule Berlim.MixProject do
       {:bcrypt_elixir, "~> 2.0"},
       {:guardian, "~> 2.0"},
       {:cors_plug, "~> 2.0"},
-      {:swoosh, "~> 0.23"},
+      {:swoosh, "~> 1.0"},
       {:timex, "~> 3.0"}
     ]
   end

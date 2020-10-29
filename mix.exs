@@ -41,7 +41,7 @@ defmodule Berlim.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:credo, "~> 1.3.0", only: [:dev, :test], runtime: false},
+      {:credo, "~> 1.5.0", only: [:dev, :test], runtime: false},
       {:exnumerator, "~> 1.6"},
       {:ex_machina, "~> 2.2", only: :test},
       {:bcrypt_elixir, "~> 2.0"},
